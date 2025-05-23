@@ -1,0 +1,20 @@
+{
+    "name": "h-skycomputer/kiemtra2",
+    "description": "idk",
+    "autoload": {
+        "psr-4": {
+            "HSkycomputer\\Kiemtra2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "trinhhung12345",
+            "email": "wearingarmor12345@gmail.com"
+        }
+    ],
+    "require": {
+        "src/phpmailer/phpmailer": "^6.9",
+      "ext-pdo": "*",
+      "ext-openssl": "*"
+    }
+}

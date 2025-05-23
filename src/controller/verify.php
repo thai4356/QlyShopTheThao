@@ -1,0 +1,19 @@
+<?php
+$conn = require_once "../model/Connect.php";
+
+$email = $_GET['email'];
+$token = $_GET['token'];
+
+$stmt = $conn->prepare("SELECT * FROM username WHERE email = :email AND verify_token = :token");
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':token', $token);
+$stmt->execute();
+
+if ($stmt->rowCount() > 0) {
+    $update = $conn->prepare("UPDATE username SET is_verified = 1, verify_token = NULL WHERE email = :email");
+    $update->bindParam(':email', $email);
+    $update->execute();
+    echo "Xác thực thành công!";
+} else {
+    echo "Liên kết xác thực không hợp lệ!";
+}
