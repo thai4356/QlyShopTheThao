@@ -3,10 +3,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$conn = require_once "../model/Connect.php";
+
 require '../PHPMailer/src/Exception.php';
 require '../PHPMailer/src/PHPMailer.php';
 require '../PHPMailer/src/SMTP.php';
+require_once "../model/Connect.php"; // chỉ include, không gán vào $conn
+
+$database = new Connect();
+$conn = $database->getConnection(); // chính xác: đây là object PDO
+
 
 $email = $_REQUEST["email"];
 $pass = $_REQUEST["password"];
