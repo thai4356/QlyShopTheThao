@@ -11,10 +11,18 @@ switch ($module) {
         break;
 
     case 'blog':
-        require_once 'controllers/BlogController.php';
+        require_once '../../controller/BlogController.php';
         $controller = new BlogController();
         $controller->index();
         break;
+
+    case 'chitietsanpham':
+        require_once '../../controller/ProductController.php';
+        $controller = new ProductController();
+        $id = isset($_GET['masp']) ? (int)$_GET['masp'] : 0;
+        $controller->detail($id);
+        break;
+
 
     case 'home':
 
