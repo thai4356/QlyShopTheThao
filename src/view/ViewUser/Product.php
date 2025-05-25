@@ -52,7 +52,7 @@ $brands = $productModel->getAllBrands();
                         <div class="col-lg-4 col-md-6 product-item">
                             <div class="class-box wow fadeInUp" data-wow-delay=".5s">
                                 <div class="class-img">
-                                    <img src="image/Product/<?= htmlspecialchars($image) ?>" width="440" height="270"
+                                    <img src="<?= htmlspecialchars($image) ?>" width="440" height="270"
                                          alt="<?= htmlspecialchars($product['name']) ?>" class="img-cover"
                                          style="max-width: 440px; max-height: 270px;" loading="lazy">
                                 </div>
@@ -81,18 +81,18 @@ $brands = $productModel->getAllBrands();
                 <!-- PAGINATION -->
                 <div class="pagination" style="padding-top: 70px;padding-left: 33%">
                     <?php if ($page > 1): ?>
-                        <a href="?module=sanpham&page=<?= $page - 1 ?>" class="prev">Previous</a>
+                        <a href="?<?= $queryStr ?>page=<?= $page - 1 ?>" class="prev">Previous</a>
                     <?php endif; ?>
 
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?module=sanpham&page=<?= $i ?>"
-                           class="<?= ($i == $page) ? 'active' : '' ?>"><?= $i ?></a>
+                        <a href="?<?= $queryStr ?>page=<?= $i ?>" class="<?= ($i == $page) ? 'active' : '' ?>"><?= $i ?></a>
                     <?php endfor; ?>
 
                     <?php if ($page < $totalPages): ?>
-                        <a href="?module=sanpham&page=<?= $page + 1 ?>" class="next">Next</a>
+                        <a href="?<?= $queryStr ?>page=<?= $page + 1 ?>" class="next">Next</a>
                     <?php endif; ?>
                 </div>
+
 
             </section>
         </div>
