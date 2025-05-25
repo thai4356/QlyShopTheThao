@@ -5,6 +5,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 $conn = require_once "../model/Connect.php";
+$database = new Connect();
+$conn = $database->getConnection();
 require '../PHPMailer/src/Exception.php';
 require '../PHPMailer/src/PHPMailer.php';
 require '../PHPMailer/src/SMTP.php';
@@ -16,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if email exists in the database
     $query = "SELECT * FROM username WHERE email = :email";
-    /** @var PDO $conn */
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':email', $email);
     $stmt->execute();

@@ -1,6 +1,9 @@
 <?php
 $conn = require_once "../model/Connect.php";
 
+$database = new Connect();
+$conn = $database->getConnection();
+
 $email = $_GET['email'];
 $token = $_GET['token'];
 

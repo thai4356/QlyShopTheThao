@@ -28,13 +28,26 @@
         </div>
     </div>
 
+    <div id="recaptchaSignUpModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1001; justify-content:center; align-items:center; flex-direction:column;">
+        <div style="background-color:white; padding:20px 40px; border-radius:8px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <h4 style="margin-top:0; margin-bottom:15px; font-family: 'Montserrat', sans-serif; font-size:18px;">Verify you are human</h4>
+            <div id="recaptchaWidgetSignUpContainer" style="margin: 15px auto; transform:scale(0.9);transform-origin:50% 50%;"></div>
+            <button type="button" id="closeRecaptchaSignUpModal" style="margin-top:10px; padding: 8px 15px; border-radius: 5px; border: 1px solid #ccc; background-color: #f0f0f0; cursor:pointer;">Close</button>
+        </div>
+    </div>
+
     <div class="form-container sign-up-container">
-        <form action="../controller/xulyDangKi.php" method="Post" enctype="multipart/form-data" >
+        <form action="../controller/xulyDangKi.php" method="Post" enctype="multipart/form-data" id="form-1">
             <h1>Create Account</h1>
-            <input type="email" name="email" id="email" placeholder="email" class="form-control" required/>
-            <span class="form-message"></span>
-            <input type="password" name="password" id="password" placeholder="Password" class="form-control" required minlength="5">
-            <input type="submit" value="Sign Up" id="b1_signup"> </form>
+            <div class="form-group"> <input type="email" name="email" id="email" placeholder="Email" class="form-control" required/>
+                <span class="form-message"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder="Password" class="form-control" required minlength="5">
+                <span class="form-message"></span>
+            </div>
+            <input type="submit" value="Sign Up" id="b1_signup">
+        </form>
     </div>
     <div class="form-container sign-in-container">
         <form action="../controller/xulyDangNhap.php" method="post" enctype="multipart/form-data" class="form" id="signInForm"> <h1>Sign in</h1>
@@ -82,12 +95,12 @@
 
 <style>
     #b1:hover{
-        color: red;
-        border: red;
-        border-width:1px ;
-        border-style: solid;
+        /* Giữ lại hiệu ứng hover cơ bản cho nút, nhưng điều chỉnh để nhất quán hơn */
+        background-color: #e04020; /* Một màu tối hơn của #FF4B2B */
+        border-color: #d03010;   /* Một màu tối hơn nữa cho border khi hover */
+        color: #FFFFFF;
     }
-    button {
+    button,input[type="submit"]#b1_signup, input[type="submit"]#b1 {
         border-radius: 20px;
         border: 1px solid #FF4B2B;
         background-color: #FF4B2B;
@@ -97,14 +110,22 @@
         padding: 12px 45px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        transition: transform 80ms ease-in;
+        transition: transform 80ms ease-in, background-color 0.2s, border-color 0.2s;
+        cursor: pointer;
+        margin: 8px 0;
     }
 
-    button:active {
+    input[type="submit"]#b1_signup, input[type="submit"]#b1 {
+        padding: 12px 15px; /* Override padding for full-width buttons if needed, or keep 12px 45px */
+        width: 100%; /* Make submit buttons full width like text inputs */
+        box-sizing: border-box;
+    }
+
+    button:active,input[type="submit"]#b1_signup:active, input[type="submit"]#b1:active {
         transform: scale(0.95);
     }
 
-    button:focus {
+    button:focus input[type="submit"]#b1_signup:focus, input[type="submit"]#b1:focus{
         outline: none;
     }
 
@@ -124,14 +145,48 @@
         border-color: #545b62;
     }
 
+    .form-container .form-group input[type="text"],
+    .form-container .form-group input[type="password"],
+    .form-container .form-group input[type="email"] { /* Bao gồm cả input email nếu có */
+        background-color: #eee; /* Từ register.css */
+        border: 1px solid #ddd;  /* Thêm border mảnh, nhất quán */
+        padding: 12px 15px;    /* Từ register.css */
+        margin: 8px 0;         /* Từ register.css */
+        width: 100%;           /* Từ register.css */
+        box-sizing: border-box;/* Từ register.css */
+        font-family: 'Montserrat', sans-serif; /* Áp dụng font Roboto */
+        font-size: 14px;       /* Điều chỉnh kích thước font cho dễ đọc */
+        border-radius: 4px;    /* Bo góc nhẹ cho textbox (tùy chọn) */
+    }
+
+    /* Style cho nút Sign In (id="b1") */
+    #b1 {
+        border-radius: 20px;
+        border: 1px solid #FF4B2B; /* Border nhất quán với trạng thái thường */
+        background-color: #FF4B2B;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 12px 15px;    /* Giữ padding này để nội dung không quá sát khi width 100% */
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 80ms ease-in, background-color 0.2s, border-color 0.2s;
+        width: 100%;           /* Đảm bảo width 100% */
+        box-sizing: border-box;/* Đảm bảo box-sizing */
+        margin: 8px 0;         /* Giống các input khác */
+        font-family: 'Montserrat', sans-serif; /* Giữ font Montserrat cho nút, hoặc đổi thành Roboto nếu muốn */
+        cursor: pointer;
+    }
+
 </style>
 <script>
-    // Global function for reCAPTCHA success callback
+    // Global reCAPTCHA Site Key (v2 Checkbox)
+    const RECAPTCHA_V2_SITE_KEY = "6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"; // Replace with your actual Site Key
+
+    // Callback for Sign In reCAPTCHA
     function onRecaptchaSuccess(token) {
         const signInFormElement = document.getElementById('signInForm');
-        console.log('reCAPTCHA success. Token:', token);
-
-        // Add the token as a hidden input to the form
+        console.log('Sign In reCAPTCHA success. Token:', token);
         let recaptchaInput = signInFormElement.querySelector('input[name="g-recaptcha-response"]');
         if (!recaptchaInput) {
             recaptchaInput = document.createElement('input');
@@ -140,69 +195,100 @@
             signInFormElement.appendChild(recaptchaInput);
         }
         recaptchaInput.setAttribute('value', token);
-
         const recaptchaModal = document.getElementById('recaptchaModal');
-        if (recaptchaModal) {
-            recaptchaModal.style.display = 'none';
-        }
-        // Submit the form (Validator.js already prevented default submission)
+        if (recaptchaModal) recaptchaModal.style.display = 'none';
         signInFormElement.submit();
     }
 
+    // NEW Callback for Sign Up reCAPTCHA
+    function onRecaptchaSignUpSuccess(token) {
+        const signUpFormElement = document.getElementById('form-1'); // Ensure this is the correct ID of your sign-up form
+        console.log('Sign Up reCAPTCHA success. Token:', token);
+        let recaptchaInput = signUpFormElement.querySelector('input[name="g-recaptcha-response"]');
+        if (!recaptchaInput) {
+            recaptchaInput = document.createElement('input');
+            recaptchaInput.setAttribute('type', 'hidden');
+            recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+            signUpFormElement.appendChild(recaptchaInput);
+        }
+        recaptchaInput.setAttribute('value', token);
+        const recaptchaSignUpModal = document.getElementById('recaptchaSignUpModal');
+        if (recaptchaSignUpModal) recaptchaSignUpModal.style.display = 'none';
+        signUpFormElement.submit();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
-        // const v2SiteKey = "6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"; // Site key is in the div's data-sitekey
         const signInFormElement = document.getElementById('signInForm');
         const recaptchaModal = document.getElementById('recaptchaModal');
         const closeRecaptchaModalButton = document.getElementById('closeRecaptchaModal');
 
-        // Validator cho form đăng ký (#form-1) - Giữ nguyên từ code của bạn
-        if (document.getElementById('form-1')) {
+        const signUpFormElement = document.getElementById('form-1'); // For sign-up form
+        const recaptchaSignUpModal = document.getElementById('recaptchaSignUpModal');
+        const closeRecaptchaSignUpModalButton = document.getElementById('closeRecaptchaSignUpModal');
+        const recaptchaWidgetSignUpContainer = document.getElementById('recaptchaWidgetSignUpContainer');
+        let signUpRecaptchaWidgetId = null; // To store widget ID for sign-up reCAPTCHA
+
+        // Validator for Sign Up form (ID: form-1)
+        if (signUpFormElement) {
             Validator({
-                form: '#form-1',
+                form: '#form-1', // Targets the sign-up form
                 formGroupSelector: '.form-group',
                 errorSelector: '.form-message',
                 rules: [
-                    Validator.isEmail('#email'),
-                    Validator.minLength('#password', 6),
+                    Validator.isEmail('#email'), // ID of email input in sign-up form
+                    Validator.minLength('#password', 5), // ID of password input in sign-up form
                 ],
-                onSubmit: function (data) {
-                    console.log('Dữ liệu form đăng ký:', data);
-                    document.getElementById('form-1').submit();
-                }
-            });
-        }
-
-        // SỬA ĐỔI Validator cho form đăng nhập (signInForm)
-        if (signInFormElement) {
-            Validator({
-                form: '#signInForm',
-                formGroupSelector: '.form-group', //
-                errorSelector: '.form-message',   //
-                rules: [
-                    Validator.isEmail('#email_signin'),       //
-                    Validator.minLength('#password_signin', 1) //
-                ],
-                onSubmit: function (data_form_validator) {
-                    // Hàm này được gọi khi các trường email/password hợp lệ (theo Validator.js)
-                    // Validator.js đã gọi e.preventDefault() trên sự kiện submit của form.
-                    console.log('Email/Password hợp lệ. Hiển thị reCAPTCHA modal.');
-                    if (recaptchaModal) {
-                        recaptchaModal.style.display = 'flex'; // Hiển thị modal
-                        // reCAPTCHA sẽ tự render vì nó đã được phân tích bởi api.js khi trang tải
-                        // và giờ đây nó đã hiển thị.
-                        // Nếu reCAPTCHA đã được giải và modal bị ẩn/hiện lại, có thể cần reset.
-                        // Tuy nhiên, callback `onRecaptchaSuccess` sẽ xử lý việc submit.
-                        // Nếu người dùng đóng modal và thử lại, reCAPTCHA sẽ sẵn sàng cho lần thử mới.
-                        if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
-                            // Cân nhắc reset reCAPTCHA ở đây nếu cần thiết mỗi khi modal mở
-                            // grecaptcha.reset();
+                onSubmit: function (data) { // Called when sign-up email/password are valid
+                    console.log('Sign Up form valid. Showing reCAPTCHA for Sign Up.');
+                    if (recaptchaSignUpModal && recaptchaWidgetSignUpContainer) {
+                        recaptchaSignUpModal.style.display = 'flex';
+                        // Render reCAPTCHA for sign-up if not already rendered or reset if needed
+                        if (signUpRecaptchaWidgetId === null && typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+                            try {
+                                signUpRecaptchaWidgetId = grecaptcha.render(recaptchaWidgetSignUpContainer, {
+                                    'sitekey': RECAPTCHA_V2_SITE_KEY,
+                                    'callback': 'onRecaptchaSignUpSuccess'
+                                });
+                            } catch (e) {
+                                console.error("Error rendering sign-up reCAPTCHA: ", e);
+                                alert("Could not load reCAPTCHA. Please try again later.");
+                                recaptchaSignUpModal.style.display = 'none';
+                            }
+                        } else if (typeof grecaptcha !== 'undefined' && grecaptcha.reset && signUpRecaptchaWidgetId !== null) {
+                            grecaptcha.reset(signUpRecaptchaWidgetId);
                         }
                     }
                 }
             });
         }
 
-        // Toggle hiển thị mật khẩu cho form đăng nhập - Giữ nguyên từ code của bạn
+        // Validator for Sign In form (signInForm)
+        if (signInFormElement) {
+            Validator({
+                form: '#signInForm',
+                formGroupSelector: '.form-group',
+                errorSelector: '.form-message',
+                rules: [
+                    Validator.isEmail('#email_signin'),
+                    Validator.minLength('#password_signin', 1)
+                ],
+                onSubmit: function (data_form_validator) {
+                    console.log('Sign In form valid. Showing reCAPTCHA for Sign In.');
+                    if (recaptchaModal) {
+                        recaptchaModal.style.display = 'flex';
+                        // For sign-in, reCAPTCHA is auto-rendered by class. Reset if needed.
+                        if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
+                            // Assuming the first widget (index 0) or find specific widget ID if necessary.
+                            // For the auto-rendered one, managing widget ID can be tricky without explicit render.
+                            // For now, we assume it resets or provides a fresh challenge.
+                            // If problems, explicitly render the sign-in one too.
+                        }
+                    }
+                }
+            });
+        }
+
+        // Toggle password visibility
         const passwordSigninInput = document.getElementById('password_signin');
         const togglePasswordButton = document.getElementById('showPassword');
         if (passwordSigninInput && togglePasswordButton) {
@@ -211,30 +297,29 @@
             });
         }
 
-        // Xử lý chuyển đổi giữa Sign In và Sign Up - Giữ nguyên từ code của bạn
+        // Panel switching
         const signUpButtonJs = document.getElementById('signUp');
         const signInButtonJs = document.getElementById('signIn');
         const containerJs = document.getElementById('container');
         if (signUpButtonJs && signInButtonJs && containerJs) {
-            signUpButtonJs.addEventListener('click', () => {
-                containerJs.classList.add("right-panel-active");
-            });
-            signInButtonJs.addEventListener('click', () => {
-                containerJs.classList.remove("right-panel-active");
-            });
+            signUpButtonJs.addEventListener('click', () => containerJs.classList.add("right-panel-active"));
+            signInButtonJs.addEventListener('click', () => containerJs.classList.remove("right-panel-active"));
         }
 
-        // Event listener cho nút đóng modal
+        // Close button for Sign In reCAPTCHA modal
         if (closeRecaptchaModalButton && recaptchaModal) {
             closeRecaptchaModalButton.addEventListener('click', function() {
                 recaptchaModal.style.display = 'none';
-                // Khi đóng thủ công, reset reCAPTCHA để người dùng phải giải lại nếu mở lại.
-                if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
-                    try {
-                        grecaptcha.reset();
-                    } catch (e) {
-                        console.error("Error resetting reCAPTCHA: ", e);
-                    }
+                // Optionally reset the Sign In reCAPTCHA
+            });
+        }
+
+        // Close button for Sign Up reCAPTCHA modal
+        if (closeRecaptchaSignUpModalButton && recaptchaSignUpModal) {
+            closeRecaptchaSignUpModalButton.addEventListener('click', function() {
+                recaptchaSignUpModal.style.display = 'none';
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.reset && signUpRecaptchaWidgetId !== null) {
+                    grecaptcha.reset(signUpRecaptchaWidgetId);
                 }
             });
         }

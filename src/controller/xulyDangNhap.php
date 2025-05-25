@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/../../config/autoloader.php';
 require_once "../model/Connect.php"; // chỉ include, không gán vào $conn
+$database = new Connect();
+$conn = $database->getConnection();
 
 $projectRootPath = __DIR__ . '/../..'; // Thư mục gốc của project
 

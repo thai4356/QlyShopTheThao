@@ -22,6 +22,8 @@
 <body>
 <?php
 $conn = require_once "../model/Connect.php";
+$database = new Connect();
+$conn = $database->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $token = $_POST['token'];
