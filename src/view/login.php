@@ -13,16 +13,20 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
-
-<!--<form action="cRegistry.php" method="post">-->
-<!--    Username<input name="tusername" id="username" type="text">-->
-<!--    Password<input name="tpassword" id="password" type="password">-->
-<!--    <input type="submit" value="Log in">-->
-<!--    chua co tai khoan ?-->
-<!--    <a href="DangKi.php">Dang ki </a>-->
-<!--</form>-->
 <body style="background-color: #3c3f41">
 <div class="container" id="container">
+
+    <div id="recaptchaModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; flex-direction:column;">
+        <div style="background-color:white; padding:20px 40px; border-radius:8px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <h4 style="margin-top:0; margin-bottom:15px; font-family: 'Montserrat', sans-serif; font-size:18px;">Verify you are human</h4>
+            <div class="g-recaptcha"
+                 data-sitekey="6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"
+                 data-callback="onRecaptchaSuccess"
+                 style="margin: 15px auto; transform:scale(0.9);transform-origin:50% 50%;">
+            </div>
+            <button type="button" id="closeRecaptchaModal" style="margin-top:10px; padding: 8px 15px; border-radius: 5px; border: 1px solid #ccc; background-color: #f0f0f0; cursor:pointer;">Close</button>
+        </div>
+    </div>
 
     <div class="form-container sign-up-container">
         <form action="../controller/xulyDangKi.php" method="Post" enctype="multipart/form-data" >
@@ -33,38 +37,25 @@
             <input type="submit" value="Sign Up" id="b1_signup"> </form>
     </div>
     <div class="form-container sign-in-container">
-        <form action="../controller/xulyDangNhap.php" method="post" enctype="multipart/form-data" class="form" id="signInForm">
-            <h1>Sign in</h1>
+        <form action="../controller/xulyDangNhap.php" method="post" enctype="multipart/form-data" class="form" id="signInForm"> <h1>Sign in</h1>
             <span>or use your account</span>
 
             <div class="form-group">
                 <input name="email" id="email_signin" type="text" placeholder="Email" class="form-control"
-                       value="<?php echo isset($_COOKIE['email']) ? htmlspecialchars($_COOKIE['email']) : ''; ?>">
-                <span class="form-message"></span>
-            </div>
+                       value="<?php echo isset($_COOKIE['email']) ? htmlspecialchars($_COOKIE['email']) : ''; ?>"> <span class="form-message"></span> </div>
             <div class="form-group">
-                <input name="password" id="password_signin" type="password" placeholder="Password" class="form-control"
-                       value="<?php // echo isset($_COOKIE['password']) ? htmlspecialchars($_COOKIE['password']) : ''; // Không nên lưu pass vào cookie ?>">
-                <span class="form-message"></span>
-            </div>
+                <input name="password" id="password_signin" type="password" placeholder="Password" class="form-control"> <span class="form-message"></span> </div>
 
-            <div class="g-recaptcha" data-sitekey="6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT" style="margin-bottom: 15px; transform:scale(0.9);transform-origin:0 0"></div>
             <label class="checkbox-custom">
-                <input type="checkbox" id="showPassword">
-                <span class="checkmark"></span>
-                Show Password
+                <input type="checkbox" id="showPassword"> <span class="checkmark"></span> Show Password
             </label>
 
             <label class="checkbox-custom">
                 <input type="checkbox" name="remember"
-                    <?php echo isset($_COOKIE['email']) ? 'checked' : ''; ?>>
-                <span class="checkmark"></span>
-                Remember Me
+                    <?php echo isset($_COOKIE['email']) ? 'checked' : ''; ?>> <span class="checkmark"></span> Remember Me
             </label>
 
-            <a href="ForgotPassword.php">Forgot your password?</a>
-            <input type="submit" id="b1" value="Sign in">
-        </form>
+            <a href="ForgotPassword.php">Forgot your password?</a> <input type="submit" id="b1" value="Sign in"> </form>
     </div>
     <div class="overlay-container">
         <div class="overlay">
@@ -122,95 +113,129 @@
         border-color: #FFFFFF;
     }
 
+    /* Custom styles for modal close button if needed */
+    #closeRecaptchaModal {
+        background-color: #6c757d; /* A neutral color */
+        border-color: #6c757d;
+        padding: 10px 20px; /* Adjust padding */
+    }
+    #closeRecaptchaModal:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
 </style>
 <script>
+    // Global function for reCAPTCHA success callback
+    function onRecaptchaSuccess(token) {
+        const signInFormElement = document.getElementById('signInForm');
+        console.log('reCAPTCHA success. Token:', token);
+
+        // Add the token as a hidden input to the form
+        let recaptchaInput = signInFormElement.querySelector('input[name="g-recaptcha-response"]');
+        if (!recaptchaInput) {
+            recaptchaInput = document.createElement('input');
+            recaptchaInput.setAttribute('type', 'hidden');
+            recaptchaInput.setAttribute('name', 'g-recaptcha-response');
+            signInFormElement.appendChild(recaptchaInput);
+        }
+        recaptchaInput.setAttribute('value', token);
+
+        const recaptchaModal = document.getElementById('recaptchaModal');
+        if (recaptchaModal) {
+            recaptchaModal.style.display = 'none';
+        }
+        // Submit the form (Validator.js already prevented default submission)
+        signInFormElement.submit();
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const v2SiteKey = "6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"; // Site Key v2 bạn đang dùng cho widget
+        // const v2SiteKey = "6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"; // Site key is in the div's data-sitekey
+        const signInFormElement = document.getElementById('signInForm');
+        const recaptchaModal = document.getElementById('recaptchaModal');
+        const closeRecaptchaModalButton = document.getElementById('closeRecaptchaModal');
 
-        // Validator cho form đăng ký (#form-1)
-        // Đảm bảo các ID input bên trong form đăng ký là duy nhất và Validator nhắm đúng
+        // Validator cho form đăng ký (#form-1) - Giữ nguyên từ code của bạn
         if (document.getElementById('form-1')) {
             Validator({
                 form: '#form-1',
-                formGroupSelector: '.form-group', // Đảm bảo HTML của bạn có cấu trúc này
-                errorSelector: '.form-message',   // Đảm bảo HTML của bạn có cấu trúc này
+                formGroupSelector: '.form-group',
+                errorSelector: '.form-message',
                 rules: [
-                    // Ví dụ: Giả sử input tên đầy đủ có id="fullname_signup"
-                    // Validator.isRequired('#fullname_signup', 'Vui lòng nhập tên đầy đủ của bạn'),
-                    Validator.isEmail('#email'), // ID của input email trong form đăng ký
-                    Validator.minLength('#password', 6), // ID của input password trong form đăng ký (đảm bảo là password, không phải password_signup)
-                    // Validator.isRequired('#password_confirmation'), // Nếu có
-                    // Validator.isConfirmed('#password_confirmation', function () {
-                    //     return document.querySelector('#form-1 #password').value;
-                    // }, 'Mật khẩu nhập lại không chính xác')
+                    Validator.isEmail('#email'),
+                    Validator.minLength('#password', 6),
                 ],
                 onSubmit: function (data) {
                     console.log('Dữ liệu form đăng ký:', data);
-                    // Nếu muốn reCAPTCHA cho đăng ký, bạn cũng cần thêm widget và kiểm tra tương tự
-                    document.getElementById('form-1').submit(); // Hoặc xử lý AJAX
+                    document.getElementById('form-1').submit();
                 }
             });
         }
 
-        // Validator cho form đăng nhập (signInForm)
-        const signInFormElement = document.getElementById('signInForm');
+        // SỬA ĐỔI Validator cho form đăng nhập (signInForm)
         if (signInFormElement) {
             Validator({
-                form: '#signInForm', // Sử dụng đúng ID của form đăng nhập
-                formGroupSelector: '.form-group', // Các input cần được bọc bởi div.form-group
-                errorSelector: '.form-message',   // Cần có span.form-message sau mỗi input
+                form: '#signInForm',
+                formGroupSelector: '.form-group', //
+                errorSelector: '.form-message',   //
                 rules: [
-                    Validator.isEmail('#email_signin'),       // Đúng ID input email đăng nhập
-                    Validator.minLength('#password_signin', 1) // Đúng ID input password đăng nhập (min length tùy bạn)
+                    Validator.isEmail('#email_signin'),       //
+                    Validator.minLength('#password_signin', 1) //
                 ],
-                onSubmit: function (data_form_validator) { // Hàm này được gọi khi các rule của Validator hợp lệ
-                    console.log('Form đăng nhập hợp lệ theo Validator. Kiểm tra reCAPTCHA v2...');
-
-                    const recaptchaResponse = grecaptcha.getResponse(); // Lấy token từ widget reCAPTCHA v2
-
-                    if (recaptchaResponse.length === 0) {
-                        // Nếu người dùng chưa check reCAPTCHA
-                        alert('Vui lòng xác minh bạn không phải là người máy.');
-                        // Quan trọng: Ngăn chặn form submit nếu Validator của bạn không tự làm điều đó
-                        // Nếu Validator của bạn vẫn submit form nếu hàm này không return false,
-                        // bạn cần một cách khác để dừng nó, ví dụ như thêm một lỗi vào Validator.
-                        // Hoặc, nếu Validator không tự submit, thì bạn không cần làm gì thêm ở đây.
-                        return false; // Thường thì return false sẽ ngăn submit trong nhiều thư viện Validator
+                onSubmit: function (data_form_validator) {
+                    // Hàm này được gọi khi các trường email/password hợp lệ (theo Validator.js)
+                    // Validator.js đã gọi e.preventDefault() trên sự kiện submit của form.
+                    console.log('Email/Password hợp lệ. Hiển thị reCAPTCHA modal.');
+                    if (recaptchaModal) {
+                        recaptchaModal.style.display = 'flex'; // Hiển thị modal
+                        // reCAPTCHA sẽ tự render vì nó đã được phân tích bởi api.js khi trang tải
+                        // và giờ đây nó đã hiển thị.
+                        // Nếu reCAPTCHA đã được giải và modal bị ẩn/hiện lại, có thể cần reset.
+                        // Tuy nhiên, callback `onRecaptchaSuccess` sẽ xử lý việc submit.
+                        // Nếu người dùng đóng modal và thử lại, reCAPTCHA sẽ sẵn sàng cho lần thử mới.
+                        if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
+                            // Cân nhắc reset reCAPTCHA ở đây nếu cần thiết mỗi khi modal mở
+                            // grecaptcha.reset();
+                        }
                     }
-
-                    // Nếu reCAPTCHA đã được giải quyết, tiến hành submit form
-                    // Nếu Validator của bạn tự động submit khi không có lỗi và hàm này không return false,
-                    // thì không cần dòng submit() dưới đây.
-                    // Ngược lại, nếu Validator chỉ gọi hàm này và bạn phải tự submit, thì dùng dòng dưới.
-                    console.log('reCAPTCHA v2 đã được giải quyết. Đang gửi form...');
-                    signInFormElement.submit();
                 }
             });
         }
 
-        // Toggle hiển thị mật khẩu cho form đăng nhập
-        const passwordSigninInput = document.getElementById('password_signin'); // Đúng ID
+        // Toggle hiển thị mật khẩu cho form đăng nhập - Giữ nguyên từ code của bạn
+        const passwordSigninInput = document.getElementById('password_signin');
         const togglePasswordButton = document.getElementById('showPassword');
-
         if (passwordSigninInput && togglePasswordButton) {
             togglePasswordButton.addEventListener('change', function () {
                 passwordSigninInput.type = this.checked ? 'text' : 'password';
             });
         }
 
-        // Xử lý chuyển đổi giữa Sign In và Sign Up (từ file của bạn)
+        // Xử lý chuyển đổi giữa Sign In và Sign Up - Giữ nguyên từ code của bạn
         const signUpButtonJs = document.getElementById('signUp');
         const signInButtonJs = document.getElementById('signIn');
         const containerJs = document.getElementById('container');
-
         if (signUpButtonJs && signInButtonJs && containerJs) {
             signUpButtonJs.addEventListener('click', () => {
                 containerJs.classList.add("right-panel-active");
             });
-
             signInButtonJs.addEventListener('click', () => {
                 containerJs.classList.remove("right-panel-active");
+            });
+        }
+
+        // Event listener cho nút đóng modal
+        if (closeRecaptchaModalButton && recaptchaModal) {
+            closeRecaptchaModalButton.addEventListener('click', function() {
+                recaptchaModal.style.display = 'none';
+                // Khi đóng thủ công, reset reCAPTCHA để người dùng phải giải lại nếu mở lại.
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
+                    try {
+                        grecaptcha.reset();
+                    } catch (e) {
+                        console.error("Error resetting reCAPTCHA: ", e);
+                    }
+                }
             });
         }
     });
