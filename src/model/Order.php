@@ -1,5 +1,5 @@
 <?php
-require_once 'Database.php';
+require_once 'Connect.php';
 
 class Order {
     private $conn;
@@ -7,6 +7,6 @@ class Order {
     public $id, $user_id, $total_price, $status, $created_at, $updated_at;
 
     public function __construct() {
-        $this->conn = (new Database())->getConnection();
+        $this->conn = (new Connect())->getConnection();
     }
 }

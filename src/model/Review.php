@@ -1,5 +1,5 @@
 <?php
-require_once 'Database.php';
+require_once 'Connect.php';
 
 class Review {
     private $conn;
@@ -7,6 +7,6 @@ class Review {
     public $id, $user_id, $product_id, $rating, $comment, $created_at, $updated_at;
 
     public function __construct() {
-        $this->conn = (new Database())->getConnection();
+        $this->conn = (new Connect())->getConnection();
     }
 }

@@ -1,3 +1,7 @@
+<?php
+$activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
+?>
+
 <header class="site-header sticky-header">
 
     <link rel="stylesheet" type="text/css" href="../Public/CSS/index2.css">
@@ -24,7 +28,7 @@
                 <div class="col-lg-2">
                     <!-- Sit Logo Start -->
                     <div class="site-branding">
-                        <a href="index.html" title="Fithub">
+                        <a href="222.php" title="Fithub">
                             <img src="../Public/Image/logo.png" alt="Logo">
                             <img src="../Public/Image/logo_stickey.png" class="sticky-logo" alt="Logo">
                         </a>
@@ -45,7 +49,7 @@
                                 <i class="menu-background bottom"></i>
                                 <ul class="menu">
                                     <li >
-                                        <a href="index.php" title="Home">Home</a>
+                                        <a href="?module=home" title="Home">Home</a>
                                     </li>
                                     <!--                                    <li><a href="indexUserProduct.php">Our products</a></li>-->
                                     <li>
