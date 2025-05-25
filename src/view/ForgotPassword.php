@@ -4,36 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .form-container {
-            max-width: 400px;
-            margin: auto;
-            margin-top: 50px; /* Adjust as needed */
-            padding: 20px;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    <link rel="stylesheet" href="Public/CSS/register.css"> <style>
+        /* body được style bởi register.css để căn giữa nội dung */
+        .auth-form-container {
+            background-color: #FFFFFF; /* */
+            padding: 40px 50px;
+            border-radius: 10px; /* */
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); /* */
+            width: 100%;
+            max-width: 420px;
+            text-align: center; /* */
+        }
+        .auth-form-container h1 {
+            margin-bottom: 20px; /* */
+        }
+        .auth-form-container p {
+            font-size: 14px; /* */
+            color: #555;
+            margin-bottom: 25px; /* */
+        }
+        .auth-form-container form {
+            padding: 0; /* Ghi đè padding của form từ register.css nếu không cần thiết */
+            background-color: transparent; /* Ghi đè background của form từ register.css */
+            box-shadow: none;
+        }
+        .auth-form-container input[type="email"] {
+            margin-bottom: 20px; /* */
+        }
+        .auth-form-container button[type="submit"] {
+            width: 100%; /* */
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="form-container">
-        <h1 class="text-center mb-4">Forgot Password</h1>
-        <form action="../controller/xulyQuen.php" method="post" class="form">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
-    </div>
+<div class="auth-form-container">
+    <h1>Forgot Password</h1> <p>Enter your email address, and we will send you a link to reset your password.</p>
+    <form action="../controller/xulyQuen.php" method="post"> <input type="email" name="email" id="email" placeholder="Enter your email" required> <button type="submit">Send Reset Link</button> </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
