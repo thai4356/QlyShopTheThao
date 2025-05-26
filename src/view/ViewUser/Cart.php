@@ -76,7 +76,7 @@
                         ?>
                         <tr>
                             <td class="checkbox-cell"><input type="checkbox" name="select_item[]" value="<?= $item['product_id'] ?>" onclick="updateTotal()">
-                            <td><img src="image/Product/<?= $item['image_url'] ?>" width="60"></td>
+                            <td><img src="ProductImage/<?= $item['image_url'] ?>" width="60"></td>
                             <td><?= $item['name'] ?></td>
                             <td id="total-<?= $item['product_id'] ?>" data-total="<?= $total ?>">
                                 <?= number_format($total) ?>₫

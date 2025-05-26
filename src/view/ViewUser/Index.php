@@ -3,7 +3,7 @@ session_start();
 
 $module = isset($_GET['module']) ? $_GET['module'] : 'home';
 
-// ✅ Xử lý redirect add/remove cart
+
 if ($module === 'cart' && isset($_GET['act']) && in_array($_GET['act'], ['add', 'remove'])) {
     require_once '../../controller/CartController.php';
     $cartCtrl = new CartController();
@@ -17,13 +17,12 @@ if ($module === 'cart' && isset($_GET['act']) && in_array($_GET['act'], ['add', 
     exit;
 }
 
-// ✅ Chặn chưa login nếu cần
 if (!in_array($module, ['home', 'sanpham']) && !isset($_SESSION['username'])) {
     echo '<script>alert("Log in to use more function"); window.location.href="?module=home";</script>';
     exit;
 }
 
-// ✅ Route xử lý controller TRƯỚC KHI include header
+
 switch ($module) {
     case 'order':
         require_once '../../controller/OrderController.php';
@@ -34,10 +33,8 @@ switch ($module) {
         } else {
 
             $ctrl->index();
-
         }
         exit;
-
 
     case 'cart':
         require_once '../../controller/CartController.php';
@@ -47,11 +44,6 @@ switch ($module) {
     case 'sanpham':
         require_once '../../controller/ProductController.php';
         $controller = new ProductController();
-        break;
-
-    case 'blog':
-        require_once '../../controller/BlogController.php';
-        $controller = new BlogController();
         break;
 
     case 'chitietsanpham':
@@ -74,3 +66,11 @@ switch ($module) {
 include 'header.php';
 $controller->index();
 include 'footer.php';
+?>
+
+<script>
+    window.history.replaceState(null, null, window.location.href);
+</script>
+
+
+

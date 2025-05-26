@@ -1,102 +1,39 @@
-<?php
-//include 'header.php';
-//?>
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&amp;family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
 
 <section class="main-banner">
-    <div class="banner-overlay-bg animate-this" style="transform: translateX(20px) translateY(-10px);">
-        <img src="" alt="Overlay">
+    <div class="banner-overlay-bg">
+        <img src="" alt="Lớp phủ">
     </div>
     <div class="banner-blur-bg">
-        <img src="../Public/Image/" alt="Blur">
+        <img src="../Public/Image/banner-sports.jpg" alt="Làm mờ">
     </div>
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="banner-title-one">
-                    <div class="main-banner-subtitle-box wow fadeInUp" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+                    <div class="main-banner-subtitle-box">
                         <div class="banner-subtitle-box">
-                            <div class="banner-subtitle-first">The Best</div>
-                            <div class="banner-subtitle-second">Fitness Club</div>
+                            <div class="banner-subtitle-first">Được đánh giá cao</div>
+                            <div class="banner-subtitle-second">Bộ sưu tập đồ thể thao</div>
                         </div>
                     </div>
-                    <h1 class="h1-title wow fadeInUp" data-wow-delay=".7s" style="visibility: visible; animation-delay: 0.7s; animation-name: fadeInUp;">Work Hard To Get Better Life</h1>
-                    <p class="wow fadeInUp" data-wow-delay=".9s" style="visibility: visible; animation-delay: 0.9s; animation-name: fadeInUp;">Duis mollis felis quis libero dictum vehicula. Duis dictum lorem mi, a faucibus nisi eleifend eu.</p>
-                    <a href="about-us.html" class="sec-btn wow fadeInUp" data-wow-delay="1s" style="visibility: visible; animation-delay: 1s; animation-name: fadeInUp;">Get Started</a>
+                    <h1 class="h1-title">Trang bị để đạt hiệu suất tốt nhất</h1>
+                    <p>Khám phá trang phục thể thao cao cấp được thiết kế cho sự thoải mái, phong cách và hiệu quả. Phù hợp cho tập luyện, chạy bộ và di chuyển hàng ngày.</p>
+                    <a href="?module=sanpham" class="sec-btn">Mua ngay</a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="main-banner-img-one">
                     <img src="../Public/Image/hero-banner.png" alt="Banner">
                     <div class="banner-circle-first">
-                        <img src="../Public/Image/about-circle-one.png" alt="Circle">
+                        <img src="../Public/Image/about-circle-one.png" alt="Vòng tròn">
                     </div>
                     <div class="banner-circle-second">
-                        <img src="../Public/Image/about-circle-two.png" alt="Circle">
-                    </div>
-                    <div class="heart-rate">
-                        <img src="../Public/Image/heart-rate.png" alt="Heart Rate">
-                        <span>Heart Rate</span>
-                        <h3>100 bpm</h3>
-                    </div>
-                    <div class="calories-box">
-                        <div class="calories">
-                            <img src="../Public/Image/calories.png" alt="Heart Rate">
-                            <div class="calories-text">
-                                <span>Calories Burned</span>
-                                <h3>100 bpm</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="main-about-us">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="about-img-box wow fadeInLeft" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;">
-                    <div class="about-img-one">
-                        <img src="../Public/Image/about-banner.png" alt="About Us">
-                    </div>
-                    <div class="about-img-bg"></div>
-                    <div class="fitness">
-                        <img src="../Public/Image/fitness.png" alt="Fitness">
-                    </div>
-                    <div class="about-circle-one">
-                        <img src="../Public/Image/about-circle-two.png" alt="Circle">
-                    </div>
-                    <div class="about-circle-two">
-                        <img src="../Public/Image/about-circle-two.png" alt="Circle">
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="about-content-box wow fadeInRight" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInRight;">
-                    <div class="about-us-title">
-                        <div class="subtitle">
-                            <h2 class="h2-subtitle">About Us</h2>
-                        </div>
-                        <h2 class="h2-title">Welcome To Our Fitness Gym</h2>
-                    </div>
-                    <p>Nam ut hendrerit leo. Aenean vel ipsum nunc. Curabitur in tellus vitae nisi aliquet dapibus non et erat. Pellentesque porta sapien non accumsan dignissim curabitur sagittis nulla sit amet dolor feugiat.</p>
-                    <p>Integer placerat vitae metus posuere tincidunt. Nullam suscipit ante ac aliquet viverra vestibulum ante ipsum primis.</p>
-                    <div class="about-text-box">
-                        <div class="about-trainer-box">
-                            <div class="about-trainer-img">
-                                <img src="../Public/Image/about-coach.jpg" class="rounded-circle" alt="Trainer">
-                            </div>
-                            <div class="about-trainer-name">
-                                <h3 class="h3-title">Denis Robinson</h3>
-                                <span>Our Coach</span>
-                            </div>
-                        </div>
-                        <a href="about-us.html" class="sec-btn">Explore More</a>
+                        <img src="../Public/Image/about-circle-two.png" alt="Vòng tròn">
                     </div>
                 </div>
             </div>
@@ -104,19 +41,67 @@
     </div>
 </section>
 
+<section class="main-about-us">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-img-box">
+                    <div class="about-img-one">
+                        <img src="../Public/Image/about-banner.png" alt="Về chúng tôi">
+                    </div>
+                    <div class="fitness">
+                        <img src="../Public/Image/fitness.png" alt="Thể hình">
+                    </div>
+                    <div class="about-circle-one">
+                        <img src="../Public/Image/about-circle-two.png" alt="Vòng tròn">
+                    </div>
+                    <div class="about-circle-two">
+                        <img src="../Public/Image/about-circle-two.png" alt="Vòng tròn">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content-box">
+                    <div class="about-us-title">
+                        <div class="subtitle">
+                            <h2 class="h2-subtitle">Về chúng tôi</h2>
+                        </div>
+                        <h2 class="h2-title">Chào mừng đến với cửa hàng thể thao của chúng tôi</h2>
+                    </div>
+                    <p>Chúng tôi chuyên cung cấp đồ thể thao chất lượng cao cho vận động viên và người yêu thể dục. Sứ mệnh của chúng tôi là hỗ trợ hành trình của bạn bằng những trang bị vừa tiện ích vừa thời trang.</p>
+                    <p>Dù bạn ở sân cỏ, phòng tập hay di chuyển hàng ngày, sản phẩm của chúng tôi luôn sẵn sàng đồng hành.</p>
+                    <div class="about-text-box">
+                        <div class="about-trainer-box">
+                            <div class="about-trainer-img">
+                                <img src="../Public/Image/about-coach.jpg" class="rounded-circle" alt="Người sáng lập">
+                            </div>
+                            <div class="about-trainer-name">
+                                <h3 class="h3-title">Taylor Smith</h3>
+                                <span>Người sáng lập & Giám đốc điều hành</span>
+                            </div>
+                        </div>
+                        <a href="about-us.html" class="sec-btn">Tìm hiểu thêm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <!--Classes Start-->
 <section class="main-classes">
     <div class="classes-overlay-bg animate-this" style="transform: translateX(20px) translateY(-7.46373px);">
-        <img src="../Public/Image/classes-bg.png" alt="Overlay">
+        <img src="../Public/Image/classes-bg.png" alt="Lớp phủ">
     </div>
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="classes-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Our Classes</h2>
+                        <h2 class="h2-subtitle">Lớp học của chúng tôi</h2>
                     </div>
-                    <h2 class="h2-title">Fitness Classes For Every Goal</h2>
+                    <h2 class="h2-title">Lớp thể hình cho mọi mục tiêu</h2>
                 </div>
             </div>
         </div>
@@ -411,236 +396,79 @@
         </div>
 </section>
 <!--Classes End-->
-
-<!--Schedule Start-->
+<!-- Lịch Mở Cửa Start -->
 <section class="main-schedule">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="schedule-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Our Schedule</h2>
+                        <h2 class="h2-subtitle">Giờ hoạt động</h2>
                     </div>
-                    <h2 class="h2-title">Check Our  Classes Schedule</h2>
+                    <h2 class="h2-title">Tham khảo lịch mở cửa của chúng tôi</h2>
                 </div>
             </div>
             <div class="col-lg-12">
-                <div class="main-schedule-box wow fadeInUp" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+                <div class="main-schedule-box wow fadeInUp" data-wow-delay=".5s">
                     <div class="schedule-box">
                         <div class="schedule-time-box">
                             <ul>
                                 <li><img src="../Public/Image/clock-1.png" alt="Clock"></li>
-                                <li><h3 class="h3-title">8:00 Am</h3></li>
-                                <li><h3 class="h3-title">10:00 Am</h3></li>
-                                <li><h3 class="h3-title">12:00 Pm</h3></li>
-                                <li><h3 class="h3-title">5:00 Pm</h3></li>
-                                <li><h3 class="h3-title">8:00 Pm</h3></li>
+                                <li><h3 class="h3-title">6:00 AM</h3></li>
+                                <li><h3 class="h3-title">8:00 AM</h3></li>
+                                <li><h3 class="h3-title">12:00 PM</h3></li>
+                                <li><h3 class="h3-title">4:00 PM</h3></li>
+                                <li><h3 class="h3-title">8:00 PM</h3></li>
                             </ul>
                         </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Monday</h3></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Weight Lifting</h3>
-                                        <span>Desert Antony</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Cardio</h3>
-                                        <span>Kate Johnson</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Boxing</h3>
-                                        <span>John Hard</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Power Yoga</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Zumba Dance</h3>
-                                        <span>Steven Hill</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Tuesday</h3></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Aerobics</h3>
-                                        <span>Manny Johnes</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Power Yoga</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                                <li></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Weight Lifting</h3>
-                                        <span>Desert Antony</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Boxing</h3>
-                                        <span>John Hard</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Wednesday</h3></li>
-                                <li></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Weight Lifting</h3>
-                                        <span>Desert Antony</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Cardio</h3>
-                                        <span>Kate Johnson</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Zumba Dance</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Power Yoga</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Thursday</h3></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Power Yoga</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                                <li></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Aerobics</h3>
-                                        <span>Manny Johnes</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Boxing</h3>
-                                        <span>John Hard</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Weight Lifting</h3>
-                                        <span>Desert Antony</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Friday</h3></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Cardio</h3>
-                                        <span>Kate Johnson</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Aerobics</h3>
-                                        <span>Manny Johnes</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Weight Lifting</h3>
-                                        <span>Desert Antony</span>
-                                    </div>
-                                </li>
-                                <li></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Boxing</h3>
-                                        <span>John Hard</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="schedule-class-box">
-                            <ul>
-                                <li><h3 class="h3-title">Saturday</h3></li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Boxing</h3>
-                                        <span>John Hard</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Power Yoga</h3>
-                                        <span>Zahra Sharif</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Cardio</h3>
-                                        <span>Kate Johnson</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="schedule-class-text">
-                                        <h3 class="h3-title">Aerobics</h3>
-                                        <span>Manny Johnes</span>
-                                    </div>
-                                </li>
-                                <li></li>
-                            </ul>
-                        </div>
+
+                        <!-- Bảng giờ mở cửa theo ngày -->
+                        <?php
+                        $days = [
+                            'Thứ Hai' => ['6:00 AM - 12:00 PM', '2:00 PM - 9:00 PM'],
+                            'Thứ Ba' => ['6:00 AM - 10:00 AM', '3:00 PM - 8:00 PM'],
+                            'Thứ Tư' => ['6:00 AM - 12:00 PM', '2:00 PM - 9:00 PM'],
+                            'Thứ Năm' => ['6:00 AM - 10:00 AM', '3:00 PM - 8:00 PM'],
+                            'Thứ Sáu' => ['6:00 AM - 12:00 PM', '2:00 PM - 9:00 PM'],
+                            'Thứ Bảy' => ['8:00 AM - 5:00 PM'],
+                            'Chủ Nhật' => ['Nghỉ'],
+                        ];
+
+                        foreach ($days as $day => $hours): ?>
+                            <div class="schedule-class-box">
+                                <ul>
+                                    <li><h3 class="h3-title"><?= $day ?></h3></li>
+                                    <?php foreach ($hours as $hour): ?>
+                                        <li>
+                                            <div class="schedule-class-text">
+                                                <h3 class="h3-title"><?= $hour ?></h3>
+                                                <span><?= $hour === 'Nghỉ' ? 'Không hoạt động' : 'Phục vụ đầy đủ dịch vụ' ?></span>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endforeach; ?>
+                        <!-- Kết thúc bảng -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!--Schedule End-->
+<!-- Lịch Mở Cửa End -->
 
 <!--Counter Start-->
 <section class="main-counter">
     <div class="container">
-        <div class="row counter-bg wow fadeInUp" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+        <div class="row counter-bg wow fadeInUp" data-wow-delay=".5s">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="counter-box">
                     <div class="counter-content">
                         <h2 class="h2-title counting-data" data-count="874">874</h2>
                         <div class="counter-text">
-                            <img src="../Public/Image/happy-client.png" alt="Happy Client">
-                            <span>Happy Clients</span>
+                            <img src="../Public/Image/happy-client.png" alt="Khách hàng hài lòng">
+                            <span>Khách hàng hài lòng</span>
                         </div>
                     </div>
                 </div>
@@ -650,8 +478,8 @@
                     <div class="counter-content">
                         <h2 class="h2-title counting-data" data-count="987">987</h2>
                         <div class="counter-text">
-                            <img src="../Public/Image/total-clients.png" alt="Total Clients">
-                            <span>Total Clients</span>
+                            <img src="../Public/Image/total-clients.png" alt="Khách hàng thường xuyên">
+                            <span>Khách hàng thường xuyên</span>
                         </div>
                     </div>
                 </div>
@@ -661,8 +489,8 @@
                     <div class="counter-content">
                         <h2 class="h2-title counting-data" data-count="587">587</h2>
                         <div class="counter-text">
-                            <img src="../Public/Image/gym-equipment.png" alt="Gym Equipment">
-                            <span>Gym Equipment</span>
+                            <img src="../Public/Image/gym-equipment.png" alt="Thiết bị hiện đại">
+                            <span>Thiết bị hiện đại</span>
                         </div>
                     </div>
                 </div>
@@ -672,8 +500,8 @@
                     <div class="counter-content">
                         <h2 class="h2-title counting-data" data-count="748">748</h2>
                         <div class="counter-text">
-                            <img src="../Public/Image/cup-of-coffee.png" alt="Cup Of Coffee">
-                            <span>Cup Of Coffee</span>
+                            <img src="../Public/Image/cup-of-coffee.png" alt="Dịch vụ hỗ trợ">
+                            <span>Dịch vụ hỗ trợ</span>
                         </div>
                     </div>
                 </div>
@@ -685,17 +513,17 @@
 
 <!--Team Start-->
 <section class="main-team">
-    <div class="team-overlay-bg animate-this" style="transform: translateX(15.9991px) translateY(-9.99986px);">
-        <!--        <img src="assets/images/team-overlay-bg.png" alt="Overlay">-->
+    <div class="team-overlay-bg animate-this">
+        <!-- Hình nền đội ngũ huấn luyện -->
     </div>
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="team-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Best Trainer</h2>
+                        <h2 class="h2-subtitle">Huấn luyện viên xuất sắc</h2>
                     </div>
-                    <h2 class="h2-title">Our Professional Trainer</h2>
+                    <h2 class="h2-title">Đội ngũ huấn luyện chuyên nghiệp</h2>
                 </div>
             </div>
         </div>
@@ -927,6 +755,3 @@
     </div>
 </section>
 
-<?php
-//include 'footer.php';
-//?>

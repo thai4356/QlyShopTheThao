@@ -11,27 +11,18 @@ require_once 'Connect.php';
             $this->conn = (new Connect())->getConnection();
         }
 
-        public function getAll() {
-            $query = "SELECT * FROM $this->table ORDER BY created_at DESC";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
         public function getById($id) {
-            $query = "SELECT * FROM $this->table WHERE id = ?";
+
+            $query = "SELECT p.*, pi.image_url
+        FROM $this->table p
+        LEFT JOIN product_image pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
+        WHERE p.id = ?
+        LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
-        public function getPaged($limit, $offset) {
-            $sql = "SELECT * FROM product ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+
 
 
         public function countAll() {
@@ -73,40 +64,47 @@ require_once 'Connect.php';
         }
 
         public function getFiltered($limit, $offset, $filters = []) {
-            $sql = "SELECT * FROM product WHERE 1=1";
+            $sql = "
+        SELECT p.*, pi.image_url
+        FROM product p
+        INNER JOIN product_image pi 
+            ON p.id = pi.product_id AND pi.is_thumbnail = 1
+        WHERE 1=1
+    ";
+
+
             $params = [];
 
             // -- Build filter conditions
             if (!empty($filters['location'])) {
                 $placeholders = implode(',', array_fill(0, count($filters['location']), '?'));
-                $sql .= " AND location IN ($placeholders)";
+                $sql .= " AND p.location IN ($placeholders)";
                 $params = array_merge($params, $filters['location']);
             }
 
             if (!empty($filters['brand'])) {
                 $placeholders = implode(',', array_fill(0, count($filters['brand']), '?'));
-                $sql .= " AND brand IN ($placeholders)";
+                $sql .= " AND p.brand IN ($placeholders)";
                 $params = array_merge($params, $filters['brand']);
             }
 
             if (!empty($filters['price_min'])) {
-                $sql .= " AND price >= ?";
+                $sql .= " AND p.price >= ?";
                 $params[] = (int)$filters['price_min'];
             }
 
             if (!empty($filters['price_max'])) {
-                $sql .= " AND price <= ?";
+                $sql .= " AND p.price <= ?";
                 $params[] = (int)$filters['price_max'];
             }
 
-            // -- Add limit & offset (không để dấu nháy trong SQL!)
-            $sql .= " ORDER BY created_at DESC LIMIT ? OFFSET ?";
+            // -- Add limit & offset
+            $sql .= " ORDER BY p.created_at DESC LIMIT ? OFFSET ?";
             $params[] = (int)$limit;
             $params[] = (int)$offset;
 
             $stmt = $this->conn->prepare($sql);
 
-            // -- Gắn toàn bộ biến đúng thứ tự
             foreach ($params as $index => $value) {
                 $stmt->bindValue($index + 1, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
@@ -114,6 +112,7 @@ require_once 'Connect.php';
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
 
         public function getAllLocations() {
             $stmt = $this->conn->query("SELECT DISTINCT location FROM product WHERE location IS NOT NULL AND location <> '' LIMIT 5
@@ -126,5 +125,11 @@ require_once 'Connect.php';
 ");
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
+
+        public function reduceStock($productId, $quantity) {
+            $stmt = $this->conn->prepare("UPDATE product SET stock = stock - ? WHERE id = ? AND stock >= ?");
+            $stmt->execute(array($quantity, $productId, $quantity));
+        }
+
 
     }

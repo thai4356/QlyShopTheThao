@@ -19,7 +19,7 @@ class ProductController {
             'price_min' => isset($_GET['price_min']) ? $_GET['price_min'] : null,
             'price_max' => isset($_GET['price_max']) ? $_GET['price_max'] : null
         ];
-        // Tạo chuỗi query giữ lại các filter (dùng cho phân trang)
+
         $query = $_GET;
         unset($query['page']); // không giữ page hiện tại
         $queryStr = http_build_query($query);

@@ -1,68 +1,101 @@
 <main class="container" style="margin-top: 100px">
+    <?php
+    require_once '../../controller/ReviewController.php';
 
-    <!-- Left Column / Headphones Image -->
-    <div class="left-column">
-        <img data-image="black" src="../Public/Image/about-banner.png" alt="">
-        <img data-image="blue" src="../Public/Image/about-circle-two.png" alt="">
-        <img data-image="red" class="active" src="../Public/Image/about-banner.png" alt="">
-    </div>
+    $productId = $id;
 
+    $reviewCtrl = new ReviewController();
+    $reviews = $reviewCtrl->loadProductReviews($productId);
+    ?>
 
-    <!-- Right Column -->
-    <div class="right-column">
-
-        <!-- Product Description -->
-        <div class="product-description">
-            <span>Headphones</span>
-            <h1>Beats EP</h1>
-            <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
-        </div>
-
-        <!-- Product Configuration -->
-        <div class="product-configuration">
-
-            <!-- Product Color -->
-            <div class="product-color">
-                <span>Color</span>
-
-                <div class="color-choose">
-                    <div>
-                        <input data-image="red" type="radio" id="red" name="color" value="red" checked>
-                        <label for="red"><span></span></label>
-                    </div>
-                    <div>
-                        <input data-image="blue" type="radio" id="blue" name="color" value="blue">
-                        <label for="blue"><span></span></label>
-                    </div>
-                    <div>
-                        <input data-image="black" type="radio" id="black" name="color" value="black">
-                        <label for="black"><span></span></label>
-                    </div>
-                </div>
+    <div class="container" style="padding-top: 80px;">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="ProductImage/<?= $product['image_url'] ?>" class="img-fluid" alt="<?= htmlspecialchars($product['name']) ?>">
 
             </div>
-
-            <!-- Cable Configuration -->
-            <div class="cable-config">
-                <span>Cable configuration</span>
-
-                <div class="cable-choose">
-                    <button>Straight</button>
-                    <button>Coiled</button>
-                    <button>Long-coiled</button>
-                </div>
-
-                <a href="#">How to configurate your headphones</a>
+            <div class="col-md-7">
+                <h2><?= htmlspecialchars($product['name']) ?></h2>
+                <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
+                <h4 style="color:red"><?= number_format($product['price']) ?>₫</h4>
+                <p><strong>Còn lại:</strong> <?= $product['stock'] ?></p>
+                <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success">Thêm vào giỏ</a>
             </div>
         </div>
 
-        <!-- Product Pricing -->
-        <div class="product-price">
-            <span>148$</span>
-            <a href="#" class="cart-btn">Add to cart</a>
-        </div>
-    </div>
 </main>
+
+
+
+<?php if (isset($_SESSION['message'])): ?>
+    <script>alert('<?= addslashes($_SESSION['message']) ?>');</script>
+    <?php unset($_SESSION['message']); ?>
+<?php endif; ?>
+
+<section style="max-width: 1200px; margin: 50px auto; padding: 20px; border-top: 2px solid #eee;">
+    <h2>Đánh giá sản phẩm</h2>
+
+    <?php if (count($reviews) === 0): ?>
+        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+    <?php else: ?>
+        <?php foreach ($reviews as $r): ?>
+            <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+                <strong>⭐ <?= htmlspecialchars($r['rating']) ?>/5</strong><br>
+                <p><?= nl2br(htmlspecialchars($r['comment'])) ?></p>
+                <small>Đánh giá lúc <?= $r['created_at'] ?></small>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <hr style="margin: 30px 0;">
+
+    <h3>Gửi đánh giá của bạn</h3>
+    <form method="POST" action="../../controller/ReviewController.php?action=submitReview" style="margin-top: 15px;">
+        <input type="hidden" name="product_id" value="<?= $productId ?>">
+
+        <label>Đánh giá:</label><br>
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" required><label for="star5">★</label>
+            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+        </div>
+        <br><br>
+
+        <label for="comment">Bình luận:</label><br>
+        <textarea name="comment" id="comment" rows="4" style="width: 100%;" required></textarea><br><br>
+
+        <button type="submit" style="background-color: #fc4c08; color: white; padding: 10px 20px; border: none; border-radius: 6px;">Gửi đánh giá</button>
+    </form>
+</section>
+
+
+
+<style>
+    .star-rating {
+        direction: rtl;
+        font-size: 2rem;
+        unicode-bidi: bidi-override;
+        display: inline-flex;
+        gap: 5px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: gold;
+    }
+</style>
 
 <style>
     html, body {
@@ -266,17 +299,3 @@
         }
     }
 </style>
-
-<script>
-    $(document).ready(function() {
-
-        $('.color-choose input').on('click', function() {
-            var headphonesColor = $(this).attr('data-image');
-
-            $('.active').removeClass('active');
-            $('.left-column img[data-image = ' + headphonesColor + ']').addClass('active');
-            $(this).addClass('active');
-        });
-
-    });
-</script>

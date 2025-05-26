@@ -49,20 +49,20 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                                 <i class="menu-background bottom"></i>
                                 <ul class="menu">
                                     <li >
-                                        <a href="?module=home" title="Home">Home</a>
+                                        <a href="?module=home" title="Home">Trang Chủ</a>
                                     </li>
                                     <!--                                    <li><a href="indexUserProduct.php">Our products</a></li>-->
                                     <li>
-                                        <a href="?module=sanpham" class="navbar-link" data-nav-link>Product</a>
+                                        <a href="?module=sanpham" class="navbar-link" data-nav-link>Sản Phẩm</a>
 
 
                                     </li>
                                     <li>
-                                        <a href="?module=blog" class="navbar-link" title="Blog" data-nav-link>Blog</a>
+                                        <a href="?module=cart" class="navbar-link" title="Blog" data-nav-link>Giỏ hàng</a>
                                     </li>
 
                                     <li>
-                                        <a href="?module=blog" class="navbar-link" title="Favourite" data-nav-link>Favourite</a>
+                                        <a href="?module=blog" class="navbar-link" title="Favourite" data-nav-link>Yêu thích</a>
                                     </li>
                                 </ul>
                             </div>
