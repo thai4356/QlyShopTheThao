@@ -1,42 +1,68 @@
 <main class="container" style="margin-top: 100px">
 
-    <!-- Left Column / Product Image -->
+    <!-- Left Column / Headphones Image -->
     <div class="left-column">
-        <img data-image="main" class="active" src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+        <img data-image="black" src="../Public/Image/about-banner.png" alt="">
+        <img data-image="blue" src="../Public/Image/about-circle-two.png" alt="">
+        <img data-image="red" class="active" src="../Public/Image/about-banner.png" alt="">
     </div>
+
 
     <!-- Right Column -->
     <div class="right-column">
 
         <!-- Product Description -->
         <div class="product-description">
-            <span><?= htmlspecialchars($product['brand']) ?> - <?= htmlspecialchars($product['location']) ?></span>
-            <h1><?= htmlspecialchars($product['name']) ?></h1>
-            <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
+            <span>Headphones</span>
+            <h1>Beats EP</h1>
+            <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
         </div>
 
-        <!-- Product Configuration (Bạn có thể giữ hoặc ẩn phần này nếu không dùng) -->
+        <!-- Product Configuration -->
         <div class="product-configuration">
+
+            <!-- Product Color -->
             <div class="product-color">
                 <span>Color</span>
+
                 <div class="color-choose">
                     <div>
-                        <input data-image="main" type="radio" id="color-default" name="color" value="default" checked>
-                        <label for="color-default"><span style="background-color: #ccc;"></span></label>
+                        <input data-image="red" type="radio" id="red" name="color" value="red" checked>
+                        <label for="red"><span></span></label>
+                    </div>
+                    <div>
+                        <input data-image="blue" type="radio" id="blue" name="color" value="blue">
+                        <label for="blue"><span></span></label>
+                    </div>
+                    <div>
+                        <input data-image="black" type="radio" id="black" name="color" value="black">
+                        <label for="black"><span></span></label>
                     </div>
                 </div>
+
+            </div>
+
+            <!-- Cable Configuration -->
+            <div class="cable-config">
+                <span>Cable configuration</span>
+
+                <div class="cable-choose">
+                    <button>Straight</button>
+                    <button>Coiled</button>
+                    <button>Long-coiled</button>
+                </div>
+
+                <a href="#">How to configurate your headphones</a>
             </div>
         </div>
 
         <!-- Product Pricing -->
         <div class="product-price">
-            <span><?= number_format($product['price']) ?>₫</span>
-            <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="cart-btn">Thêm vào giỏ</a>
+            <span>148$</span>
+            <a href="#" class="cart-btn">Add to cart</a>
         </div>
     </div>
-
 </main>
-
 
 <style>
     html, body {

@@ -57,11 +57,11 @@ if ($row) {
         setcookie('password', '', time() - 3600, "/");
     }
 
-    if ($row["roleid"] == 2) {
+    if ($row["roleid"] == 1) {
         header("Location: ../view/adminView.php");
         exit;
     } else {
-        header("Location: ../view/ViewUser/Menu.php");
+        header("Location: ../view/ViewUser/Index.php");
         exit;
     }
 }

@@ -2,6 +2,6 @@
 
 class HomeController {
     public function index() {
-        include __DIR__ . '/../view/ViewUser/222.php';
+        include __DIR__ . '/../view/ViewUser/Menu.php';
     }
 }

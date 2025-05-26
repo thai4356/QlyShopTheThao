@@ -1,5 +1,4 @@
 <?php
-session_start();
 $locations = $productModel->getAllLocations();
 $brands = $productModel->getAllBrands();
 

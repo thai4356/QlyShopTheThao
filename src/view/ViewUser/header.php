@@ -28,7 +28,7 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                 <div class="col-lg-2">
                     <!-- Sit Logo Start -->
                     <div class="site-branding">
-                        <a href="222.php" title="Fithub">
+                        <a href="Menu.php" title="Fithub">
                             <img src="../Public/Image/logo.png" alt="Logo">
                             <img src="../Public/Image/logo_stickey.png" class="sticky-logo" alt="Logo">
                         </a>
@@ -61,14 +61,23 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                                         <a href="?module=blog" class="navbar-link" title="Blog" data-nav-link>Blog</a>
                                     </li>
 
+                                    <li>
+                                        <a href="?module=blog" class="navbar-link" title="Favourite" data-nav-link>Favourite</a>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
 
                         <div class="black-shadow"></div>
+
                         <div class="header-btn">
-                            <a href="Login.php" class="sec-btn">Log in</a>
+                            <?php if (isset($_SESSION['username'])): ?>
+                                <a href="../../controller/logout.php" class="sec-btn">Log out</a>
+                            <?php else: ?>
+                                <a href="../login.php" class="sec-btn">Log in</a>
+                            <?php endif; ?>
                         </div>
+
                     </div>
                 </div>
             </div>
