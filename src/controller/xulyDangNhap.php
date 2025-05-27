@@ -163,7 +163,7 @@ if ($row) {
     }
 
     if ($row["roleid"] == 1) {
-        header("Location: ../view/adminView.php");
+        header("Location: ../view/ViewAdmin/adminView.php");
         exit;
     } else {
         header("Location: ../view/ViewUser/Index.php");
