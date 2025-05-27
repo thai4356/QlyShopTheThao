@@ -13,9 +13,6 @@ if (isset($_SESSION['username'])) {
     exit;
 }
 ?>
-
-
-
 <!doctype html>
 <html lang="en">
 <head>
