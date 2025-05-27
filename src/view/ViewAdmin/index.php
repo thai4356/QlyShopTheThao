@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Kiểm tra nếu không có role_id hoặc role_id khác 1 thì chuyển hướng
+if (!isset($_SESSION['role_id']) || $_SESSION['role_id'] != 1) {
+    header("Location: ../ViewUser/access_denied.php");
+    exit;
+}
+?>
+
+
+
 <html>
 
 <head>

@@ -1,70 +1,33 @@
 <?php session_start(); ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request Sent</title>
-    <link rel="stylesheet" href="Public/CSS/register.css"> <style>
-        /* body được style bởi register.css để căn giữa nội dung */
-        .auth-message-container {
-            background-color: #FFFFFF; /* */
-            padding: 40px 50px;
-            border-radius: 10px; /* */
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); /* */
-            width: 100%;
-            max-width: 480px;
-            text-align: center; /* */
-        }
-        .auth-message-container h1 {
-            margin-bottom: 15px; /* */
-            font-size: 24px; /* */
-            color: #4CAF50; /* Màu xanh cho thành công */
-        }
-        .auth-message-container p {
-            font-size: 16px; /* */
-            color: #333;
-            margin-bottom: 25px; /* */
-            line-height: 1.6;
-        }
-        .auth-message-container a.button-link {
-            display: inline-block;
-            border-radius: 20px; /* */
-            border: 1px solid #FF4B2B; /* */
-            background-color: #FF4B2B; /* */
-            color: #FFFFFF !important; /* */
-            font-size: 12px; /* */
-            font-weight: bold; /* */
-            padding: 12px 25px; /* */
-            letter-spacing: 1px; /* */
-            text-transform: uppercase; /* */
-            text-decoration: none;
-            transition: transform 80ms ease-in, background-color 0.2s; /* */
-        }
-        .auth-message-container a.button-link:hover {
-            background-color: #e04020;
-            border-color: #e04020;
-            transform: scale(1.05); /* */
-        }
-    </style>
+    <title>Yêu cầu đã được gửi</title>
+    <link rel="stylesheet" href="Public/CSS/register.css">
+    <link rel="stylesheet" href="Public/CSS/message_page_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700;800&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="message-page-body">
 
 <div class="auth-message-container">
-    <h1>✅ Request Sent!</h1>
+    <h1>✅ Yêu cầu đã được gửi!</h1>
     <p>
         <?php
-        $email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : 'your email address';
+        $email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : 'địa chỉ email của bạn';
         $status = $_GET['status'] ?? '';
 
         if ($status === 'emailsent_placeholder') {
-            echo "If an account with the provided email exists, we have sent a password reset link. Please check your inbox (and spam folder).";
+            echo "Nếu có tài khoản tương ứng với email đã cung cấp, chúng tôi đã gửi một liên kết đặt lại mật khẩu. Vui lòng kiểm tra hộp thư đến (và cả thư mục spam).";
         } else {
-            echo "We have sent a password reset link to <strong>" . $email . "</strong>. Please check your inbox (and spam folder).";
+            echo "Chúng tôi đã gửi một liên kết đặt lại mật khẩu tới <strong>" . $email . "</strong>. Vui lòng kiểm tra hộp thư đến (và cả thư mục spam).";
         }
         ?>
     </p>
-    <a href="login.php" class="button-link">Back to Login</a>
+    <a href="login.php" class="button-link">Quay lại đăng nhập</a>
 </div>
 
 </body>

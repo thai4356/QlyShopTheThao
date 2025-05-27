@@ -1,0 +1,292 @@
+/*-----------------------------------*\
+  #CUSTOM PROPERTY (BIẾN TÙY CHỈNH)
+\*-----------------------------------*/
+
+:root {
+
+    /**
+     * colors (Màu sắc)
+     */
+
+    --rich-black-fogra-29_50: hsl(210, 26%, 11%, 0.5); /* Màu đen sẫm với 50% độ trong suốt */
+    --rich-black-fogra-29-1: hsl(210, 26%, 11%);     /* Màu đen sẫm (ví dụ: cho văn bản chính, nền tối) */
+    --rich-black-fogra-29-2: hsl(210, 50%, 4%);      /* Màu đen sẫm hơn nữa */
+    --silver-metallic: hsl(212, 9%, 67%);           /* Màu bạc kim loại */
+    --coquelicot_20: hsla(12, 98%, 52%, 0.2);       /* Màu cam coquelicot với 20% độ trong suốt */
+    --coquelicot_10: hsla(12, 98%, 52%, 0.1);       /* Màu cam coquelicot với 10% độ trong suốt */
+    --sonic-silver: hsl(0, 0%, 47%);                /* Màu bạc sonic (ví dụ: cho văn bản phụ, viền) */
+    --cadet-gray: hsl(214, 15%, 62%);               /* Màu xám cadet */
+    --light-gray: hsl(0, 0%, 80%);                  /* Màu xám nhạt (ví dụ: cho viền nhẹ, nền phụ) */
+    --coquelicot: hsl(12, 98%, 52%);                /* Màu cam coquelicot (ví dụ: màu chủ đạo, nhấn mạnh) */
+    --gainsboro: hsl(0, 0%, 88%);                   /* Màu xám gainsboro (ví dụ: cho viền, dải phân cách) */
+    --white_20: hsla(0, 0%, 100%, 0.2);             /* Màu trắng với 20% độ trong suốt */
+    --white_10: hsla(0, 0%, 100%, 0.1);             /* Màu trắng với 10% độ trong suốt */
+    --white: hsl(0, 0%, 100%);                      /* Màu trắng */
+    --black_10: hsla(0, 0%, 0%, 0.1);               /* Màu đen với 10% độ trong suốt */
+    --black: hsl(0, 0%, 0%);                        /* Màu đen */
+
+    /**
+     * typography (Kiểu chữ)
+     */
+
+    --ff-rubik: 'Rubik', sans-serif;            /* Font chữ chính Rubik */
+    --ff-catamaran: 'Catamaran', sans-serif;    /* Font chữ phụ Catamaran */
+
+    /* Các kích thước font chữ (fs = font-size) */
+    --fs-1: 5rem;   /* Kích thước lớn nhất, ví dụ cho tiêu đề chính banner */
+    --fs-2: 3.8rem;
+    --fs-3: 3rem;   /* Ví dụ cho tiêu đề H2 của section */
+    --fs-4: 1.9rem;   /* Ví dụ cho tiêu đề H3 hoặc phụ đề lớn */
+    --fs-5: 1.8rem;   /* Ví dụ cho văn bản thông thường hoặc tiêu đề nhỏ hơn */
+    --fs-6: 1.5rem;   /* Ví dụ cho văn bản trong bảng, mô tả */
+    --fs-7: 1.4rem;   /* Ví dụ cho văn bản nhỏ, chú thích, button nhỏ */
+    --fs-8: 1.3rem;
+    --fs-9: 1.2rem;
+
+    /* Độ đậm của font (fw = font-weight) */
+    --fw-500: 500; /* Medium */
+    --fw-700: 700; /* Bold */
+    --fw-900: 900; /* Black / Extra-Bold */
+
+    /**
+     * spacing (Khoảng cách)
+     */
+
+    --section-padding: 80px; /* Khoảng cách đệm chung cho các section */
+
+    /**
+     * shadow (Đổ bóng)
+     */
+
+    --shadow-1: 0 5px 10px hsla(12, 98%, 52%, 0.1);  /* Đổ bóng nhẹ với màu cam chủ đạo */
+    --shadow-2: 0 3px 10px hsla(210, 26%, 11%, 0.2); /* Đổ bóng nhẹ với màu đen sẫm */
+    --shadow-3: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.08); /* Đổ bóng rất nhẹ */
+
+    /**
+     * border radius (Bo góc)
+     */
+
+    --radius-5: 5px;
+    --radius-8: 8px;
+    --radius-10: 10px;
+    --radius-12: 12px;
+    --radius-15: 15px;
+
+    /**
+     * transition (Hiệu ứng chuyển tiếp)
+     */
+
+    --transition-1: 0.25s ease; /* Thời gian chuyển tiếp nhanh */
+    --transition-2: 0.5s ease;  /* Thời gian chuyển tiếp vừa */
+    --cubic-out: cubic-bezier(0.33, 1, 0.68, 1); /* Kiểu chuyển tiếp */
+
+}
+
+/* Using Fithub variables - adjust if your variables are named differently */
+:root {
+    /* Primary Colors from Fithub (style.css) */
+    --order-brand-primary: var(--coquelicot, #FF4500); /* Default to orange if not defined */
+    --order-brand-dark: var(--rich-black-fogra-29-1, #1C2331);
+    --order-text-secondary: var(--sonic-silver, #757575);
+    --order-background-light: var(--white, #FFFFFF);
+    --order-border-color: var(--gainsboro, #DDDDDD);
+
+    /* Fonts from Fithub (style.css) */
+    --order-primary-font: var(--ff-rubik, 'Rubik', sans-serif);
+    --order-secondary-font: var(--ff-catamaran, 'Catamaran', sans-serif);
+
+    /* Font Sizes (Approximation from Fithub's style.css) */
+    --order-fs-title: var(--fs-3, 2rem); /* For <h2> */
+    --order-fs-table-header: var(--fs-7, 0.875rem); /* For table th */
+    --order-fs-table-cell: var(--fs-6, 0.9rem);   /* For table td */
+    --order-fs-button: var(--fs-7, 0.875rem); /* For buttons */
+    --order-fs-status: var(--fs-7, 0.8rem); /* For status badges */
+
+    /* Radius & Shadow from Fithub */
+    --order-radius: var(--radius-8, 8px);
+    --order-shadow: var(--shadow-2, 0 3px 10px rgba(0,0,0,0.1));
+
+    /* Status Colors (can remain specific or map to Fithub's palette if available) */
+    --status-pending-bg: #ffc107;
+    --status-pending-text: #333;
+    --status-confirmed-bg: #17a2b8;
+    --status-confirmed-text: #fff;
+    --status-shipped-bg: #007bff;
+    --status-shipped-text: #fff;
+    --status-completed-bg: #28a745;
+    --status-completed-text: #fff;
+    --status-canceled-bg: #dc3545;
+    --status-canceled-text: #fff;
+    --status-default-bg: #6c757d;
+    --status-default-text: #fff;
+}
+
+.order-history-container {
+    /* margin-top: 100px; Applied inline, can be moved here if preferred */
+    padding-bottom: 50px; /* From original */
+    font-family: var(--order-secondary-font);
+}
+
+.order-history-container h2.page-title { /* Added class for specificity */
+    color: var(--order-brand-dark); /* Use Fithub's dark title color */
+    font-family: var(--order-primary-font);
+    font-weight: 700; /* Fithub titles are often bolder */
+    margin-bottom: 30px; /* Increased spacing */
+    font-size: var(--order-fs-title);
+    text-align: center; /* Common for Fithub titles */
+    padding-bottom: 10px;
+    position: relative;
+}
+
+/* Optional: Add an underline like Fithub section titles */
+.order-history-container h2.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--order-brand-primary); /* Fithub's primary accent */
+}
+
+
+.order-history-container .table-wrapper { /* New wrapper for box shadow and radius */
+    border-radius: var(--order-radius);
+    overflow: hidden; /* Important for border-radius on table */
+    box-shadow: var(--order-shadow);
+    background-color: var(--order-background-light);
+}
+
+.order-history-container .table {
+    margin-bottom: 0; /* Remove default Bootstrap margin if table is inside wrapper */
+    border: none; /* Remove table border if wrapper has shadow */
+}
+
+.order-history-container .table thead th { /* Updated thead styling */
+    background-color: var(--order-brand-dark); /* Fithub dark color */
+    color: var(--order-background-light); /* White text */
+    font-family: var(--order-primary-font);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: var(--order-fs-table-header);
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 2px solid var(--order-brand-primary); /* Accent border */
+    text-align: left;
+}
+
+.order-history-container .table tbody td {
+    color: var(--order-text-secondary); /* Fithub's secondary text color */
+    font-size: var(--order-fs-table-cell);
+    padding: 15px;
+    vertical-align: middle;
+    border-top: 1px solid var(--order-border-color); /* Fithub's border color */
+}
+
+.order-history-container .table tbody tr:hover {
+    background-color: hsla(12, 98%, 52%, 0.05); /* Light primary color tint on hover */
+}
+
+/* Status Badges */
+.order-status-badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: var(--order-fs-status);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--radius-5, 5px); /* Fithub's radius */
+    text-transform: capitalize;
+}
+
+.order-status-badge.status-pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+}
+.order-status-badge.status-confirmed {
+    background-color: var(--status-confirmed-bg);
+    color: var(--status-confirmed-text);
+}
+.order-status-badge.status-shipped {
+    background-color: var(--status-shipped-bg);
+    color: var(--status-shipped-text);
+}
+.order-status-badge.status-completed {
+    background-color: var(--status-completed-bg);
+    color: var(--status-completed-text);
+}
+.order-status-badge.status-canceled {
+    background-color: var(--status-canceled-bg);
+    color: var(--status-canceled-text);
+}
+.order-status-badge.status-default {
+    background-color: var(--status-default-bg);
+    color: var(--status-default-text);
+}
+
+
+/* Detail button - Align with Fithub's .sec-btn or similar */
+.btn-order-detail {
+    /* Replicating Fithub .btn style + .sec-btn like outline */
+    font-family: var(--order-primary-font);
+    background: transparent;
+    color: var(--order-brand-primary);
+    border: 2px solid var(--order-brand-primary);
+    border-radius: var(--radius-10, 10px); /* Fithub button radius */
+    padding: 8px 18px; /* Adjusted padding */
+    font-size: var(--order-fs-button);
+    font-weight: 600; /* Fithub buttons are often bold */
+    text-transform: uppercase; /* Fithub buttons often uppercase */
+    letter-spacing: 1px;
+    transition: var(--transition-1, 0.25s ease);
+    display: inline-block; /* For consistent behavior */
+    text-decoration: none; /* Remove underline from <a> */
+    line-height: 1.5;
+}
+
+.btn-order-detail:hover,
+.btn-order-detail:focus {
+    background-color: var(--order-brand-primary);
+    color: var(--order-background-light); /* White text on hover */
+    border-color: var(--order-brand-primary);
+    box-shadow: var(--shadow-1, 0 5px 10px rgba(255,69,0,0.2)); /* Fithub primary shadow */
+}
+
+/* Empty orders message */
+.no-orders-message { /* Renamed class for clarity */
+    padding: 40px 20px;
+    text-align: center;
+    background-color: hsla(0, 0%, 0%, 0.03); /* Lighter, more subtle background */
+    border-radius: var(--order-radius);
+    color: var(--order-text-secondary);
+    font-size: var(--fs-5, 1.1rem); /* Fithub font size */
+    margin-top: 20px;
+}
+.no-orders-message i { /* Optional: if you add an icon */
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--order-brand-primary);
+}
+
+
+/* Responsive styles from original, can be kept or adjusted */
+@media (max-width: 767px) {
+    .order-history-container .table,
+    .order-history-container .table-wrapper { /* Apply to wrapper too */
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    .order-history-container .table th,
+    .order-history-container .table td {
+        white-space: nowrap; /* Prevent text wrapping in cells on small screens */
+    }
+    .order-history-container h2.page-title {
+        font-size: calc(var(--order-fs-title) * 0.8); /* Slightly smaller title on mobile */
+    }
+}

@@ -1,0 +1,272 @@
+/* CUSTOM PROPERTY (BIẾN TÙY CHỈNH) - From your style.css */
+:root {
+    /**
+     * colors (Màu sắc)
+     */
+    --rich-black-fogra-29_50: hsl(210, 26%, 11%, 0.5);
+    --rich-black-fogra-29-1: hsl(210, 26%, 11%);
+    --rich-black-fogra-29-2: hsl(210, 50%, 4%);
+    --silver-metallic: hsl(212, 9%, 67%);
+    --coquelicot_20: hsla(12, 98%, 52%, 0.2);
+    --coquelicot_10: hsla(12, 98%, 52%, 0.1);
+    --sonic-silver: hsl(0, 0%, 47%);
+    --cadet-gray: hsl(214, 15%, 62%);
+    --light-gray: hsl(0, 0%, 80%);
+    --coquelicot: hsl(12, 98%, 52%); /* This is Fithub's primary orange */
+    --gainsboro: hsl(0, 0%, 88%);
+    --white_20: hsla(0, 0%, 100%, 0.2);
+    --white_10: hsla(0, 0%, 100%, 0.1);
+    --black_10: hsla(0, 0%, 0%, 0.1);
+    --white: hsl(0, 0%, 100%);
+    --black: hsl(0, 0%, 0%);
+
+    /**
+     * typography (Kiểu chữ)
+     */
+    --ff-rubik: 'Rubik', sans-serif;
+    --ff-catamaran: 'Catamaran', sans-serif;
+
+    /* Font Sizes (Adjusted for table context if needed) */
+    --fs-1: 3.8rem; /* Original: 5rem */
+    --fs-2: 3rem;   /* Original: 3.8rem */
+    --fs-3: 2.5rem; /* Original: 3rem -> For <h2> title */
+    --fs-4: 2rem;   /* Original: 1.9rem */
+    --fs-5: 1.8rem; /* Original: 1.8rem */
+    --fs-6: 1.5rem; /* For general table text */
+    --fs-7: 1.4rem; /* For smaller text, badges, table headers */
+
+    --fw-900: 900;
+    --fw-800: 800;
+    --fw-700: 700;
+    --fw-500: 500;
+
+    /**
+     * shadow (Đổ bóng)
+     */
+    --shadow-1: 0 0 20px var(--black_10); /* Original: 0 5px 10px hsla(12, 98%, 52%, 0.1) */
+    --shadow-2: 0px 10px 24px var(--coquelicot_20); /* Original: 0 3px 10px hsla(210, 26%, 11%, 0.2) */
+
+    /**
+     * border radius (Bo góc)
+     */
+    --radius-10: 10px;
+    --radius-8: 8px;
+    --radius-5: 5px;
+
+    /**
+     * transition (Hiệu ứng chuyển tiếp)
+     */
+    --transition-1: 0.25s ease;
+    --transition-2: 0.5s ease;
+
+    /* Status Colors (can be kept or mapped if Fithub has equivalents) */
+    --status-pending-bg: #ffc107; /* Yellow */
+    --status-pending-text: var(--rich-black-fogra-29-1); /* Dark text for yellow bg */
+    --status-confirmed-bg: #17a2b8; /* Info Blue */
+    --status-confirmed-text: var(--white);
+    --status-shipped-bg: #007bff;   /* Primary Blue */
+    --status-shipped-text: var(--white);
+    --status-completed-bg: #28a745; /* Success Green */
+    --status-completed-text: var(--white);
+    --status-canceled-bg: #dc3545;  /* Danger Red */
+    --status-canceled-text: var(--white);
+    --status-default-bg: var(--sonic-silver); /* Default Grey */
+    --status-default-text: var(--white);
+}
+
+/* :root definition from style.css (Fithub theme) should be globally available */
+/* If not, copy the :root block from the previous order-history.css example here */
+
+.order-detail-container {
+    font-family: var(--ff-rubik, 'Rubik', sans-serif); /* Sử dụng font Rubik làm font chính */
+    color: var(--sonic-silver, #757575); /* Màu chữ mặc định */
+    padding-bottom: 50px;
+}
+
+.order-detail-container .page-title {
+    color: var(--rich-black-fogra-29-1, #1C2331); /* Màu tiêu đề đậm */
+    font-family: var(--ff-catamaran, 'Catamaran', sans-serif); /* Font Catamaran cho tiêu đề */
+    font-weight: var(--fw-800, 800);
+    font-size: var(--fs-3, 2.5rem); /* Kích thước font cho tiêu đề chính */
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.order-detail-container .page-title::after { /* Gạch chân cho tiêu đề */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background-color: var(--coquelicot, #FF4500); /* Màu cam chủ đạo của Fithub */
+    border-radius: var(--radius-5, 5px);
+}
+
+.order-info-card {
+    background-color: var(--white, #FFFFFF);
+    border-radius: var(--radius-8, 8px);
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-1, 0 0 20px rgba(0,0,0,0.1)); /* Đổ bóng nhẹ */
+}
+
+.order-info-card .info-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gainsboro, #DDDDDD);
+}
+
+.order-info-card .info-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.order-info-card .info-header {
+    font-family: var(--ff-catamaran, 'Catamaran', sans-serif);
+    font-size: var(--fs-5, 1.8rem); /* Kích thước font cho tiêu đề phụ */
+    color: var(--rich-black-fogra-29-1, #1C2331);
+    margin-bottom: 15px;
+    font-weight: var(--fw-700, 700);
+}
+
+.order-info-card p {
+    margin-bottom: 8px;
+    font-size: var(--fs-6, 1.5rem); /* Kích thước font cho nội dung */
+    line-height: 1.7;
+}
+
+.order-info-card p strong {
+    font-weight: var(--fw-500, 500);
+    color: var(--rich-black-fogra-29-1, #1C2331); /* Màu cho phần strong */
+    min-width: 150px; /* Giúp các mục thẳng hàng hơn */
+    display: inline-block;
+}
+
+.order-status-detail { /* Style cho trạng thái đơn hàng */
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: var(--fs-7, 1.4rem);
+    font-weight: var(--fw-700, 700);
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--radius-5, 5px);
+    text-transform: capitalize;
+}
+/* Copy các class .status-pending, .status-confirmed, v.v. từ order-history.css vào đây */
+.order-status-detail.status-pending {
+    background-color: var(--status-pending-bg, #ffc107);
+    color: var(--status-pending-text, #333);
+}
+.order-status-detail.status-confirmed {
+    background-color: var(--status-confirmed-bg, #17a2b8);
+    color: var(--status-confirmed-text, #fff);
+}
+.order-status-detail.status-shipped {
+    background-color: var(--status-shipped-bg, #007bff);
+    color: var(--status-shipped-text, #fff);
+}
+.order-status-detail.status-completed {
+    background-color: var(--status-completed-bg, #28a745);
+    color: var(--status-completed-text, #fff);
+}
+.order-status-detail.status-canceled { /* Sửa lỗi chính tả "canceled" */
+    background-color: var(--status-canceled-bg, #dc3545);
+    color: var(--status-canceled-text, #fff);
+}
+.order-status-detail.status-default {
+    background-color: var(--status-default-bg, #6c757d);
+    color: var(--status-default-text, #fff);
+}
+
+
+.order-items-table-wrapper { /* Wrapper cho bảng sản phẩm */
+    border-radius: var(--radius-8, 8px);
+    overflow-x: auto; /* Responsive cho bảng */
+    box-shadow: var(--shadow-1, 0 0 20px rgba(0,0,0,0.1));
+    background-color: var(--white, #FFFFFF);
+    margin-bottom: 30px;
+}
+
+.order-items-table {
+    margin-bottom: 0;
+}
+
+.order-items-table thead th {
+    background-color: var(--rich-black-fogra-29-1, #1C2331); /* Nền tối cho header bảng */
+    color: var(--white, #FFFFFF);
+    font-family: var(--ff-catamaran, 'Catamaran', sans-serif);
+    font-weight: var(--fw-700, 700);
+    text-transform: uppercase;
+    font-size: var(--fs-7, 1.4rem);
+    padding: 15px 20px;
+    vertical-align: middle;
+    border-bottom: 2px solid var(--coquelicot, #FF4500); /* Viền cam cho header */
+    text-align: left;
+}
+
+.order-items-table tbody td {
+    color: var(--sonic-silver, #757575);
+    font-size: var(--fs-6, 1.5rem);
+    padding: 15px 20px;
+    vertical-align: middle;
+    border-top: 1px solid var(--gainsboro, #DDDDDD);
+}
+
+.order-items-table tbody tr:hover {
+    background-color: var(--coquelicot_10, hsla(12, 98%, 52%, 0.1)); /* Hiệu ứng hover */
+}
+
+.order-total-summary {
+    text-align: right;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--white, #FFFFFF);
+    border-radius: var(--radius-8, 8px);
+    box-shadow: var(--shadow-1, 0 0 20px rgba(0,0,0,0.1));
+}
+
+.order-total-summary .total-title {
+    font-family: var(--ff-catamaran, 'Catamaran', sans-serif);
+    font-size: var(--fs-4, 1.9rem); /* Kích thước cho "Tổng thanh toán" */
+    color: var(--rich-black-fogra-29-1, #1C2331);
+    font-weight: var(--fw-500, 500);
+    margin-right: 10px;
+}
+
+.order-total-summary .total-amount {
+    font-family: var(--ff-rubik, 'Rubik', sans-serif);
+    font-size: var(--fs-3, 2.5rem); /* Kích thước lớn cho tổng tiền */
+    color: var(--coquelicot, #FF4500); /* Màu cam chủ đạo */
+    font-weight: var(--fw-700, 700);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .order-detail-container .page-title {
+        font-size: calc(var(--fs-3, 2.5rem) * 0.85);
+    }
+    .order-info-card p strong {
+        min-width: 120px; /* Giảm chiều rộng tối thiểu cho màn hình nhỏ hơn */
+    }
+    .order-info-card {
+        padding: 20px;
+    }
+    .order-items-table thead th,
+    .order-items-table tbody td {
+        padding: 12px 15px;
+        font-size: calc(var(--fs-7, 1.4rem) * 0.9);
+    }
+    .order-total-summary .total-title {
+        font-size: calc(var(--fs-4, 1.9rem) * 0.9);
+    }
+    .order-total-summary .total-amount {
+        font-size: calc(var(--fs-3, 2.5rem) * 0.9);
+    }
+}
