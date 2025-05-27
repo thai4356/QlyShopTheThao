@@ -3,46 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
-    <link rel="stylesheet" href="Public/CSS/register.css"> <style>
-        /* body được style bởi register.css để căn giữa nội dung */
-        .auth-form-container {
-            background-color: #FFFFFF; /* */
-            padding: 40px 50px;
-            border-radius: 10px; /* */
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); /* */
-            width: 100%;
-            max-width: 420px;
-            text-align: center; /* */
-        }
-        .auth-form-container h1 {
-            margin-bottom: 20px; /* */
-        }
-        .auth-form-container p {
-            font-size: 14px; /* */
-            color: #555;
-            margin-bottom: 25px; /* */
-        }
-        .auth-form-container form {
-            padding: 0; /* Ghi đè padding của form từ register.css nếu không cần thiết */
-            background-color: transparent; /* Ghi đè background của form từ register.css */
-            box-shadow: none;
-        }
-        .auth-form-container input[type="email"] {
-            margin-bottom: 20px; /* */
-        }
-        .auth-form-container button[type="submit"] {
-            width: 100%; /* */
-        }
-    </style>
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="Public/CSS/register.css">
+    <link rel="stylesheet" href="Public/CSS/auth_form_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700;800&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="auth-page-body">
 
 <div class="auth-form-container">
-    <h1>Forgot Password</h1> <p>Enter your email address, and we will send you a link to reset your password.</p>
-    <form action="../controller/xulyQuen.php" method="post"> <input type="email" name="email" id="email" placeholder="Enter your email" required> <button type="submit">Send Reset Link</button> </form>
+    <h1>Reset Your Password</h1>
+    <form method="POST" action="../controller/xulyDatLai.php" id="resetPasswordForm">
+        <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? htmlspecialchars($_GET['token']) : ''; ?>">
+        <div class="form-group">
+            <input type="password" name="new_password" id="new_password" placeholder="Enter new password" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm new password" required>
+        </div>
+        <span id="passwordMatchError" class="form-error-message" style="display:none;"></span>
+        <button type="submit">Reset Password</button>
+    </form>
 </div>
 
+<script src="Public/JS/reset_password_scripts.js"></script>
 </body>
 </html>
-

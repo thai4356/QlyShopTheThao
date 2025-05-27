@@ -1,0 +1,85 @@
+/* QlyShopTheThao/view/Public/CSS/message_page_styles.css */
+
+/*
+  Giả định rằng các biến CSS chung như --coquelicot, --radius-10, --shadow-1, etc.
+  đã được định nghĩa trong một file CSS global khác (ví dụ: style.css của Fithub)
+  và đã được load trên trang.
+  Nếu chưa, bạn có thể cần định nghĩa chúng ở đây hoặc trong file CSS global đó.
+*/
+:root {
+    --radius-20: 20px;
+    /* Ví dụ các biến màu từ Fithub (style.css) */
+    --message-primary-color: var(--coquelicot, #FF4B2B); /* Màu cam chủ đạo */
+    --message-primary-darker-color: #e04020; /* Màu cam đậm hơn cho hover */
+    --message-success-color: #4CAF50; /* Màu xanh lá cho thành công */
+    --message-text-color: #333;
+    --message-background-color: #FFFFFF;
+    --message-box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    --message-border-radius: var(--radius-10, 10px); /* Sử dụng biến từ Fithub nếu có */
+    --message-button-border-radius: var(--radius-20, 20px); /* Hoặc một giá trị cụ thể */
+    --message-button-font-size: 12px;
+    --message-button-padding: 12px 25px;
+    --message-font-family: var(--ff-rubik, 'Rubik', sans-serif); /* Sử dụng font từ Fithub */
+}
+
+body.message-page-body { /* Thêm class này vào thẻ body của success_reset.php */
+    /* style body được lấy từ register.css để căn giữa nội dung, ví dụ: */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #3c3f41; /* Màu nền giống login.php nếu muốn */
+    margin: 0;
+    font-family: var(--message-font-family);
+}
+
+.auth-message-container {
+    background-color: var(--message-background-color);
+    padding: 40px 50px;
+    border-radius: var(--message-border-radius);
+    box-shadow: var(--message-box-shadow);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.auth-message-container h1 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: var(--message-success-color); /* Màu xanh cho thành công */
+    font-family: var(--ff-catamaran, 'Catamaran', sans-serif); /* Font tiêu đề Fithub */
+    font-weight: var(--fw-700, 700);
+}
+
+.auth-message-container p {
+    font-size: 16px;
+    color: var(--message-text-color);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.auth-message-container p strong {
+    font-weight: var(--fw-700, 700); /* Sử dụng font-weight từ Fithub */
+    color: var(--message-primary-color); /* Màu cam cho email */
+}
+
+.auth-message-container a.button-link {
+    display: inline-block;
+    border-radius: var(--message-button-border-radius);
+    border: 1px solid var(--message-primary-color);
+    background-color: var(--message-primary-color);
+    color: var(--white, #FFFFFF) !important; /* Quan trọng để ghi đè */
+    font-size: var(--message-button-font-size);
+    font-weight: bold;
+    padding: var(--message-button-padding);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 80ms ease-in, background-color 0.2s, border-color 0.2s;
+}
+
+.auth-message-container a.button-link:hover {
+    background-color: var(--message-primary-darker-color);
+    border-color: var(--message-primary-darker-color);
+    transform: scale(1.05);
+}
