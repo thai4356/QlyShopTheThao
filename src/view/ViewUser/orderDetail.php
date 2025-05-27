@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 100px;">
-    <h2>Chi tiết đơn hàng #<?= $order['id'] ?></h2>
+    <h2>Chi tiết đơn hàng #<?= $order['orderNo'] ?></h2>
     <p><strong>Ngày đặt:</strong> <?= $order['created_at'] ?></p>
     <p><strong>Người nhận:</strong> <?= $order['name'] ?> | <strong>Địa chỉ:</strong> <?= $order['address'] ?> | <strong>SĐT:</strong> <?= $order['phone'] ?></p>
     <p><strong>Phương thức:</strong> <?= $order['payment_method'] ?> | <strong>Trạng thái:</strong> <?= $order['status'] ?></p>

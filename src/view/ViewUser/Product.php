@@ -1,19 +1,40 @@
 <?php
 $locations = $productModel->getAllLocations();
 $brands = $productModel->getAllBrands();
-
+require_once '../../model/category.php';
+$categoryModel = new Category();
+$categories = $categoryModel->getAll()
 ?>
 
 <div class="container">
     <div class="row">
 
         <!-- BỘ LỌC 30% -->
-        <div class="col-12 col-md-3 filter-sidebar" style="padding-top: 100px">
+        <div class="col-12 col-md-3 filter-sidebar" style="padding-top: 100px; position: sticky">
             <form method="GET" action="">
                 <input type="hidden" name="module" value="sanpham">
 
-                <!-- Sắp xếp theo giá -->
+                <!-- 🔍 Tìm kiếm sản phẩm -->
                 <div class="mb-3">
+                    <label for="search" class="form-label">Tìm kiếm sản phẩm</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Nhập tên sản phẩm..."
+                           value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                </div>
+
+                <!-- 📁 Danh mục sản phẩm -->
+                <div class="mb-3">
+                    <h5>Danh mục</h5>
+                    <?php foreach ($categories as $cat): ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="category_id[]" value="<?= $cat['id'] ?>"
+                                <?= isset($_GET['category_id']) && in_array($cat['id'], $_GET['category_id']) ? 'checked' : '' ?>>
+                            <label class="form-check-label"><?= htmlspecialchars($cat['name']) ?></label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- 🔃 Sắp xếp -->
+                <div class="mb-3" style="margin-top: 30px">
                     <label for="sort" class="form-label">Sắp xếp</label>
                     <select name="sort" id="sort" class="form-select">
                         <option value="">Mặc định</option>
@@ -22,27 +43,31 @@ $brands = $productModel->getAllBrands();
                     </select>
                 </div>
 
-                <!-- Nơi bán -->
+                <!-- 📍 Nơi Bán -->
                 <h5>Nơi Bán</h5>
                 <?php foreach ($locations as $loc): ?>
-                    <label class="d-block">
-                        <input type="checkbox" name="location[]" value="<?= htmlspecialchars($loc) ?>"
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="location[]" value="<?= htmlspecialchars($loc) ?>"
                             <?= isset($_GET['location']) && in_array($loc, $_GET['location']) ? 'checked' : '' ?>>
-                        <?= htmlspecialchars($loc) ?>
-                    </label>
+                        <label class="form-check-label">
+                            <?= htmlspecialchars($loc) ?>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
 
-                <!-- Thương hiệu -->
+                <!-- 🏷 Thương hiệu -->
                 <h5 class="mt-3">Thương hiệu</h5>
                 <?php foreach ($brands as $brand): ?>
-                    <label class="d-block">
-                        <input type="checkbox" name="brand[]" value="<?= htmlspecialchars($brand) ?>"
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="brand[]" value="<?= htmlspecialchars($brand) ?>"
                             <?= isset($_GET['brand']) && in_array($brand, $_GET['brand']) ? 'checked' : '' ?>>
-                        <?= htmlspecialchars($brand) ?>
-                    </label>
+                        <label class="form-check-label">
+                            <?= htmlspecialchars($brand) ?>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
 
-                <!-- Giá -->
+                <!-- 💵 Khoảng giá -->
                 <h5 class="mt-3">Khoảng giá</h5>
                 <div style="display: flex; gap: 10px;">
                     <input type="number" name="price_min" class="form-control" placeholder="Từ"
@@ -51,7 +76,7 @@ $brands = $productModel->getAllBrands();
                            value="<?= isset($_GET['price_max']) ? $_GET['price_max'] : '' ?>">
                 </div>
 
-                <!-- Nút lọc -->
+                <!-- ✅ Nút lọc -->
                 <div class="mt-3">
                     <button type="submit" class="btn btn-outline-secondary w-100">
                         <i class="fa fa-filter"></i> Lọc
@@ -59,6 +84,8 @@ $brands = $productModel->getAllBrands();
                 </div>
             </form>
         </div>
+
+
 
 
         <!-- SẢN PHẨM 70% -->
@@ -72,8 +99,7 @@ $brands = $productModel->getAllBrands();
                             <div class="class-box wow fadeInUp" data-wow-delay=".5s">
                                 <div class="class-img">
 
-                                    <img src="ProductImage/<?= htmlspecialchars($image) ?>" width="440" height="270"
-                                         alt="<?= htmlspecialchars($product['name']) ?>" class="img-cover"
+                                    <img src="ProductImage/<?= htmlspecialchars($image) ?>"
                                          style="max-width: 440px; max-height: 270px;" loading="lazy">
                                 </div>
                                 <div class="class-box-contant">
@@ -82,8 +108,8 @@ $brands = $productModel->getAllBrands();
                                             <img src="../Public/Image/class-icon-1.png" alt="icon">
                                         </div>
                                         <a href="?module=chitietsanpham&masp=<?= $product['id'] ?>">
-                                            <h3 class="h3-title" style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;line-height: 1.3em;max-height: 2.6em;">
-                                                <?= htmlspecialchars($product['name']) ?>
+                                            <h3 class="h3-title" style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;line-height: 1.3em;max-height: 2.6em;font-family: 'Be Vietnam Pro', sans-serif !important;">
+                                                <?= $product['name'] ?>
                                             </h3>
 
                                         </a>
@@ -104,7 +130,7 @@ $brands = $productModel->getAllBrands();
                 <!-- PAGINATION -->
                 <div class="pagination" style="padding-top: 70px;padding-left: 33%">
                     <?php if ($page > 1): ?>
-                        <a href="?<?= $queryStr ?>page=<?= $page - 1 ?>" class="prev">Previous</a>
+                        <a href="?<?= $queryStr ?>page=<?= $page - 1 ?>" class="prev">Trang trước</a>
                     <?php endif; ?>
 
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
@@ -112,7 +138,7 @@ $brands = $productModel->getAllBrands();
                     <?php endfor; ?>
 
                     <?php if ($page < $totalPages): ?>
-                        <a href="?<?= $queryStr ?>page=<?= $page + 1 ?>" class="next">Next</a>
+                        <a href="?<?= $queryStr ?>page=<?= $page + 1 ?>" class="next">Trang sau</a>
                     <?php endif; ?>
                 </div>
 
@@ -165,13 +191,13 @@ $brands = $productModel->getAllBrands();
     }
 
     .pagination a.active {
-        background-color: #007bff;
+        background-color: #f86902;
         color: white;
-        border-color: #007bff;
+        border-color: #fc4c08;
     }
 
     .pagination a:hover {
-        background-color: #0056b3;
+        background-color: #df1111;
         color: white;
     }
 

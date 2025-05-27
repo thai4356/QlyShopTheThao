@@ -9,15 +9,14 @@ $count = count($items);
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
+    <title>Thanh toán</title>
     <link rel="stylesheet" href="../Public/CSS/checkout.css">
     <link rel="stylesheet" href="../Public/CSS/vCP.css">
     <style>
-        /* Additional styles inline or link external CSS */
         .Content_Table { width: 100%; border-collapse: collapse; }
         .Content_Table th, .Content_Table td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     </style>
@@ -27,19 +26,19 @@ $count = count($items);
 <div class="col-75">
     <div style="width: 45%; float:left; margin-left: 2%">
         <?php if (empty($items)): ?>
-            <h1>No items selected for checkout.</h1>
-            <h3><a href="indexUser.php">Go to shopping page</a></h3>
+            <h1>Không có sản phẩm nào được chọn để thanh toán.</h1>
+            <h3><a href="indexUser.php">Quay lại trang mua sắm</a></h3>
         <?php else: ?>
             <div id="content_cart">
                 <div id="right_detail">
-                    <h3>Your Selected Products</h3>
+                    <h3>Sản phẩm bạn đã chọn</h3>
                     <table class="Content_Table">
                         <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Ảnh</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
                         </tr>
                         <?php foreach ($items as $item): ?>
                             <?php
@@ -62,23 +61,23 @@ $count = count($items);
 
     <span class="iphone" style="width: 50%; float:right">
         <form action="../../controller/xulyThanhToan.php" method="post" onsubmit="return kt();">
+            <p><span>Họ và tên</span><input type="text" name="hoten" id="hoten" required></p>
+            <p><span>Địa chỉ</span><input type="text" name="diachi" id="diachi" required></p>
+            <p><span>Số điện thoại</span><input type="text" name="dienthoai" id="dienthoai" required></p>
 
-            <p><span>Name</span><input type="text" name="hoten" id="hoten" required></p>
-            <p><span>Address</span><input type="text" name="diachi" id="diachi" required></p>
-            <p><span>Phone No</span><input type="text" name="dienthoai" id="dienthoai" required></p>
             <fieldset>
-                <legend>Payment Method</legend>
+                <legend>Phương thức thanh toán</legend>
                 <div class="form__radios">
                     <div class="form__radio">
-                        <label for="cod">COD</label>
+                        <label for="cod">Thanh toán khi nhận hàng (COD)</label>
                         <input checked id="cod" name="payment_method" type="radio" value="cod" />
                     </div>
                     <div class="form__radio">
-                        <label for="bank">Bank Transfer</label>
+                        <label for="bank">Chuyển khoản ngân hàng</label>
                         <input id="bank" name="payment_method" type="radio" value="bank" />
                     </div>
                     <div class="form__radio">
-                        <label for="momo">MoMo</label>
+                        <label for="momo">Ví MoMo</label>
                         <input id="momo" name="payment_method" type="radio" value="momo" />
                     </div>
                 </div>
@@ -90,33 +89,34 @@ $count = count($items);
             $grandTotal = $total + $shipping - $discount;
             ?>
             <div>
-                <h2>Shopping Bill</h2>
+                <h2>Chi tiết hóa đơn</h2>
                 <table>
                     <tbody>
-                        <tr><td>Shipping fee</td><td align="right"><?= number_format($shipping) ?>₫</td></tr>
-                        <tr><td>Discount 10%</td><td align="right">-<?= number_format($discount) ?>₫</td></tr>
-                        <tr><td>Subtotal</td><td align="right"><?= number_format($total) ?>₫</td></tr>
+                        <tr><td>Phí vận chuyển</td><td align="right"><?= number_format($shipping) ?>₫</td></tr>
+                        <tr><td>Giảm giá 10%</td><td align="right">-<?= number_format($discount) ?>₫</td></tr>
+                        <tr><td>Tạm tính</td><td align="right"><?= number_format($total) ?>₫</td></tr>
                     </tbody>
                     <tfoot>
-                        <tr><td>Total</td><td align="right"><strong><?= number_format($grandTotal) ?>₫</strong></td></tr>
+                        <tr><td>Tổng cộng</td><td align="right"><strong><?= number_format($grandTotal) ?>₫</strong></td></tr>
                     </tfoot>
                 </table>
             </div>
             <div>
                 <button name="dathang" id="dathang" class="button button--full" type="submit">
-                    <svg class="icon"><use xlink:href="#icon-shopping-bag" /></svg> Buy Now
+                    <svg class="icon"><use xlink:href="#icon-shopping-bag" /></svg> Đặt hàng ngay
                 </button>
             </div>
         </form>
     </span>
 </div>
+
 <script>
     function kt() {
         var hoten = document.getElementById("hoten");
         var diachi = document.getElementById("diachi");
         var dienthoai = document.getElementById("dienthoai");
-        if(hoten.value=="" || diachi.value=="" || dienthoai.value=="") {
-            alert("Please fill out all fields.");
+        if (hoten.value === "" || diachi.value === "" || dienthoai.value === "") {
+            alert("Vui lòng điền đầy đủ thông tin!");
             return false;
         }
         return true;
@@ -124,6 +124,7 @@ $count = count($items);
 </script>
 </body>
 </html>
+
 
 
 <style>

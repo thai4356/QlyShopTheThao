@@ -44,6 +44,8 @@ switch ($module) {
         break;
 
     case 'sanpham':
+        ;
+
         require_once '../../controller/ProductController.php';
         $controller = new ProductController();
         break;
@@ -73,6 +75,25 @@ switch ($module) {
         $controller->viewOrderDetail($orderId);
         include 'footer.php';
         exit;
+
+    case 'wishlist':
+        require_once '../../model/connect.php';
+        require_once '../../model/Wishlist.php';
+        $conn = (new Connect())->getConnection();
+
+        if (!isset($_SESSION['user_id'])) {
+            echo '<script>alert("Vui lòng đăng nhập để xem danh sách yêu thích"); window.location.href="?module=home";</script>';
+            exit;
+        }
+
+        $wishlist = new Wishlist($conn);
+        $wishlistItems = $wishlist->getWishlistByUser($_SESSION['user_id']);
+
+        include 'header.php';
+        include '../ViewUser/WishlistPage.php';
+        include 'footer.php';
+        exit;
+
 
 
     case 'home':

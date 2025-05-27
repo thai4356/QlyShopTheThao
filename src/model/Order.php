@@ -13,14 +13,40 @@ class Order {
     }
 
     public function createOrder($userId, $totalPrice, $paymentMethod, $name, $address, $phone) {
-        $stmt = $this->conn->prepare("
+        // Tạo kết nối
+        $conn = $this->conn;
+
+        // Vòng lặp tạo orderNo không trùng
+        do {
+            $orderNo = 'ORD-' . strtoupper(bin2hex(random_bytes(4))); // VD: ORD-8FA4C7E1
+
+            $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM orders WHERE orderNo = ?");
+            $stmtCheck->execute([$orderNo]);
+            $exists = $stmtCheck->fetchColumn();
+
+        } while ($exists > 0); // Nếu đã tồn tại thì tạo lại
+
+        // Tạo câu lệnh INSERT
+        $stmt = $conn->prepare("
         INSERT INTO orders 
-        (user_id, total_price, payment_method, name, address, phone, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
+        (user_id, total_price, payment_method, name, address, phone, status, created_at, updated_at, orderNo)
+        VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW(), ?)
     ");
-        $stmt->execute(array($userId, $totalPrice, $paymentMethod, $name, $address, $phone));
-        return $this->conn->lastInsertId();
+
+        // Thực thi câu lệnh
+        $stmt->execute([
+            $userId,
+            $totalPrice,
+            $paymentMethod,
+            $name,
+            $address,
+            $phone,
+            $orderNo
+        ]);
+
+        return $conn->lastInsertId(); // Trả lại ID đơn hàng vừa tạo
     }
+
 
     public function getOrdersByUser($userId) {
         $stmt = $this->conn->prepare("SELECT * FROM  orders WHERE user_id = ? ORDER BY created_at DESC");
@@ -28,11 +54,7 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-//    public function getItemsByOrderId($orderId) {
-//        $stmt = $this->conn->prepare("SELECT *  FROM order_items WHERE order_id = ?");
-//        $stmt->execute([$orderId]);
-//        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-//    }
+
 
     public function getOrderById($orderId) {
         $stmt = $this->conn->prepare("SELECT * FROM orders WHERE id = ?");

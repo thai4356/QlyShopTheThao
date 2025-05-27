@@ -18,7 +18,7 @@
             <tbody>
             <?php foreach ($orders as $index => $order): ?>
                 <tr>
-                    <td><?= $index + 1 ?></td>
+                    <td><?= $order['orderNo'] ?></td>
                     <td><?= $order['created_at'] ?></td>
                     <td><?= htmlspecialchars($order['payment_method']) ?></td>
                     <td><?= number_format($order['total_price']) ?>₫</td>

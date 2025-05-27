@@ -9,4 +9,10 @@ class Category {
     public function __construct() {
         $this->conn = (new Connect())->getConnection();
     }
+
+    public function getAll() {
+        $stmt = $this->conn->query("SELECT id, name FROM category");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

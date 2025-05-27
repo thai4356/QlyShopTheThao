@@ -78,7 +78,7 @@
                                 <span>Người sáng lập & Giám đốc điều hành</span>
                             </div>
                         </div>
-                        <a href="https://www.totalgymshop.co.uk/about/" class="sec-btn">Tìm hiểu thêm</a>
+                        <a href="about-us.html" class="sec-btn">Tìm hiểu thêm</a>
                     </div>
                 </div>
             </div>

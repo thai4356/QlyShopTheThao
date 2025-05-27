@@ -3,7 +3,7 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
 ?>
 
 <header class="site-header sticky-header">
-
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../Public/CSS/index2.css">
     <link rel="stylesheet" type="text/css" href="../Public/CSS/style.css">
     <link rel="stylesheet" type="text/css" href="../Public/CSS/slick.css">
@@ -18,9 +18,8 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!--Google Fonts CSS-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&amp;family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
     <!--Navbar Start  -->
@@ -66,6 +65,10 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                                     <li>
                                         <a href="?module=orderhistory" class="navbar-link" title="Favourite" data-nav-link>Lịch sử mua hàng</a>
                                     </li>
+
+                                    <li>
+                                        <a href="?module=wishlist" class="navbar-link" title="Favourite" data-nav-link><i class="fas fa-heart" style="color: red"> Thích </i></a>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
@@ -87,3 +90,9 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
     </div>
     <!--Navbar End  -->
 </header>
+
+<style>
+    body, html {
+        font-family: 'Be Vietnam Pro', sans-serif !important;
+    }
+</style>

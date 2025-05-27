@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if ($row["roleid"] == 1) {
-                    header("Location: ../view/adminView.php");
+                    header("Location: ../view/ViewAdmin/Index.php");
                     exit;
                 } else {
                     header("Location: ../view/ViewUser/Index.php");
@@ -162,14 +162,7 @@ if ($row) {
         setcookie('password', '', time() - 3600, "/");
     }
 
-    if ($row["roleid"] == 1) {
-//        header("Location: ../view/adminView.php");
-        echo $_SESSION["role"];
-        exit;
-    } else {
-        header("Location: ../view/ViewUser/Index.php");
-        exit;
-    }
+
 }
 
 ?>

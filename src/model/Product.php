@@ -41,18 +41,34 @@ require_once 'Connect.php';
             $sql = "SELECT COUNT(*) AS total FROM product WHERE 1=1";
             $params = [];
 
+            // Lọc theo nơi bán
             if (!empty($filters['location'])) {
-                $in = str_repeat('?,', count($filters['location']) - 1) . '?';
-                $sql .= " AND location IN ($in)";
+                $placeholders = implode(',', array_fill(0, count($filters['location']), '?'));
+                $sql .= " AND location IN ($placeholders)";
                 $params = array_merge($params, $filters['location']);
             }
 
+            // Lọc theo thương hiệu
             if (!empty($filters['brand'])) {
-                $in = str_repeat('?,', count($filters['brand']) - 1) . '?';
-                $sql .= " AND brand IN ($in)";
+                $placeholders = implode(',', array_fill(0, count($filters['brand']), '?'));
+                $sql .= " AND brand IN ($placeholders)";
                 $params = array_merge($params, $filters['brand']);
             }
 
+            // Lọc theo danh mục
+            if (!empty($filters['category_id'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['category_id']), '?'));
+                $sql .= " AND category_id IN ($placeholders)";
+                $params = array_merge($params, $filters['category_id']);
+            }
+
+            // Lọc theo tên sản phẩm
+            if (!empty($filters['search'])) {
+                $sql .= " AND name LIKE ?";
+                $params[] = '%' . $filters['search'] . '%';
+            }
+
+            // Khoảng giá
             if (!empty($filters['price_min'])) {
                 $sql .= " AND price >= ?";
                 $params[] = (int)$filters['price_min'];
@@ -63,11 +79,14 @@ require_once 'Connect.php';
                 $params[] = (int)$filters['price_max'];
             }
 
+            // Chuẩn bị và thực thi câu lệnh
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
             return $row['total'];
         }
+
 
         public function getFiltered($limit, $offset, $filters = []) {
             $sql = "
@@ -75,25 +94,39 @@ require_once 'Connect.php';
         FROM product p
         INNER JOIN product_image pi 
             ON p.id = pi.product_id 
-        WHERE 1=1 and pi.is_thumbnail = 1
+        WHERE 1=1 AND pi.is_thumbnail = 1
     ";
-
 
             $params = [];
 
-            // -- Build filter conditions
+            // Location
             if (!empty($filters['location'])) {
                 $placeholders = implode(',', array_fill(0, count($filters['location']), '?'));
                 $sql .= " AND p.location IN ($placeholders)";
                 $params = array_merge($params, $filters['location']);
             }
 
+            // Brand
             if (!empty($filters['brand'])) {
                 $placeholders = implode(',', array_fill(0, count($filters['brand']), '?'));
                 $sql .= " AND p.brand IN ($placeholders)";
                 $params = array_merge($params, $filters['brand']);
             }
 
+            // Category
+            if (!empty($filters['category_id'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['category_id']), '?'));
+                $sql .= " AND p.category_id IN ($placeholders)";
+                $params = array_merge($params, $filters['category_id']);
+            }
+
+            // Search
+            if (!empty($filters['search'])) {
+                $sql .= " AND p.name LIKE ?";
+                $params[] = '%' . $filters['search'] . '%';
+            }
+
+            // Price
             if (!empty($filters['price_min'])) {
                 $sql .= " AND p.price >= ?";
                 $params[] = (int)$filters['price_min'];
@@ -104,8 +137,7 @@ require_once 'Connect.php';
                 $params[] = (int)$filters['price_max'];
             }
 
-            // -- Sắp xếp
-            // Nếu người dùng chọn sắp xếp theo giá
+            // Sort
             if (!empty($filters['sort']) && in_array($filters['sort'], ['asc', 'desc'])) {
                 $sql .= " ORDER BY p.price " . strtoupper($filters['sort']);
             } else {
@@ -113,12 +145,13 @@ require_once 'Connect.php';
             }
 
             $sql .= " LIMIT ? OFFSET ?";
-
             $params[] = (int)$limit;
             $params[] = (int)$offset;
 
-            $stmt = $this->conn->prepare($sql);
+            // Debug
+            // echo $sql; print_r($params); exit;
 
+            $stmt = $this->conn->prepare($sql);
             foreach ($params as $index => $value) {
                 $stmt->bindValue($index + 1, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
@@ -126,6 +159,7 @@ require_once 'Connect.php';
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
 
 
         public function getAllLocations() {

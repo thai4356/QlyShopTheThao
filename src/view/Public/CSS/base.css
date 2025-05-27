@@ -1231,7 +1231,7 @@ div.required .col-form-label:before, div.required .form-label:before {
     margin-bottom: 1px;
     color: var(--light-color);}
   #column-left section.latest-products .product-thumb:hover .caption h4 a{
-    color: var(--light-color) !important;}}
+    color: var(--light-color) !important;}
   #column-left section.latest-products .product-thumb .button-group,#column-left section.latest-products .product-thumb .btn-cart {
     display: none;
   }
@@ -1500,7 +1500,7 @@ div.required .col-form-label:before, div.required .form-label:before {
       border: 0;
       box-shadow: none;
       z-index: 1;
-      background: url(../../../image/catalog/grid.png) no-repeat;
+
       -webkit-transition: all 0.25s;
       -moz-transition: all 0.25s;
       -o-transition: all 0.25s;

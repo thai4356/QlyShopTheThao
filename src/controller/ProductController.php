@@ -18,8 +18,11 @@ class ProductController {
             'brand' => $_GET['brand'] ?? [],
             'price_min' => $_GET['price_min'] ?? null,
             'price_max' => $_GET['price_max'] ?? null,
-            'sort' => $_GET['sort'] ?? null
+            'sort' => $_GET['sort'] ?? null,
+            'category_id' => isset($_GET['category_id']) ? (array) $_GET['category_id'] : [],
+            'search' => $_GET['search'] ?? null,
         ];
+
 
 
         $query = $_GET;

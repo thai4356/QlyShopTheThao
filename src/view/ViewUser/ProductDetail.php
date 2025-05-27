@@ -69,7 +69,13 @@
 
                 <p><strong>Còn lại:</strong> <?= $product['stock'] ?></p>
                 <p><strong>Đã bán:</strong> <?= $product['sold_quantity'] ?></p>
-                <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success">Thêm vào giỏ</a>
+                <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success" style="background-color: orangered;border-color: orangered">Thêm vào giỏ</a>
+                <form method="POST" action="../../controller/WishlistController.php" style="display: inline;">
+                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                    <input type="hidden" name="action" value="add">
+                    <button type="submit" class="btn btn-outline-danger">❤️ Yêu thích</button>
+                </form>
+
             </div>
         </div>
 
@@ -89,7 +95,7 @@
         <p>Chưa có đánh giá nào cho sản phẩm này.</p>
     <?php else: ?>
         <?php foreach ($reviews as $r): ?>
-            <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+            <div style="border-bottom: 1px solid #ddd; padding: 10px 0; font-size: large">
                 <strong>⭐ <?= htmlspecialchars($r['rating']) ?>/5</strong><br>
                 <p><?= nl2br(htmlspecialchars($r['comment'])) ?></p>
                 <small>Đánh giá lúc <?= $r['created_at'] ?></small><br>
@@ -102,7 +108,7 @@
     <hr style="margin: 30px 0;">
 
     <h3>Gửi đánh giá của bạn</h3>
-    <form method="POST" action="../../controller/ReviewController.php?action=submitReview" style="margin-top: 15px;">
+    <form method="POST" action="../../controller/ReviewController.php?action=submitReview" style="font-size: large;margin-top: 15px;">
         <input type="hidden" name="product_id" value="<?= $productId ?>">
 
         <label>Đánh giá:</label><br>
@@ -125,6 +131,7 @@
 
 
 <style>
+
     .star-rating {
         direction: rtl;
         font-size: 2rem;
