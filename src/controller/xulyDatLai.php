@@ -1,6 +1,4 @@
 <?php
-// File: xulyDatLai.php (src/controller/xulyDatLai.php)
-// PHẦN LOGIC PHP HIỆN TẠI CỦA BẠN SẼ ĐƯỢC GIỮ NGUYÊN
 require_once "../model/Connect.php"; //
 $database = new Connect(); //
 $conn = $database->getConnection(); //
