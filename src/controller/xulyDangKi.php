@@ -55,7 +55,9 @@ function sendVerificationEmail($email, $token) {
         //Content
         $mail->isHTML(true);  //Set email format to HTML
         $mail->Subject = 'Xac thuc tai khoan';
-        $mail->Body = "Nhấn vào <a href='http://localhost/QlyShopTheThao/src/controller/verify.php?email=$email&token=$token'>đây</a> để xác thực tài khoản.";
+
+        $mail->Body = "Nhấn vào <a href='http://localhost/kiemtra2-2/src/controller/verify.php?email=$email&token=$token'>đây</a> để xác thực tài khoản.";
+
         $mail->AltBody = 'Bam vao de xac thuc tai khoan: http://localhost/kiemtra2-1/src/view/resetpassword.php?token=' . $token;
 
 
@@ -72,19 +74,16 @@ function Add($email, $pass, $conn) {
         $options = ['cost' => 12];
         $pass = password_hash($pass, PASSWORD_BCRYPT, $options);
         $token = bin2hex(openssl_random_pseudo_bytes(16));
-
-        $stmt = $conn->prepare("INSERT INTO username (email, password, is_verified, verify_token) VALUES (:email, :password, 0, :token)");
+        $stmt = $conn->prepare("INSERT INTO username (email, password, is_verified, verify_token ,roleid) VALUES (:email, :password, 0, :token , 2)");
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $pass);
         $stmt->bindParam(':token', $token);
         $stmt->execute();
-
         sendVerificationEmail($email, $token);
         echo "Tạo tài khoản thành công. Vui lòng kiểm tra email để xác thực.";
     } catch(PDOException $e) {
-
+        echo $e->getMessage();
         echo "Email đã tồn tại nếu bạn chưa xác thực thì hãy kiểm tra gmail nếu quên mật khẩu thì hãy đặt lại: ";
-
     }
     $conn = null;
 }

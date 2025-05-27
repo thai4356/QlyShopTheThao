@@ -144,4 +144,32 @@ function KiemTraTaiKhoan($email, $pass, $conn)
     }
     return false;
 }
+
+
+$row = KiemTraTaiKhoan($email, $pass,$conn);
+
+if ($row) {
+    $_SESSION["logined"] = "OK";
+    $_SESSION["username"] = $row["email"];
+    $_SESSION["role"] = $row["roleid"];
+    $_SESSION["user_id"] = $row["id"];
+
+    if (isset($_POST['remember'])) {
+        setcookie('email', $email, time() + (86400 * 7), "/"); // 7 ngày
+        setcookie('password', $pass, time() + (86400 * 7), "/");
+    } else {
+        setcookie('email', '', time() - 3600, "/");
+        setcookie('password', '', time() - 3600, "/");
+    }
+
+    if ($row["roleid"] == 1) {
+        header("Location: ../view/adminView.php");
+        exit;
+    } else {
+        header("Location: ../view/ViewUser/Index.php");
+        exit;
+    }
+}
+=======
+
 ?>

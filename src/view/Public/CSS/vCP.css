@@ -1,0 +1,96 @@
+@charset "UTF-8";
+.content_left {
+    padding-top: 14px;
+}
+.content_right {
+    border: 1px solid #d9d9d9;
+    margin-left: 14px;
+    margin-right: 14px;
+    /*margin-top: 14px;*/
+}
+.left1 {
+    margin: auto;
+    padding-left: 14px;
+}
+.topnav {
+    overflow: hidden;
+    /*background: #333;*/
+}
+/* tạo kiểu cho liên kết */
+.topnav a {
+    float: left;
+    display: block;
+    color: #333;
+    text-align: center;
+    padding: 5px 14px 5px 0px;
+    text-decoration: none;
+}
+/* thay đổi màu khi di chuột */
+.topnav a:hover {
+    /*background-color: #ddd;*/
+    color: dodgerblue;
+}
+h1 {
+    text-align: left;
+    font-size: 170%;
+    margin: 5px 14px 5px 14px;
+}
+.tTukhoa {
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid #d9d9d9;
+    /*border-color: #d9d9d9;*/
+}
+.cat_id {
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid #d9d9d9;
+}
+.bSearch {
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid #d9d9d9;
+}
+.fTimkiem {
+    padding: 5px 14px 14px 14px;
+}
+.bx-search {
+    font-size: 20px;
+    padding: 3px 10px 3px 10px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background-color: #5c636a;
+    border-radius: 10px 10px 10px 10px;
+    color: white;
+}
+#right_detail {
+    margin-bottom: 14px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+.Content_Table {
+    margin-left: 14px;
+    margin-right: 14px;
+    /*padding-right: 14px;*/
+}
+.Content_Table tr td {
+    border: 1px solid #d9d9d9;
+}
+td {
+    text-align: center;
+}
+td a {
+    color: #d9d9d9;
+}
+.td a:hover {
+    color: dodgerblue;
+}
+.form1 {
+    float: left;
+    border: 0;
+}
+.table_contents {
+    float: left;
+    margin: 5px 14px 14px 14px;
+}
+.table_contents td {
+    text-align: left;
+    padding: 5px 5px 5px 5px
+}

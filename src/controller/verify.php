@@ -1,5 +1,9 @@
 <?php
-$conn = require_once "../model/Connect.php";
+require_once "../model/Connect.php";
+
+// Gọi hàm getConnection() để lấy PDO
+$connection = new Connect();
+$conn = $connection->getConnection();
 
 $database = new Connect();
 $conn = $database->getConnection();
@@ -20,3 +24,4 @@ if ($stmt->rowCount() > 0) {
 } else {
     echo "Liên kết xác thực không hợp lệ!";
 }
+?>

@@ -60,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //Content
             $mail->isHTML(true);  //Set email format to HTML
             $mail->Subject = 'Password Reset Request';
-            $mail->Body = 'Click <a href="http://localhost/QlyShopTheThao/src/view/resetpassword.php?token=' . $token . '">here</a> to reset your password.';
+
+            $mail->Body = 'Click <a href="http://localhost/kiemtra2-2/src/view/resetpassword.php?token=' . $token . '">here</a> to reset your password.';
+
             $mail->AltBody = 'Click this link to reset your password: http://localhost/kiemtra2-1/src/view/resetpassword.php?token=' . $token;
 
 
