@@ -56,9 +56,9 @@ function sendVerificationEmail($email, $token) {
         $mail->isHTML(true);  //Set email format to HTML
         $mail->Subject = 'Xac thuc tai khoan';
 
-        $mail->Body = "Nhấn vào <a href='http://localhost/kiemtra2-2/src/controller/verify.php?email=$email&token=$token'>đây</a> để xác thực tài khoản.";
+        $mail->Body = "Nhấn vào <a href='http://localhost/QLyShopTheThao/src/controller/verify.php?email=$email&token=$token'>đây</a> để xác thực tài khoản.";
 
-        $mail->AltBody = 'Bam vao de xac thuc tai khoan: http://localhost/kiemtra2-2/src/view/resetpassword.php?token=' . $token;
+        $mail->AltBody = 'Bam vao de xac thuc tai khoan: http://localhost/QLyShopTheThao/src/view/resetpassword.php?token=' . $token;
 
 
         $mail->send();
