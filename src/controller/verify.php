@@ -24,4 +24,4 @@ if ($stmt->rowCount() > 0) {
 } else {
     echo "Liên kết xác thực không hợp lệ!";
 }
-?>
+
