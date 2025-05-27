@@ -1,10 +1,10 @@
 <?php
 class Connect {
 
-    private $host = "localhost:3306";
+    private $host = "localhost:3312";
     private $db_name = "user_database";
     private $username = "root";
-    private $password = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {
