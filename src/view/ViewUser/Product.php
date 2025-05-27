@@ -12,34 +12,54 @@ $brands = $productModel->getAllBrands();
             <form method="GET" action="">
                 <input type="hidden" name="module" value="sanpham">
 
+                <!-- Sắp xếp theo giá -->
+                <div class="mb-3">
+                    <label for="sort" class="form-label">Sắp xếp</label>
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="">Mặc định</option>
+                        <option value="asc" <?= (isset($_GET['sort']) && $_GET['sort'] === 'asc') ? 'selected' : '' ?>>Giá tăng dần</option>
+                        <option value="desc" <?= (isset($_GET['sort']) && $_GET['sort'] === 'desc') ? 'selected' : '' ?>>Giá giảm dần</option>
+                    </select>
+                </div>
+
+                <!-- Nơi bán -->
                 <h5>Nơi Bán</h5>
                 <?php foreach ($locations as $loc): ?>
-                    <label>
+                    <label class="d-block">
                         <input type="checkbox" name="location[]" value="<?= htmlspecialchars($loc) ?>"
                             <?= isset($_GET['location']) && in_array($loc, $_GET['location']) ? 'checked' : '' ?>>
                         <?= htmlspecialchars($loc) ?>
-                    </label><br>
+                    </label>
                 <?php endforeach; ?>
 
-                <h5>Thương hiệu</h5>
+                <!-- Thương hiệu -->
+                <h5 class="mt-3">Thương hiệu</h5>
                 <?php foreach ($brands as $brand): ?>
-                    <label>
+                    <label class="d-block">
                         <input type="checkbox" name="brand[]" value="<?= htmlspecialchars($brand) ?>"
                             <?= isset($_GET['brand']) && in_array($brand, $_GET['brand']) ? 'checked' : '' ?>>
                         <?= htmlspecialchars($brand) ?>
-                    </label><br>
+                    </label>
                 <?php endforeach; ?>
 
+                <!-- Giá -->
+                <h5 class="mt-3">Khoảng giá</h5>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" name="price_min" class="form-control" placeholder="Từ"
+                           value="<?= isset($_GET['price_min']) ? $_GET['price_min'] : '' ?>">
+                    <input type="number" name="price_max" class="form-control" placeholder="Đến"
+                           value="<?= isset($_GET['price_max']) ? $_GET['price_max'] : '' ?>">
+                </div>
 
-                <h5>Giá</h5>
-                <input type="number" name="price_min" placeholder="TỪ"
-                       value="<?= isset($_GET['price_min']) ? $_GET['price_min'] : '' ?>"> -
-                <input type="number" name="price_max" placeholder="ĐẾN"
-                       value="<?= isset($_GET['price_max']) ? $_GET['price_max'] : '' ?>"><br><br>
-
-                <button type="submit">Lọc</button>
+                <!-- Nút lọc -->
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary w-100">
+                        <i class="fa fa-filter"></i> Lọc
+                    </button>
+                </div>
             </form>
         </div>
+
 
         <!-- SẢN PHẨM 70% -->
         <div class="col-12 col-md-9">
@@ -69,9 +89,12 @@ $brands = $productModel->getAllBrands();
                                         </a>
                                     </div>
                                     <p class="truncate-2-lines"><?= htmlspecialchars(substr($product['description'], 0, 100)) ?></p>
-                                    <p>Price: <?= number_format($product['price']) ?>₫</p>
+                                    <p style="color: orangered">Giá bán: <?= number_format($product['price']) ?>₫</p>
                                     <a href="?module=cart&act=add&masp=<?= $product['id'] ?>"
-                                       class="btn-link has-before">Add to cart</a>
+                                       class="btn btn-warning d-inline-flex align-items-center gap-2">
+                                        <i class="fa fa-shopping-cart"></i> Thêm vào giỏ
+                                    </a>
+
                                 </div>
                             </div>
                         </div>
@@ -103,6 +126,14 @@ $brands = $productModel->getAllBrands();
 
 
 <style>
+    .filter-sidebar h5 {
+        margin-top: 20px;
+        font-weight: 600;
+    }
+    .filter-sidebar input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
     .filter-sidebar {
         padding: 20px;
         background-color: #f8f8f8;

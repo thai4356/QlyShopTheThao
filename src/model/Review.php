@@ -11,10 +11,17 @@ class Review {
     }
 
     public function getByProductId($productId) {
-        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE product_id = ? ORDER BY created_at DESC");
+        $stmt = $this->conn->prepare("
+        SELECT r.*, u.email 
+        FROM $this->table r 
+        INNER JOIN username u ON r.user_id = u.id 
+        WHERE r.product_id = ? 
+        ORDER BY r.created_at DESC
+    ");
         $stmt->execute([$productId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
     public function addReview($userId, $productId, $rating, $comment) {
         $stmt = $this->conn->prepare("INSERT INTO $this->table (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)");

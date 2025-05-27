@@ -14,11 +14,13 @@ class ProductController {
 
         // Gộp các filter – thay ?? bằng isset(...) ? ... : ...
         $filters = [
-            'location' => isset($_GET['location']) ? $_GET['location'] : [],
-            'brand' => isset($_GET['brand']) ? $_GET['brand'] : [],
-            'price_min' => isset($_GET['price_min']) ? $_GET['price_min'] : null,
-            'price_max' => isset($_GET['price_max']) ? $_GET['price_max'] : null
+            'location' => $_GET['location'] ?? [],
+            'brand' => $_GET['brand'] ?? [],
+            'price_min' => $_GET['price_min'] ?? null,
+            'price_max' => $_GET['price_max'] ?? null,
+            'sort' => $_GET['sort'] ?? null
         ];
+
 
         $query = $_GET;
         unset($query['page']); // không giữ page hiện tại

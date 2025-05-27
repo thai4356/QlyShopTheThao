@@ -12,16 +12,22 @@ require_once 'Connect.php';
         }
 
         public function getById($id) {
-
             $query = "SELECT p.*, pi.image_url
-        FROM $this->table p
-        LEFT JOIN product_image pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
-        WHERE p.id = ?
-        LIMIT 1";
+              FROM $this->table p
+              LEFT JOIN product_image pi ON p.id = pi.product_id
+              WHERE p.id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([$id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$rows) return null;
+
+            $product = $rows[0]; // thông tin sản phẩm
+            $product['images'] = array_column($rows, 'image_url'); // mảng các ảnh
+
+            return $product;
         }
+
 
 
 
@@ -65,11 +71,11 @@ require_once 'Connect.php';
 
         public function getFiltered($limit, $offset, $filters = []) {
             $sql = "
-        SELECT p.*, pi.image_url
+        SELECT DISTINCT p.*, pi.image_url
         FROM product p
         INNER JOIN product_image pi 
-            ON p.id = pi.product_id AND pi.is_thumbnail = 1
-        WHERE 1=1
+            ON p.id = pi.product_id 
+        WHERE 1=1 and pi.is_thumbnail = 1
     ";
 
 
@@ -98,8 +104,16 @@ require_once 'Connect.php';
                 $params[] = (int)$filters['price_max'];
             }
 
-            // -- Add limit & offset
-            $sql .= " ORDER BY p.created_at DESC LIMIT ? OFFSET ?";
+            // -- Sắp xếp
+            // Nếu người dùng chọn sắp xếp theo giá
+            if (!empty($filters['sort']) && in_array($filters['sort'], ['asc', 'desc'])) {
+                $sql .= " ORDER BY p.price " . strtoupper($filters['sort']);
+            } else {
+                $sql .= " ORDER BY p.created_at DESC";
+            }
+
+            $sql .= " LIMIT ? OFFSET ?";
+
             $params[] = (int)$limit;
             $params[] = (int)$offset;
 
@@ -131,5 +145,8 @@ require_once 'Connect.php';
             $stmt->execute(array($quantity, $productId, $quantity));
         }
 
-
+        public function increseSold($productId, $quantity) {
+            $stmt = $this->conn->prepare("UPDATE product SET sold_quantity = sold_quantity + ? WHERE id = ? AND stock >= ?");
+            $stmt->execute(array($quantity, $productId, $quantity));
+        }
     }

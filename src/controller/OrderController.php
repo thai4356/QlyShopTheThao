@@ -87,6 +87,7 @@ class OrderController {
         foreach ($cartItems as $item) {
             $orderItemModel->addItem($orderId, $item['product_id'], $item['quantity'], $item['price']);
             $productModel->reduceStock($item['product_id'], $item['quantity']);
+            $productModel->increseSold($item['product_id'], $item['quantity']);
         }
 
         // Xóa session sau khi thanh toán

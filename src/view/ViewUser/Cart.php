@@ -1,3 +1,7 @@
+<?php
+require_once "../../controller/checklogin.php";
+?>
+
 <!doctype html>
 <html lang="en">
 <head>

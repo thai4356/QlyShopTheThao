@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once "../../controller/checklogin.php";
+
 $items = isset($_SESSION['checkout_items']) ? $_SESSION['checkout_items'] : [];
 $total = 0;
 $count = count($items);

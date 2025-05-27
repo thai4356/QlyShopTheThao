@@ -15,6 +15,8 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
     <link rel="stylesheet" type="text/css" href="../Public/CSS/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../Public/CSS/style2.css">
     <link rel="stylesheet" type="text/css" href="../Public/CSS/slick-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!--Google Fonts CSS-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">

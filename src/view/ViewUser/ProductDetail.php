@@ -1,3 +1,6 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <main class="container" style="margin-top: 100px">
     <?php
     require_once '../../controller/ReviewController.php';
@@ -6,19 +9,66 @@
 
     $reviewCtrl = new ReviewController();
     $reviews = $reviewCtrl->loadProductReviews($productId);
+    $totalReviews = count($reviews);
+    $averageRating = 0;
+
+    if ($totalReviews > 0) {
+        $sumRating = array_sum(array_column($reviews, 'rating'));
+        $averageRating = round($sumRating / $totalReviews, 1); // Làm tròn 1 chữ số thập phân
+    }
+
     ?>
 
     <div class="container" style="padding-top: 80px;">
         <div class="row">
             <div class="col-md-5">
-                <img src="ProductImage/<?= $product['image_url'] ?>" class="img-fluid" alt="<?= htmlspecialchars($product['name']) ?>">
+                <div id="productCarousel" class="carousel slide mb-3" data-bs-ride="carousel" style="max-height: 300px;max-width: 300px;margin-top: -30px">
+                    <div class="carousel-inner">
+                        <?php foreach ($product['images'] as $index => $img): ?>
+                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                <img src="ProductImage/<?= $img ?>" class="d-block w-100 main-image" alt="<?= htmlspecialchars($product['name']) ?>">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" style="background-color: rgba(0,0,0,0.3);"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" style="background-color: rgba(0,0,0,0.3);"></span>
+                    </button>
+                </div>
 
+                <!-- thumbnail dưới -->
+                <div class="d-flex gap-2 justify-content-center thumbnail-wrapper">
+                    <?php foreach ($product['images'] as $index => $img): ?>
+                        <img src="ProductImage/<?= $img ?>" class="thumbnail-img" data-bs-target="#productCarousel" data-bs-slide-to="<?= $index ?>" <?= $index === 0 ? 'class="active"' : '' ?>>
+                    <?php endforeach; ?>
+                </div>
             </div>
+
+
+
+
             <div class="col-md-7">
                 <h2><?= htmlspecialchars($product['name']) ?></h2>
                 <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
                 <h4 style="color:red"><?= number_format($product['price']) ?>₫</h4>
+                <?php if ($totalReviews > 0): ?>
+                    <p>
+                        <strong>Đánh giá:</strong>
+                        <span style="color: #ffc107; font-size: 1.2rem;">
+            <?= str_repeat('★', floor($averageRating)) ?>
+            <?= ($averageRating - floor($averageRating)) >= 0.5 ? '½' : '' ?>
+            <?= str_repeat('☆', 5 - ceil($averageRating)) ?>
+        </span>
+                        (<?= $averageRating ?>/5, <?= $totalReviews ?> lượt đánh giá)
+                    </p>
+                <?php else: ?>
+                    <p><strong>Đánh giá:</strong> Chưa có đánh giá</p>
+                <?php endif; ?>
+
                 <p><strong>Còn lại:</strong> <?= $product['stock'] ?></p>
+                <p><strong>Đã bán:</strong> <?= $product['sold_quantity'] ?></p>
                 <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success">Thêm vào giỏ</a>
             </div>
         </div>
@@ -42,7 +92,9 @@
             <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
                 <strong>⭐ <?= htmlspecialchars($r['rating']) ?>/5</strong><br>
                 <p><?= nl2br(htmlspecialchars($r['comment'])) ?></p>
-                <small>Đánh giá lúc <?= $r['created_at'] ?></small>
+                <small>Đánh giá lúc <?= $r['created_at'] ?></small><br>
+                <small>Bởi <?= strstr($r['email'], '@', true) ?></small>
+
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -95,6 +147,42 @@
     .star-rating label:hover ~ label {
         color: gold;
     }
+
+    #productCarousel {
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    #productCarousel .carousel-inner,
+    #productCarousel .carousel-item {
+        height: 100%;
+    }
+    #productCarousel img {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+    }
+
+    /* Thumbnail dưới */
+    .thumbnail-wrapper {
+        margin-top: 10px;
+    }
+    .thumbnail-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border 0.3s ease;
+        border-radius: 4px;
+    }
+    .thumbnail-img.active,
+    .thumbnail-img:hover {
+        border: 2px solid #fc4c08;
+    }
+
 </style>
 
 <style>
@@ -299,3 +387,22 @@
         }
     }
 </style>
+
+<script>
+    const thumbnails = document.querySelectorAll('.thumbnail-img');
+    const carousel = document.querySelector('#productCarousel');
+
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => {
+            // Remove active class khỏi tất cả
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+        });
+
+        carousel.addEventListener('slid.bs.carousel', (e) => {
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumbnails[e.to].classList.add('active');
+        });
+    });
+</script>
+

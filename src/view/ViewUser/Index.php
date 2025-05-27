@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+
+
 $module = isset($_GET['module']) ? $_GET['module'] : 'home';
 
 
@@ -18,7 +20,7 @@ if ($module === 'cart' && isset($_GET['act']) && in_array($_GET['act'], ['add', 
 }
 
 if (!in_array($module, ['home', 'sanpham']) && !isset($_SESSION['username'])) {
-    echo '<script>alert("Log in to use more function"); window.location.href="?module=home";</script>';
+    echo '<script>alert("Dang nhap de su dung cac tinh nang khac"); window.location.href="?module=home";</script>';
     exit;
 }
 
