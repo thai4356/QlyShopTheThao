@@ -125,7 +125,7 @@ function KiemTraTaiKhoan($email, $pass, $conn)
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            if (password_verify($pass, $row['password'])) { // Giả sử mật khẩu đã được hash bằng bcrypt [cite: 3]
+            if (password_verify($pass, $row['password'])) {
                 if ($row['is_verified'] == 1) {
                     return $row;
                 } else {
