@@ -3,11 +3,11 @@ session_start();
 
 if ( $_SESSION['role'] != 2) {
     // Chặn quyền, có thể redirect hoặc báo lỗi
-    header("Location: /kiemtra2-2/src/view/access-denied.php"); // 👉 Chuyển hướng ra trang thông báo
+    header("Location: /QlyShopTheThao/src/view/access-denied.php"); // 👉 Chuyển hướng ra trang thông báo
     exit(); // 🚨 Bắt buộc phải dừng script ngay sau header
 }
 
-$conn = require_once "../model/Connect.php";
+$conn = require_once "../../model/Connect.php";
 
 $limit = 5; // Số lượng user/admin hiển thị trên mỗi trang
 // Xác định trang hiện tại
