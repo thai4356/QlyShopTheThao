@@ -1,5 +1,5 @@
 <?php
-require_once 'Database.php';
+require_once 'Connect.php';
 
 class Category {
     private $conn;
@@ -7,6 +7,6 @@ class Category {
     public $id, $name, $description;
 
     public function __construct() {
-        $this->conn = (new Database())->getConnection();
+        $this->conn = (new Connect())->getConnection();
     }
 }

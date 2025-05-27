@@ -1,4 +1,20 @@
 
+<?php
+session_start();
+
+// NGĂN CACHE TRÌNH DUYỆT:
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// NẾU ĐÃ ĐĂNG NHẬP THÌ KHÔNG CHO VÀO TRANG LOGIN
+if (isset($_SESSION['username'])) {
+    header("Location: ../view/ViewUser/Index.php");
+    exit;
+}
+?>
+
+
 
 <!doctype html>
 <html lang="en">
@@ -7,6 +23,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="Public/CSS/register.css">
@@ -306,6 +326,12 @@
             signInButtonJs.addEventListener('click', () => containerJs.classList.remove("right-panel-active"));
         }
 
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+
         // Close button for Sign In reCAPTCHA modal
         if (closeRecaptchaModalButton && recaptchaModal) {
             closeRecaptchaModalButton.addEventListener('click', function() {
@@ -324,4 +350,8 @@
             });
         }
     });
+
 </script>
+
+
+
