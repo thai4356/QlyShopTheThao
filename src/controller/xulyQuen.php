@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         $mail = new PHPMailer(true);
-// Send email with the password reset link using PHPMailer
+        // Send email with the password reset link using PHPMailer
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_OFF;
