@@ -64,7 +64,7 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                                     </li>
 
                                     <li>
-                                        <a href="?module=blog" class="navbar-link" title="Favourite" data-nav-link>Yêu thích</a>
+                                        <a href="?module=orderhistory" class="navbar-link" title="Favourite" data-nav-link>Lịch sử mua hàng</a>
                                     </li>
                                 </ul>
                             </div>

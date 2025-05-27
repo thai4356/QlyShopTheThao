@@ -18,14 +18,17 @@ class OrderItem {
 
     public function getItemsByOrderId($orderId) {
         $stmt = $this->conn->prepare("
-        SELECT oi.*, p.name, p.image_url, p.stock
+        SELECT DISTINCT oi.*, p.name AS product_name, p.stock
         FROM order_item oi
         JOIN product p ON oi.product_id = p.id
         WHERE oi.order_id = ?
     ");
-        $stmt->execute(array($orderId));
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute([$orderId]);
+
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $items;
     }
+
 
 
 

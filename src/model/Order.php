@@ -22,7 +22,22 @@ class Order {
         return $this->conn->lastInsertId();
     }
 
+    public function getOrdersByUser($userId) {
+        $stmt = $this->conn->prepare("SELECT * FROM  orders WHERE user_id = ? ORDER BY created_at DESC");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+//    public function getItemsByOrderId($orderId) {
+//        $stmt = $this->conn->prepare("SELECT *  FROM order_items WHERE order_id = ?");
+//        $stmt->execute([$orderId]);
+//        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+//    }
 
+    public function getOrderById($orderId) {
+        $stmt = $this->conn->prepare("SELECT * FROM orders WHERE id = ?");
+        $stmt->execute([$orderId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 }

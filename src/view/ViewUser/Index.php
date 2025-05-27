@@ -57,6 +57,24 @@ switch ($module) {
         include 'footer.php';
         exit;
 
+    case 'orderhistory':
+        require_once '../../controller/OrderController.php';
+        $controller = new OrderController();
+        include 'header.php';
+        $controller->viewOrderHistory();
+        include 'footer.php';
+        exit;
+
+    case 'orderdetail':
+        require_once '../../controller/OrderController.php';
+        $controller = new OrderController();
+        $orderId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        include 'header.php';
+        $controller->viewOrderDetail($orderId);
+        include 'footer.php';
+        exit;
+
+
     case 'home':
     default:
         include 'header.php';
