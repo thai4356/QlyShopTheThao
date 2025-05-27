@@ -163,4 +163,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ../view/login.php"); // Redirect to the page with the form
     exit;
 }
-
