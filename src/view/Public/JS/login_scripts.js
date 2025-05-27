@@ -1,7 +1,7 @@
 // QlyShopTheThao/view/Public/JS/login_scripts.js
 
 // Global reCAPTCHA Site Key (v2 Checkbox)
-const RECAPTCHA_V2_SITE_KEY = "6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"; // Replace with your actual Site Key
+const RECAPTCHA_V2_SITE_KEY = "6Ldfv0srAAAAANlyHXc6UYBC2YJ0JWwIbrgHpIBW"; // Replace with your actual Site Key
 
 // Callback for Sign In reCAPTCHA
 function onRecaptchaSuccess(token) {

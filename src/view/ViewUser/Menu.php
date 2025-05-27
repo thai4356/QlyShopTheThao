@@ -15,11 +15,11 @@
                 <div class="banner-title-one">
                     <div class="main-banner-subtitle-box">
                         <div class="banner-subtitle-box">
-                            <div class="banner-subtitle-first">Được đánh giá cao</div>
-                            <div class="banner-subtitle-second">Bộ sưu tập đồ thể thao</div>
+                            <div class="banner-subtitle-first" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Được đánh giá cao</div>
+                            <div class="banner-subtitle-second" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Bộ sưu tập đồ thể thao</div>
                         </div>
                     </div>
-                    <h1 class="h1-title">Trang bị để đạt hiệu suất tốt nhất</h1>
+                    <h1 class="h1-title" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Trang bị để đạt hiệu suất tốt nhất</h1>
                     <p>Khám phá trang phục thể thao cao cấp được thiết kế cho sự thoải mái, phong cách và hiệu quả. Phù hợp cho tập luyện, chạy bộ và di chuyển hàng ngày.</p>
                     <a href="?module=sanpham" class="sec-btn">Mua ngay</a>
                 </div>
@@ -64,10 +64,10 @@
                         <div class="subtitle">
                             <h2 class="h2-subtitle">Về chúng tôi</h2>
                         </div>
-                        <h2 class="h2-title">Chào mừng đến với cửa hàng thể thao của chúng tôi</h2>
+                        <h2 class="h2-title" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Chào mừng đến với cửa hàng thể thao của chúng tôi</h2>
                     </div>
-                    <p>Chúng tôi chuyên cung cấp đồ thể thao chất lượng cao cho vận động viên và người yêu thể dục. Sứ mệnh của chúng tôi là hỗ trợ hành trình của bạn bằng những trang bị vừa tiện ích vừa thời trang.</p>
-                    <p>Dù bạn ở sân cỏ, phòng tập hay di chuyển hàng ngày, sản phẩm của chúng tôi luôn sẵn sàng đồng hành.</p>
+                    <p style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Chúng tôi chuyên cung cấp đồ thể thao chất lượng cao cho vận động viên và người yêu thể dục. Sứ mệnh của chúng tôi là hỗ trợ hành trình của bạn bằng những trang bị vừa tiện ích vừa thời trang.</p>
+                    <p style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Dù bạn ở sân cỏ, phòng tập hay di chuyển hàng ngày, sản phẩm của chúng tôi luôn sẵn sàng đồng hành.</p>
                     <div class="about-text-box">
                         <div class="about-trainer-box">
                             <div class="about-trainer-img">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="about-trainer-name">
                                 <h3 class="h3-title">Taylor Smith</h3>
-                                <span>Người sáng lập & Giám đốc điều hành</span>
+                                <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Người sáng lập & Giám đốc điều hành</span>
                             </div>
                         </div>
                         <a href="about-us.html" class="sec-btn">Tìm hiểu thêm</a>
@@ -97,9 +97,9 @@
             <div class="col-lg-12">
                 <div class="classes-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Lớp học của chúng tôi</h2>
+                        <h2 class="h2-subtitle" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Lớp học của chúng tôi</h2>
                     </div>
-                    <h2 class="h2-title">Lớp thể hình cho mọi mục tiêu</h2>
+                    <h2 class="h2-title" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Lớp thể hình cho mọi mục tiêu</h2>
                 </div>
             </div>
         </div>
@@ -401,9 +401,9 @@
             <div class="col-lg-12">
                 <div class="schedule-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Giờ hoạt động</h2>
+                        <h2 class="h2-subtitle" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Giờ hoạt động</h2>
                     </div>
-                    <h2 class="h2-title">Tham khảo lịch mở cửa của chúng tôi</h2>
+                    <h2 class="h2-title" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Tham khảo lịch mở cửa của chúng tôi</h2>
                 </div>
             </div>
             <div class="col-lg-12">
@@ -439,8 +439,8 @@
                                     <?php foreach ($hours as $hour): ?>
                                         <li>
                                             <div class="schedule-class-text">
-                                                <h3 class="h3-title"><?= $hour ?></h3>
-                                                <span><?= $hour === 'Nghỉ' ? 'Không hoạt động' : 'Phục vụ đầy đủ dịch vụ' ?></span>
+                                                <h3 class="h3-title" style=" font-family: 'Be Vietnam Pro', sans-serif !important;"><?= $hour ?></h3>
+                                                <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;"><?= $hour === 'Nghỉ' ? 'Không hoạt động' : 'Phục vụ đầy đủ dịch vụ' ?></span>
                                             </div>
                                         </li>
                                     <?php endforeach; ?>
@@ -466,7 +466,7 @@
                         <h2 class="h2-title counting-data" data-count="874">874</h2>
                         <div class="counter-text">
                             <img src="../Public/Image/happy-client.png" alt="Khách hàng hài lòng">
-                            <span>Khách hàng hài lòng</span>
+                            <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Khách hàng hài lòng</span>
                         </div>
                     </div>
                 </div>
@@ -477,7 +477,7 @@
                         <h2 class="h2-title counting-data" data-count="987">987</h2>
                         <div class="counter-text">
                             <img src="../Public/Image/total-clients.png" alt="Khách hàng thường xuyên">
-                            <span>Khách hàng thường xuyên</span>
+                            <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Khách hàng thường xuyên</span>
                         </div>
                     </div>
                 </div>
@@ -488,7 +488,7 @@
                         <h2 class="h2-title counting-data" data-count="587">587</h2>
                         <div class="counter-text">
                             <img src="../Public/Image/gym-equipment.png" alt="Thiết bị hiện đại">
-                            <span>Thiết bị hiện đại</span>
+                            <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Thiết bị hiện đại</span>
                         </div>
                     </div>
                 </div>
@@ -499,7 +499,7 @@
                         <h2 class="h2-title counting-data" data-count="748">748</h2>
                         <div class="counter-text">
                             <img src="../Public/Image/cup-of-coffee.png" alt="Dịch vụ hỗ trợ">
-                            <span>Dịch vụ hỗ trợ</span>
+                            <span style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Dịch vụ hỗ trợ</span>
                         </div>
                     </div>
                 </div>
@@ -519,9 +519,9 @@
             <div class="col-lg-12">
                 <div class="team-title">
                     <div class="subtitle">
-                        <h2 class="h2-subtitle">Huấn luyện viên xuất sắc</h2>
+                        <h2 class="h2-subtitle" style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Huấn luyện viên xuất sắc</h2>
                     </div>
-                    <h2 class="h2-title">Đội ngũ huấn luyện chuyên nghiệp</h2>
+                    <h2 class="h2-title"  style=" font-family: 'Be Vietnam Pro', sans-serif !important;">Đội ngũ huấn luyện chuyên nghiệp</h2>
                 </div>
             </div>
         </div>
@@ -752,4 +752,3 @@
         </div>
     </div>
 </section>
-

@@ -37,7 +37,7 @@ if (isset($_SESSION['username'])) {
         <div style="background-color:white; padding:20px 40px; border-radius:8px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
             <h4 style="margin-top:0; margin-bottom:15px; font-family: 'Montserrat', sans-serif; font-size:18px;">Verify you are human</h4>
             <div class="g-recaptcha"
-                 data-sitekey="6LcU8UcrAAAAAMqwXwSK3F45YFjaaiBlMtd2CWtT"
+                 data-sitekey="6Ldfv0srAAAAANlyHXc6UYBC2YJ0JWwIbrgHpIBW"
                  data-callback="onRecaptchaSuccess"
                  style="margin: 15px auto; transform:scale(0.9);transform-origin:50% 50%;">
             </div>
