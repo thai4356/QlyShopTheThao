@@ -1,10 +1,10 @@
 <?php
 class Connect {
 
-    private $host = "localhost:3312";
+    private $host = "gondola.proxy.rlwy.net:37729";
     private $db_name = "user_database";
     private $username = "root";
-    private $password = "";
+    private $password = "NvsggkIBRDcJpFNKVKOPYAofrTUsFhor";
     public $conn;
 
     public function getConnection() {
