@@ -55,6 +55,58 @@ require_once "../../controller/checklogin.php";
         a:hover {
             text-decoration: underline;
         }
+
+        /* === CSS ĐƯỢC CẬP NHẬT CHO NÚT THANH TOÁN DỰA TRÊN STYLE2.CSS === */
+        .button {
+            display: inline-block;
+            font-family: Be Vietnam Pro, Arial, sans-serif; /* Ưu tiên Rubik nếu có, fallback về Arial */
+            font-size: 15px;
+            line-height: 1.5; /* Điều chỉnh line-height cho phù hợp với padding */
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #ffffff !important; /* Quan trọng để ghi đè màu mặc định của button */
+            background-color: #fd3d0c; /* Màu cam đỏ từ style2.css */
+            padding: 15px 35px; /* Padding có thể điều chỉnh, gốc của .sec-btn là 18px 45px */
+            border-radius: 10px; /* Bo góc từ style2.css */
+            border: none; /* Bỏ border mặc định */
+            cursor: pointer;
+            position: relative; /* Cho hiệu ứng ::before */
+            z-index: 1; /* Cho hiệu ứng ::before */
+            overflow: hidden; /* Ngăn hiệu ứng tràn ra ngoài */
+            transition: color 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease; /* Thêm transition cho color và background-color */
+        }
+
+        .button::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: #141b22; /* Màu nền khi hover, từ style2.css (.sec-btn::before) */
+            z-index: -1;
+            border-radius: 10px; /* Giữ bo tròn cho hiệu ứng */
+            transition: height 0.5s ease; /* Chỉ transition height cho ::before */
+        }
+
+        .button:hover::before {
+            height: 100%;
+            top: 0; /* Đảm bảo ::before phủ từ trên xuống */
+            bottom: auto;
+        }
+
+        .button:hover {
+            color: #ffffff !important; /* Giữ màu chữ trắng khi hover */
+            /* Hiệu ứng box-shadow khi hover có thể thêm nếu muốn, ví dụ:
+            box-shadow: 0px 10px 24px 0px rgba(253, 61, 12, 0.2); */
+        }
+
+        /* Hiệu ứng focus để người dùng biết nút đang được chọn (quan trọng cho accessibility) */
+        .button:focus {
+            outline: 2px solid #141b22; /* Màu outline khi focus */
+            outline-offset: 2px;
+        }
+        /* === KẾT THÚC CSS CHO NÚT THANH TOÁN === */
     </style>
 </head>
 <body>

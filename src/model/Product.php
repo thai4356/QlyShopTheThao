@@ -11,16 +11,21 @@ require_once 'Connect.php';
             $this->conn = (new Connect())->getConnection();
         }
 
-        // Trong Product.php
         public function getById($id) {
             $query = "SELECT p.*, pi.image_url
-            FROM $this->table p
-            LEFT JOIN product_image pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
-            WHERE p.id = ?
-            LIMIT 1"; // Giả sử bạn muốn thumbnail chính
+              FROM $this->table p
+              LEFT JOIN product_image pi ON p.id = pi.product_id
+              WHERE p.id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([$id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC); // Trả về một dòng sản phẩm, bao gồm price và discount_price
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$rows) return null;
+
+            $product = $rows[0]; // thông tin sản phẩm
+            $product['images'] = array_column($rows, 'image_url'); // mảng các ảnh
+
+            return $product;
         }
 
 
