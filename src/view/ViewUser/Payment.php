@@ -80,6 +80,10 @@ $count = count($items);
                         <label for="momo">Ví MoMo</label>
                         <input id="momo" name="payment_method" type="radio" value="momo" />
                     </div>
+                    <div class="form__radio">
+                        <label for="vnpay">Ví VnPay</label>
+                        <input id="vnpay" name="payment_method" type="radio" value="vnpay" />
+                    </div>
                 </div>
             </fieldset>
             <br>

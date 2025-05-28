@@ -62,4 +62,33 @@ class Order {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Trong class Order (QlyShopTheThao/src/model/Order.php)
+    public function updateOrderStatusAndTxn($orderId, $status, $vnpTransactionNo = null, $vnpTxnRefRaw = null) {
+        // Giả sử bạn đã thêm các cột vnp_transaction_no và vnp_txn_ref_ipn vào bảng orders
+        $sql = "UPDATE " . $this->table . "
+            SET status = ?,
+                updated_at = NOW()";
+        $params = [$status];
+
+        if ($vnpTransactionNo !== null) {
+            $sql .= ", vnp_transaction_no = ?"; // Giả sử tên cột là vnp_transaction_no
+            $params[] = $vnpTransactionNo;
+        }
+        if ($vnpTxnRefRaw !== null) {
+            $sql .= ", vnp_txn_ref_ipn = ?"; // Giả sử tên cột là vnp_txn_ref_ipn
+            $params[] = $vnpTxnRefRaw;
+        }
+        $sql .= " WHERE id = ?";
+        $params[] = $orderId;
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Database Error in updateOrderStatusAndTxn: " . $e->getMessage());
+            return false;
+        }
+    }
+
 }

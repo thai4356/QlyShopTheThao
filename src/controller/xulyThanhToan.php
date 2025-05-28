@@ -19,5 +19,5 @@ if ($paymentMethod == 'vnpay') {
     // Giả sử phương thức processPayment() hiện tại của bạn xử lý các trường hợp này
     $ctrl->processPayment();
 }
-// <<< KẾT THÚC THAY ĐỔI >>>
+
 ?>
