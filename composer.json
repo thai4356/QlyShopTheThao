@@ -6,5 +6,7 @@
             "HSkycomputer\\QlyShopTheThao\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "php": "^8.2"
+    }
 }
