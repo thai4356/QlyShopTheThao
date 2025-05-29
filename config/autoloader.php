@@ -4,7 +4,7 @@ spl_autoload_register(function ($class_name) {
     $libraries = [
         'Dotenv\\'                 => __DIR__ . '/../src/phpdotenv-5.6.2/src/',
         'PhpOption\\'              => __DIR__ . '/../src/php-option-1.9.3/src/PhpOption/',
-        'GrahamCampbell\\ResultType\\' => __DIR__ . '/../src/Result-Type-1.1.3/src/' // <<< THÊM CẤU HÌNH CHO ResultType
+        'GrahamCampbell\\ResultType\\' => __DIR__ . '/../src/Result-Type-1.1.3/src/'
     ];
 
     foreach ($libraries as $prefix => $base_dir) {

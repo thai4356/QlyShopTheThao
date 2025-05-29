@@ -2,9 +2,6 @@
 require_once "../model/Connect.php";
 
 // Gọi hàm getConnection() để lấy PDO
-$connection = new Connect();
-$conn = $connection->getConnection();
-
 $database = new Connect();
 $conn = $database->getConnection();
 

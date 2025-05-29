@@ -11,7 +11,7 @@ require '../PHPMailer/src/Exception.php';
 require '../PHPMailer/src/PHPMailer.php';
 require '../PHPMailer/src/SMTP.php';
 
-require '../../vendor/autoload.php';  // Autoload PHPMailer via Composer
+//require '../../vendor/autoload.php';  // Autoload PHPMailer via Composer
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
