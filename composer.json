@@ -3,7 +3,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "HSkycomputer\\QlyShopTheThao\\": "src/"
+            "MySportsShop\\App\\": "src/"
         }
     },
     "require": {
