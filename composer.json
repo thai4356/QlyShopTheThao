@@ -1,0 +1,10 @@
+{
+    "name": "h-skycomputer/qly-shop-the-thao",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "HSkycomputer\\QlyShopTheThao\\": "src/"
+        }
+    },
+    "require": {}
+}
