@@ -247,6 +247,27 @@
     font-weight: var(--fw-700, 700);
 }
 
+/* === PHẦN THÊM MỚI === */
+.order-status-detail.status-pending-payment {
+    background-color: var(--status-pending-bg); /* Dùng màu vàng của pending */
+    color: var(--status-pending-text);
+}
+.order-status-detail.status-failed {
+    background-color: var(--status-canceled-bg); /* Dùng màu đỏ của canceled/danger */
+    color: var(--status-canceled-text);
+}
+.order-status-detail.status-expired {
+    background-color: var(--status-default-bg); /* Dùng màu xám của default */
+    color: var(--status-default-text);
+}
+/* === KẾT THÚC PHẦN THÊM MỚI === */
+
+.order-status-detail.status-default {
+    background-color: var(--status-default-bg);
+    color: var(--status-default-text);
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 767px) {
     .order-detail-container .page-title {

@@ -227,6 +227,20 @@
     color: var(--status-default-text);
 }
 
+/* === PHẦN THÊM MỚI === */
+.order-status-badge.status-pending-payment {
+    background-color: var(--status-pending-bg); /* Dùng màu vàng của pending */
+    color: var(--status-pending-text);
+}
+.order-status-badge.status-failed {
+    background-color: var(--status-canceled-bg); /* Dùng màu đỏ của canceled/danger */
+    color: var(--status-canceled-text);
+}
+.order-status-badge.status-expired {
+    background-color: var(--status-default-bg); /* Dùng màu xám của default */
+    color: var(--status-default-text);
+}
+/* === KẾT THÚC PHẦN THÊM MỚI === */
 
 /* Detail button - Align with Fithub's .sec-btn or similar */
 .btn-order-detail {

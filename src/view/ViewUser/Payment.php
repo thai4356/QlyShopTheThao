@@ -73,12 +73,8 @@ $count = count($items);
                         <input checked id="cod" name="payment_method" type="radio" value="cod" />
                     </div>
                     <div class="form__radio">
-                        <label for="bank">Chuyển khoản ngân hàng</label>
-                        <input id="bank" name="payment_method" type="radio" value="bank" />
-                    </div>
-                    <div class="form__radio">
-                        <label for="momo">Ví MoMo</label>
-                        <input id="momo" name="payment_method" type="radio" value="momo" />
+                        <label for="payos">Thanh toán qua PayOS</label>
+                        <input id="payos" name="payment_method" type="radio" value="payos" />
                     </div>
                     <div class="form__radio">
                         <label for="vnpay">Ví VnPay</label>

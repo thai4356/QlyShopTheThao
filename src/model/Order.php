@@ -91,4 +91,44 @@ class Order {
         }
     }
 
+    public function updateOrderPayOSInfo($orderId, $payosPaymentLinkId, $status = null, $payosReference = null, $payosTransactionDatetime = null) {
+        $fieldsToUpdate = [];
+        $params = [];
+
+        if ($status !== null) {
+            $fieldsToUpdate[] = "status = ?";
+            $params[] = $status;
+        }
+        if ($payosPaymentLinkId !== null) {
+            $fieldsToUpdate[] = "payos_payment_link_id = ?";
+            $params[] = $payosPaymentLinkId;
+        }
+        if ($payosReference !== null) { // This is likely your orderId/orderCode again
+            $fieldsToUpdate[] = "payos_reference = ?";
+            $params[] = $payosReference;
+        }
+        if ($payosTransactionDatetime !== null) {
+            $fieldsToUpdate[] = "payos_transaction_datetime = ?";
+            $params[] = $payosTransactionDatetime;
+        }
+
+        if (empty($fieldsToUpdate)) {
+            return false; // Nothing to update
+        }
+
+        $fieldsToUpdate[] = "updated_at = NOW()";
+
+        $sql = "UPDATE " . $this->table . " SET " . implode(", ", $fieldsToUpdate) . " WHERE id = ?";
+        $params[] = $orderId;
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Database Error in updateOrderPayOSInfo: " . $e->getMessage());
+            return false;
+        }
+    }
+
 }

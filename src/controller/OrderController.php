@@ -4,8 +4,37 @@ require_once __DIR__ . '/../model/OrderItem.php';
 require_once __DIR__ . '/../model/Product.php';
 require_once __DIR__ . '/../../config/vnpay_config.php';
 
+require_once __DIR__ . '/../../vendor/autoload.php'; // Composer autoloader
+
+use Dotenv\Dotenv;
+use PayOS\PayOS;
+
+// Load .env file
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../'); // Assuming .env is in the project root
+$dotenv->load();
+
 class OrderController
 {
+    private $payOS;
+    private $ngrok_url = "https://up-summary-honeybee.ngrok-free.app";
+
+    public function __construct()
+    {
+        // Initialize PayOS SDK
+        // Check if ENVs are loaded
+        if (empty($_ENV['PAYOS_CLIENT_ID']) || empty($_ENV['PAYOS_API_KEY']) || empty($_ENV['PAYOS_CHECKSUM_KEY'])) {
+            // Handle error: .env variables not loaded
+            // You might want to log this or throw an exception
+            error_log("PayOS environment variables are not loaded. Check .env file and path.");
+        }
+        $this->payOS = new PayOS($_ENV['PAYOS_CLIENT_ID'], $_ENV['PAYOS_API_KEY'], $_ENV['PAYOS_CHECKSUM_KEY']);
+
+        // Ensure session is started for checkout_items and user_id
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+
     public function index()
     {
         $selectedItems = isset($_POST['select_item']) ? array_unique($_POST['select_item']) : [];
@@ -460,6 +489,229 @@ class OrderController
         die();
         // === KẾT THÚC LOGIC ADAPT TỪ vnpay_ipn.php ===
     }
+
+    public function initiatePayOSPayment()
+    {
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['checkout_items']) || empty($_SESSION['checkout_items'])) {
+            echo "Lỗi: Thông tin người dùng hoặc giỏ hàng không hợp lệ.";
+            // Consider redirecting back to cart with an error
+            exit;
+        }
+
+        $userId = $_SESSION['user_id'];
+        $cartItems = $_SESSION['checkout_items']; // Already contains correct prices
+
+        $name = isset($_POST['hoten']) ? trim($_POST['hoten']) : '';
+        $address = isset($_POST['diachi']) ? trim($_POST['diachi']) : '';
+        $phone = isset($_POST['dienthoai']) ? trim($_POST['dienthoai']) : '';
+
+        if (empty($name) || empty($address) || empty($phone)) {
+            echo "Vui lòng nhập đầy đủ thông tin giao hàng.";
+            // Redirect back with error
+            exit;
+        }
+
+        // Calculate total amount (similar to your VNPay logic or processPayment)
+        $subTotal = 0;
+        foreach ($cartItems as $item) {
+            $subTotal += $item['price'] * $item['quantity'];
+        }
+
+        $shippingFee = 30000; // From Payment.php
+        $discountPercentage = 0.10; // 10% from Payment.php
+        $discountAmount = $subTotal * $discountPercentage;
+        $finalTotal = 2000; //
+
+        if ($finalTotal <= 0) {
+            echo "Tổng tiền cuối cùng không hợp lệ.";
+            exit;
+        }
+
+        // Create order in database with 'pending_payos' status
+        $orderModel = new Order();
+        // Note: createOrder in your Order.php model creates an orderNo.
+        // PayOS orderCode needs to be an INT. We'll use the database order ID.
+        $orderId = $orderModel->createOrder($userId, $finalTotal, 'payos', $name, $address, $phone); // This returns lastInsertId which is orders.id
+
+        if (!$orderId) {
+            echo "Lỗi khi tạo đơn hàng trong cơ sở dữ liệu.";
+            // Log error
+            exit;
+        }
+        // Update status to 'pending_payos' if createOrder sets a default like 'pending'
+        // Or modify createOrder to accept status
+        $orderModel->updateOrderStatusAndTxn($orderId, 'pending_payos');
+
+
+        // Save order items
+        $orderItemModel = new OrderItem();
+        $payosItems = [];
+        foreach ($cartItems as $cartItem) {
+            $orderItemModel->addItem($orderId, $cartItem['product_id'], $cartItem['quantity'], $cartItem['price']);
+            $payosItems[] = [
+                "name" => $cartItem['name'],
+                "quantity" => (int)$cartItem['quantity'],
+                "price" => (int)$cartItem['price'] // PayOS expects integer price for VND
+            ];
+        }
+
+        // Define Return and Cancel URLs
+        // Using handler files for consistency with your potential VNPay setup
+        $returnUrl = $this->ngrok_url . "/QlyShopTheThao/src/controller/payos_return_handler.php";
+        $cancelUrl = $this->ngrok_url . "/QlyShopTheThao/src/controller/payos_cancel_handler.php";
+
+        $paymentData = [
+            "orderCode" => (int)$orderId, // This MUST be an integer
+            "amount" => (int)$finalTotal,
+            "description" => "Thanh toan don hang #" . $orderId,
+            "items" => $payosItems,
+            "buyerName" => $name,
+            "buyerPhone" => $phone,
+            // "buyerEmail" => $_SESSION['user_email'], // If you have user email in session
+            "cancelUrl" => $cancelUrl,
+            "returnUrl" => $returnUrl,
+            // "expiredAt" => time() + (20 * 60) // Optional: Link expires in 20 minutes
+        ];
+
+        try {
+            $payosResponse = $this->payOS->createPaymentLink($paymentData);
+            // Log the request and response for debugging
+            // file_put_contents(__DIR__ . '/../../logs/payos_debug.log', "Request: " . json_encode($paymentData) . "\nResponse: " . json_encode($payosResponse) . "\n", FILE_APPEND);
+
+            // Store payos_payment_link_id (which is $payosResponse['paymentLinkId'])
+            // The `orders` table has payos_payment_link_id
+            if (isset($payosResponse['paymentLinkId'])) {
+                $orderModel->updateOrderPayOSInfo($orderId, $payosResponse['paymentLinkId']);
+            }
+
+
+            header('Location: ' . $payosResponse['checkoutUrl']);
+            exit;
+        } catch (\Throwable $e) {
+            error_log("PayOS Error: " . $e->getMessage());
+            echo "Có lỗi xảy ra trong quá trình tạo liên kết thanh toán PayOS. Vui lòng thử lại.";
+            // Redirect to an error page or cart
+            exit;
+        }
+    }
+
+    public function handlePayOSReturn()
+    {
+        $orderIdFromPayOS = isset($_GET['orderCode']) ? (int)$_GET['orderCode'] : null;
+        $statusFromQuery = isset($_GET['status']) ? $_GET['status'] : null; // e.g., PAID, CANCELLED
+
+        if (!$orderIdFromPayOS) {
+            echo "Lỗi: Mã đơn hàng không hợp lệ từ PayOS.";
+            // Redirect to error page
+            exit;
+        }
+
+        try {
+            $paymentLinkInfo = $this->payOS->getPaymentLinkInformation($orderIdFromPayOS);
+            $orderModel = new Order();
+            $dbOrder = $orderModel->getOrderById($orderIdFromPayOS); // Fetch by orders.id
+
+            if (!$dbOrder) {
+                echo "Lỗi: Không tìm thấy đơn hàng trong hệ thống.";
+                exit;
+            }
+
+            // Check if amounts match (optional but recommended)
+            if ((int)$dbOrder['total_price'] != (int)$paymentLinkInfo['amountTotal']) {
+                error_log("PayOS Return: Amount mismatch for order " . $orderIdFromPayOS . ". DB: " . $dbOrder['total_price'] . ", PayOS: " . $paymentLinkInfo['amountTotal']);
+                // Potentially flag for review or handle as error
+            }
+
+
+            if ($paymentLinkInfo['status'] == 'PAID') {
+                // Check if order is still pending to avoid reprocessing
+                if ($dbOrder['status'] == 'pending_payos' || $dbOrder['status'] == 'pending') {
+                    // Update order status to 'completed'
+                    $transactionTime = !empty($paymentLinkInfo['transactions']) && isset($paymentLinkInfo['transactions'][0]['transactionDateTime'])
+                        ? date('Y-m-d H:i:s', strtotime($paymentLinkInfo['transactions'][0]['transactionDateTime']))
+                        : date('Y-m-d H:i:s');
+                    // The method below needs to be created/adjusted in Order.php model
+                    $orderModel->updateOrderPayOSInfo(
+                        $orderIdFromPayOS,
+                        $paymentLinkInfo['id'], // payos_payment_link_id
+                        $paymentLinkInfo['status'], // status = 'completed'
+                        $paymentLinkInfo['orderCode'], // payos_reference (which is our orderId)
+                        $transactionTime // payos_transaction_datetime
+                    );
+
+
+                    // Update product stock
+                    $orderItemModel = new OrderItem();
+                    $productModel = new Product();
+                    $itemsInOrder = $orderItemModel->getItemsByOrderId($orderIdFromPayOS);
+                    foreach ($itemsInOrder as $item) {
+                        $productModel->reduceStock($item['product_id'], $item['quantity']);
+                        $productModel->increseSold($item['product_id'], $item['quantity']); // Check spelling "increseSold" in your Product.php
+                    }
+
+                    unset($_SESSION['checkout_items']);
+                    header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&payment_method=payos&status=success');
+                    exit;
+                } else if ($dbOrder['status'] == 'completed') {
+                    // Already processed, just redirect to success
+                    header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&payment_method=payos&status=already_completed');
+                    exit;
+                } else {
+                    // Order in a different state, might be an issue
+                    error_log("PayOS Return: Order " . $orderIdFromPayOS . " has status " . $dbOrder['status'] . " but PayOS says PAID.");
+                    header('Location: ../view/ViewUser/Payment.php?error=payos_status_mismatch&order_id=' . $orderIdFromPayOS);
+                    exit;
+                }
+            } else { // CANCELLED, FAILED, EXPIRED etc.
+                $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], $paymentLinkInfo['status']);
+                header('Location: ../view/ViewUser/Payment.php?error=payos_failed&order_id=' . $orderIdFromPayOS . '&payos_status=' . $paymentLinkInfo['status']);
+                exit;
+            }
+        } catch (\Throwable $e) {
+            error_log("PayOS Return/Cancel Error for orderCode " . $orderIdFromPayOS . ": " . $e->getMessage());
+            echo "Có lỗi xảy ra khi xử lý phản hồi từ PayOS. " . $e->getMessage();
+            // Redirect to a generic error page or home
+            exit;
+        }
+    }
+
+    // Inside OrderController class
+    public function handlePayOSCancel()
+    {
+        $orderIdFromPayOS = isset($_GET['orderCode']) ? (int)$_GET['orderCode'] : null;
+
+        if (!$orderIdFromPayOS) {
+            echo "Lỗi: Mã đơn hàng không hợp lệ từ PayOS.";
+            exit;
+        }
+
+        try {
+            $paymentLinkInfo = $this->payOS->getPaymentLinkInformation($orderIdFromPayOS);
+            $orderModel = new Order();
+
+            // Update order status to 'cancelled_payos' or based on $paymentLinkInfo['status']
+            // The getPaymentLinkInformation might show "CANCELLED"
+            if ($paymentLinkInfo['status'] == 'CANCELLED') {
+                $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'cancelled_payos');
+            } else {
+                // If status is not explicitly CANCELLED, might just be a general failure or user navigated away
+                // Keep current status or update to a general failed state if not already 'pending_payos'
+                $dbOrder = $orderModel->getOrderById($orderIdFromPayOS);
+                if ($dbOrder && ($dbOrder['status'] == 'pending_payos' || $dbOrder['status'] == 'pending')) {
+                    $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'cancelled_by_user'); // Or a more generic status
+                }
+            }
+
+            header('Location: ../view/ViewUser/Payment.php?status=payos_cancelled&order_id=' . $orderIdFromPayOS);
+            exit;
+        } catch (\Throwable $e) {
+            error_log("PayOS Cancel Error for orderCode " . $orderIdFromPayOS . ": " . $e->getMessage());
+            echo "Có lỗi xảy ra khi xử lý hủy thanh toán PayOS.";
+            exit;
+        }
+    }
+
+
 
 }
 

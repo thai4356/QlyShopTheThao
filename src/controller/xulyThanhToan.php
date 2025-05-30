@@ -1,23 +1,22 @@
 <?php
-require_once 'OrderController.php';
+require_once __DIR__ . '/../../vendor/autoload.php'; // Ensure autoloader is here
+require_once 'OrderController.php'; // Make sure the path is correct
 
-// <<< THAY ĐỔI BẮT ĐẦU TỪ ĐÂY >>>
 if (!isset($_POST['payment_method'])) {
-    // Xử lý trường hợp không có phương thức thanh toán được chọn (ví dụ: chuyển hướng về trang thanh toán với thông báo lỗi)
     echo "Vui lòng chọn phương thức thanh toán.";
     // header('Location: ../view/ViewUser/Payment.php?error=nopaymentmethod');
     exit;
 }
 
 $paymentMethod = $_POST['payment_method'];
-$ctrl = new OrderController();
+$ctrl = new OrderController(); // Constructor will init PayOS and session
 
 if ($paymentMethod == 'vnpay') {
-    $ctrl->initiateVNPayPayment(); // Gọi phương thức mới để xử lý VNPay
+    $ctrl->initiateVNPayPayment();
+} elseif ($paymentMethod == 'payos') {
+    $ctrl->initiatePayOSPayment(); // New method for PayOS
 } else {
-    // Giữ lại logic xử lý cho các phương thức thanh toán khác đã có (COD, Bank, MoMo)
-    // Giả sử phương thức processPayment() hiện tại của bạn xử lý các trường hợp này
+    // For COD, Bank, MoMo
     $ctrl->processPayment();
 }
-
 ?>

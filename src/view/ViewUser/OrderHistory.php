@@ -1,16 +1,6 @@
 <?php
 
-// Function to map status to text and CSS class (moved here for clarity or can be in a helper file)
-function getOrderStatusDisplay($status) {
-    return match ($status) {
-        'pending' => ['text' => 'Đang xử lý', 'class' => 'status-pending'],
-        'confirmed' => ['text' => 'Đã xác nhận', 'class' => 'status-confirmed'],
-        'shipped' => ['text' => 'Đang giao', 'class' => 'status-shipped'],
-        'completed' => ['text' => 'Hoàn tất', 'class' => 'status-completed'],
-        'canceled' => ['text' => 'Đã hủy', 'class' => 'status-canceled'],
-        default => ['text' => 'Không xác định', 'class' => 'status-default'],
-    };
-}
+require_once __DIR__ . '/../../../helpers/status_display_helper.php';
 ?>
 
 <link rel="stylesheet" href="../Public/CSS/order-history.css"> <div class="order-history-container container" style="margin-top: 100px;">
