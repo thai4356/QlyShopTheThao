@@ -1,0 +1,305 @@
+==== VNPay Request ====
+Timestamp: 2025-05-28 10:59:36
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 157548000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528105936
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528111436
+    [vnp_IpAddr] => ::1
+    [vnp_IpnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_ipn_handler.php
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 84 Tong: 1,575,480VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 84_1748404776
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=157548000&vnp_Command=pay&vnp_CreateDate=20250528105936&vnp_CurrCode=VND&vnp_ExpireDate=20250528111436&vnp_IpAddr=%3A%3A1&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+84+Tong%3A+1%2C575%2C480VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=84_1748404776&vnp_Version=2.1.0
+Generated SecureHash: 4b343d4c6ab67730a611338d7f39a5b36342bbc06198219fc955de7f9dd08c89ece92b587f2a98deb3fe5d8d87f1f4c00ff1107cfd080863399f4d7832bf51dd
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=157548000&vnp_Command=pay&vnp_CreateDate=20250528105936&vnp_CurrCode=VND&vnp_ExpireDate=20250528111436&vnp_IpAddr=%3A%3A1&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+84+Tong%3A+1%2C575%2C480VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=84_1748404776&vnp_Version=2.1.0&vnp_SecureHash=4b343d4c6ab67730a611338d7f39a5b36342bbc06198219fc955de7f9dd08c89ece92b587f2a98deb3fe5d8d87f1f4c00ff1107cfd080863399f4d7832bf51dd
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 11:20:51
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528112051
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528113551
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_IpnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_ipn_handler.php
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 85 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 85_1748406051
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528112051&vnp_CurrCode=VND&vnp_ExpireDate=20250528113551&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+85+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=85_1748406051&vnp_Version=2.1.0
+Generated SecureHash: 23a96e5588f498b360f44a1dd92e465a5bc436cd7f067fbd5e5b1f94a4bdc3185c3f54f5d6dfd9176b3d61ed1829edeccf9bacd16fda65a81f5ea80b1e1d8297
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528112051&vnp_CurrCode=VND&vnp_ExpireDate=20250528113551&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+85+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=85_1748406051&vnp_Version=2.1.0&vnp_SecureHash=23a96e5588f498b360f44a1dd92e465a5bc436cd7f067fbd5e5b1f94a4bdc3185c3f54f5d6dfd9176b3d61ed1829edeccf9bacd16fda65a81f5ea80b1e1d8297
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 11:46:00
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528114600
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528120100
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_IpnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_ipn_handler.php
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 86 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 86_1748407560
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528114600&vnp_CurrCode=VND&vnp_ExpireDate=20250528120100&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+86+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=86_1748407560&vnp_Version=2.1.0
+Generated SecureHash: 2ab759f23357f156145c1ba9ee689841789797316d58b338cbc02cbe5669822839696a37f4df29254fa60d739b9bfc57620b4b87e2a55f902b452359747ba400
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528114600&vnp_CurrCode=VND&vnp_ExpireDate=20250528120100&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+86+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=86_1748407560&vnp_Version=2.1.0&vnp_SecureHash=2ab759f23357f156145c1ba9ee689841789797316d58b338cbc02cbe5669822839696a37f4df29254fa60d739b9bfc57620b4b87e2a55f902b452359747ba400
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 12:22:31
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528122231
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528123731
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_IpnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_ipn_handler.php
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 87 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 87_1748409751
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528122231&vnp_CurrCode=VND&vnp_ExpireDate=20250528123731&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+87+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=87_1748409751&vnp_Version=2.1.0
+Generated SecureHash: 24d1636cf632c34c36cdf9e53228b986fecb70cf4a7228091898c1d7536594929768ef2ca9c9571d9a5a878d60821c064073a0d5d583148c3d874e7ad1394bdd
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528122231&vnp_CurrCode=VND&vnp_ExpireDate=20250528123731&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+87+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=87_1748409751&vnp_Version=2.1.0&vnp_SecureHash=24d1636cf632c34c36cdf9e53228b986fecb70cf4a7228091898c1d7536594929768ef2ca9c9571d9a5a878d60821c064073a0d5d583148c3d874e7ad1394bdd
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 12:43:22
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528124322
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528125822
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_IpnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_ipn_handler.php
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 88
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 88_1748411002
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528124322&vnp_CurrCode=VND&vnp_ExpireDate=20250528125822&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+88&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=88_1748411002&vnp_Version=2.1.0
+Generated SecureHash: 94567e70ed7bb2914d2de87877898a4c854e2d1bf6832a82b80fbd2b683155c8c4dab702368232eefb185f258c9a1f07e93bb30071a743e787baf0401cb382aa
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528124322&vnp_CurrCode=VND&vnp_ExpireDate=20250528125822&vnp_IpAddr=183.81.10.210&vnp_IpnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_ipn_handler.php&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+88&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=88_1748411002&vnp_Version=2.1.0&vnp_SecureHash=94567e70ed7bb2914d2de87877898a4c854e2d1bf6832a82b80fbd2b683155c8c4dab702368232eefb185f258c9a1f07e93bb30071a743e787baf0401cb382aa
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 13:30:28
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528133028
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528134528
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 89 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 89_1748413828
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528133028&vnp_CurrCode=VND&vnp_ExpireDate=20250528134528&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+89+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=89_1748413828&vnp_Version=2.1.0
+Generated SecureHash: 44da67f53ddd7df4f94decf288682bc6bd2c8598722f7f8e9c43256c9d950b96b4420c9afd17939b06308af3626c2c55f37dc133f297172e188c1430a13bd485
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528133028&vnp_CurrCode=VND&vnp_ExpireDate=20250528134528&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+89+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=89_1748413828&vnp_Version=2.1.0&vnp_SecureHash=44da67f53ddd7df4f94decf288682bc6bd2c8598722f7f8e9c43256c9d950b96b4420c9afd17939b06308af3626c2c55f37dc133f297172e188c1430a13bd485
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 13:36:19
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528133619
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528135119
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 90 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 90_1748414179
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528133619&vnp_CurrCode=VND&vnp_ExpireDate=20250528135119&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+90+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=90_1748414179&vnp_Version=2.1.0
+Generated SecureHash: 01ab114c24a29db9dde4af956b9fe126465ed6360091346c4573baa5ffaa6ec1ec4d45d806beb427c7b28f5bd7ee2b7a084c279506c669b2bae824f6407653dd
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528133619&vnp_CurrCode=VND&vnp_ExpireDate=20250528135119&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+90+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=90_1748414179&vnp_Version=2.1.0&vnp_SecureHash=01ab114c24a29db9dde4af956b9fe126465ed6360091346c4573baa5ffaa6ec1ec4d45d806beb427c7b28f5bd7ee2b7a084c279506c669b2bae824f6407653dd
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 13:42:41
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 67395000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528134241
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528135741
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 91 Tong: 673,950VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 91_1748414561
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=67395000&vnp_Command=pay&vnp_CreateDate=20250528134241&vnp_CurrCode=VND&vnp_ExpireDate=20250528135741&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+91+Tong%3A+673%2C950VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=91_1748414561&vnp_Version=2.1.0
+Generated SecureHash: eb681bb81d1217989a27e29913bf5b011473cac122fb70b32e92832c33662a2b93b4af40210594e40591bb469e0ca1e741a815909e9b073444e0a6de7d446dc7
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=67395000&vnp_Command=pay&vnp_CreateDate=20250528134241&vnp_CurrCode=VND&vnp_ExpireDate=20250528135741&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+91+Tong%3A+673%2C950VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=91_1748414561&vnp_Version=2.1.0&vnp_SecureHash=eb681bb81d1217989a27e29913bf5b011473cac122fb70b32e92832c33662a2b93b4af40210594e40591bb469e0ca1e741a815909e9b073444e0a6de7d446dc7
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 14:07:38
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 41637000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528140738
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528142238
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 92 Tong: 416,370VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 92_1748416058
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528140738&vnp_CurrCode=VND&vnp_ExpireDate=20250528142238&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+92+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=92_1748416058&vnp_Version=2.1.0
+Generated SecureHash: 71352db10518e1466d9580f42570443da8327adc70c6d426a775bbcefe0860a2d5dc8d50df55acb75c8a700074f7584d3d53b3da4b86c3ecf2affbf928f3f24b
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=41637000&vnp_Command=pay&vnp_CreateDate=20250528140738&vnp_CurrCode=VND&vnp_ExpireDate=20250528142238&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+92+Tong%3A+416%2C370VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=92_1748416058&vnp_Version=2.1.0&vnp_SecureHash=71352db10518e1466d9580f42570443da8327adc70c6d426a775bbcefe0860a2d5dc8d50df55acb75c8a700074f7584d3d53b3da4b86c3ecf2affbf928f3f24b
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 15:25:15
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 16689000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528152515
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528154015
+    [vnp_IpAddr] => 2001:ee0:8206:41b:b0c3:42d6:2e50:7946
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 93 Tong: 166,890VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 93_1748420715
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=16689000&vnp_Command=pay&vnp_CreateDate=20250528152515&vnp_CurrCode=VND&vnp_ExpireDate=20250528154015&vnp_IpAddr=2001%3Aee0%3A8206%3A41b%3Ab0c3%3A42d6%3A2e50%3A7946&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+93+Tong%3A+166%2C890VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=93_1748420715&vnp_Version=2.1.0
+Generated SecureHash: 2bba594f95782255402fac7b63c488909b4c8aca1c49c0114364f8f1d445ebe5f6228be2458441ea4a33ed8d9634a0cefa94c6fbbb9de23b3628a3759be8e9bc
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=16689000&vnp_Command=pay&vnp_CreateDate=20250528152515&vnp_CurrCode=VND&vnp_ExpireDate=20250528154015&vnp_IpAddr=2001%3Aee0%3A8206%3A41b%3Ab0c3%3A42d6%3A2e50%3A7946&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+93+Tong%3A+166%2C890VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=93_1748420715&vnp_Version=2.1.0&vnp_SecureHash=2bba594f95782255402fac7b63c488909b4c8aca1c49c0114364f8f1d445ebe5f6228be2458441ea4a33ed8d9634a0cefa94c6fbbb9de23b3628a3759be8e9bc
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 15:37:05
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 48927000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528153705
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528155205
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 94 Tong: 489,270VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 94_1748421425
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=48927000&vnp_Command=pay&vnp_CreateDate=20250528153705&vnp_CurrCode=VND&vnp_ExpireDate=20250528155205&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+94+Tong%3A+489%2C270VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=94_1748421425&vnp_Version=2.1.0
+Generated SecureHash: 6f66e19638fd93174616bf90ea9c49201c42b69eea5385e9e035c1f44704fc1ae15a5b523eb8d7988aa6aaeadc00b1daeba8b94e8d629987128754df2441549b
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=48927000&vnp_Command=pay&vnp_CreateDate=20250528153705&vnp_CurrCode=VND&vnp_ExpireDate=20250528155205&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+94+Tong%3A+489%2C270VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=94_1748421425&vnp_Version=2.1.0&vnp_SecureHash=6f66e19638fd93174616bf90ea9c49201c42b69eea5385e9e035c1f44704fc1ae15a5b523eb8d7988aa6aaeadc00b1daeba8b94e8d629987128754df2441549b
+=======================
+
+==== VNPay Request ====
+Timestamp: 2025-05-28 17:18:18
+Input Data for Hashing:
+Array
+(
+    [vnp_Amount] => 76872000
+    [vnp_Command] => pay
+    [vnp_CreateDate] => 20250528171818
+    [vnp_CurrCode] => VND
+    [vnp_ExpireDate] => 20250528173318
+    [vnp_IpAddr] => 183.81.10.210
+    [vnp_Locale] => vn
+    [vnp_OrderInfo] => Thanh toan don hang 95 Tong: 768,720VND
+    [vnp_OrderType] => other
+    [vnp_ReturnUrl] => https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/controller/vnpay_return_handler.php
+    [vnp_TmnCode] => 4Y0CRRH1
+    [vnp_TxnRef] => 95_1748427498
+    [vnp_Version] => 2.1.0
+)
+
+HashData String: vnp_Amount=76872000&vnp_Command=pay&vnp_CreateDate=20250528171818&vnp_CurrCode=VND&vnp_ExpireDate=20250528173318&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+95+Tong%3A+768%2C720VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=95_1748427498&vnp_Version=2.1.0
+Generated SecureHash: d3e0137c4c479f2f132dfc667e1cbf153350aff7ea0f08fcd67b2d90ce56eefa5751d514ce899a2afe7336d0a1704f1c6dba3740846ca425414d9736a1d278f2
+VNPay URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=76872000&vnp_Command=pay&vnp_CreateDate=20250528171818&vnp_CurrCode=VND&vnp_ExpireDate=20250528173318&vnp_IpAddr=183.81.10.210&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+95+Tong%3A+768%2C720VND&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fup-summary-honeybee.ngrok-free.app%2FQlyShopTheThao%2Fsrc%2Fcontroller%2Fvnpay_return_handler.php&vnp_TmnCode=4Y0CRRH1&vnp_TxnRef=95_1748427498&vnp_Version=2.1.0&vnp_SecureHash=d3e0137c4c479f2f132dfc667e1cbf153350aff7ea0f08fcd67b2d90ce56eefa5751d514ce899a2afe7336d0a1704f1c6dba3740846ca425414d9736a1d278f2
+=======================
+
