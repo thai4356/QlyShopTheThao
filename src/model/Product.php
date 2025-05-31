@@ -28,9 +28,6 @@ require_once 'Connect.php';
             return $product;
         }
 
-
-
-
         public function countAll() {
             $stmt = $this->conn->query("SELECT COUNT(*) AS total FROM product");
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -164,13 +161,13 @@ require_once 'Connect.php';
 
         public function getAllLocations() {
             $stmt = $this->conn->query("SELECT DISTINCT location FROM product WHERE location IS NOT NULL AND location <> '' LIMIT 5
-");
+                                                                ");
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
 
         public function getAllBrands() {
             $stmt = $this->conn->query("SELECT DISTINCT brand FROM product WHERE brand IS NOT NULL AND brand <> '' LIMIT 5
-");
+                                                                 ");
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
 
