@@ -44,6 +44,8 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
 
 <script src="<?php echo $assets_path; ?>js/kaiadmin.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" referrerpolicy="no-referrer"></script>
+
 <?php
 // Nơi để echo các script riêng của từng trang nếu cần
 if (isset($page_scripts) && is_array($page_scripts)) {
@@ -52,12 +54,38 @@ if (isset($page_scripts) && is_array($page_scripts)) {
     }
 }
 ?>
+
 <script>
-    // Khởi tạo tooltip (nếu dùng Bootstrap 5)
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    // Khởi tạo tooltip (có thể nằm trong admin-common.js)
+    $(document).ready(function() { // Đảm bảo DOM sẵn sàng
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+    // **QUAN TRỌNG: Định nghĩa các biến cấu hình toàn cục cho JavaScript ở đây**
+    var MyAppAdmin = window.MyAppAdmin || {}; // Đảm bảo namespace tồn tại
+    MyAppAdmin.config = MyAppAdmin.config || {};
+    // Lấy giá trị $product_image_base_url từ PHP mà AdminProductController đã truyền cho view products.php
+    // Biến này sẽ được file products.php (là file view chính) nhận được thông qua extract($view_data)
+    // Do đó, footer_scripts.php (được include bởi layout.php, mà layout.php được include bởi index.php sau khi extract)
+    // sẽ có thể truy cập được biến $product_image_base_url này.
+    MyAppAdmin.config.productImageBaseUrl = "<?php echo isset($product_image_base_url) ? htmlspecialchars($product_image_base_url) : '../../view/ViewUser/ProductImage/'; // Giá trị fallback nếu không có ?>";
+    console.log("Admin Config - productImageBaseUrl set to:", MyAppAdmin.config.productImageBaseUrl);
 </script>
+
+<script src="<?php echo $assets_path; ?>js/admin-common.js"></script>
+<script src="<?php echo $assets_path; ?>js/image-cropper-modal.js"></script>
+<script src="<?php echo $assets_path; ?>js/product-modal-add.js"></script>
+<script src="<?php echo $assets_path; ?>js/product-modal-edit.js"></script>
+<script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
+
+
+<script>
+    
+</script>
+
+
 </body>
 </html>

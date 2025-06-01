@@ -13,11 +13,11 @@ $assets_path = 'assets/';
     <title><?php echo $page_title; ?> - Shop Thể Thao Admin</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="<?php echo $assets_path; ?>img/kaiadmin/favicon.ico" type="image/x-icon"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"  referrerpolicy="no-referrer" />
     <script src="<?php echo $assets_path; ?>js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-            google: {"families":["Public Sans:300,400,500,600,700"]},
+            google: {"families":["Be VietNam Pro:300,400,500,600,700"]},
             custom: {"families":["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['<?php echo $assets_path; ?>css/fonts.min.css']},
             active: function() {
                 sessionStorage.fonts = true;
