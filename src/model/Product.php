@@ -87,12 +87,12 @@ require_once 'Connect.php';
 
         public function getFiltered($limit, $offset, $filters = []) {
             $sql = "
-        SELECT DISTINCT p.*, pi.image_url
-        FROM product p
-        INNER JOIN product_image pi 
-            ON p.id = pi.product_id 
-        WHERE 1=1 AND pi.is_thumbnail = 1
-    ";
+            SELECT DISTINCT p.*, pi.image_url
+            FROM product p
+            INNER JOIN product_image pi 
+                ON p.id = pi.product_id 
+            WHERE pi.is_thumbnail = 1 AND p.is_active = 1
+            ";
 
             $params = [];
 

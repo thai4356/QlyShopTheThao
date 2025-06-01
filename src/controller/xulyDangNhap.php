@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if ($row["roleid"] == 1) {
-                    header("Location: ../view/ViewAdmin/Index.php");
+                    header("Location: ../view/ViewAdmin/index.php");
                     exit;
                 } else {
                     header("Location: ../view/ViewUser/Index.php");

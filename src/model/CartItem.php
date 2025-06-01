@@ -28,22 +28,22 @@ class CartItem {
     // Lấy tất cả item trong cart kèm thông tin sản phẩm
     public function getItems($cartId) {
         $sql = "
-    SELECT 
-    ci.*, 
-    p.name, 
-    p.price,
-    pi.image_url
-FROM cart_item ci
-INNER JOIN product p ON ci.product_id = p.id
-INNER JOIN (
-    SELECT product_id, MIN(image_url) AS image_url
-    FROM product_image
-    WHERE is_thumbnail = 1
-    GROUP BY product_id
-) pi ON p.id = pi.product_id
-WHERE ci.cart_id = ?
-
-";
+            SELECT 
+            ci.*, 
+            p.name, 
+            p.price,
+            pi.image_url
+        FROM cart_item ci
+        INNER JOIN product p ON ci.product_id = p.id
+        INNER JOIN (
+            SELECT product_id, MIN(image_url) AS image_url
+            FROM product_image
+            WHERE is_thumbnail = 1
+            GROUP BY product_id
+        ) pi ON p.id = pi.product_id
+        WHERE ci.cart_id = ?
+        
+        ";
 
 
         $stmt = $this->conn->prepare($sql);

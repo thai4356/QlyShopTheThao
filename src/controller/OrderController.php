@@ -3,6 +3,8 @@ require_once __DIR__ . '/../model/Order.php';
 require_once __DIR__ . '/../model/OrderItem.php';
 require_once __DIR__ . '/../model/Product.php';
 require_once __DIR__ . '/../../config/vnpay_config.php';
+require_once __DIR__ . '/../model/Cart.php';
+require_once __DIR__ . '/../model/CartItem.php';
 
 require_once __DIR__ . '/../../vendor/autoload.php'; // Composer autoloader
 
@@ -124,6 +126,15 @@ class OrderController
             $orderItemModel->addItem($orderId, $item['product_id'], $item['quantity'], $item['price']);
             $productModel->reduceStock($item['product_id'], $item['quantity']);
             $productModel->increseSold($item['product_id'], $item['quantity']);
+        }
+
+        $cartModel = new Cart();
+        $cart = $cartModel->getCartByUserId($userId);
+        $cartId = $cart['id'];
+
+        $cartItemModel = new CartItem();
+        foreach ($cartItems as &$item) {
+            $cartItemModel->removeItem($cartId, $item['product_id']);
         }
 
         // Xóa session sau khi thanh toán
@@ -450,7 +461,22 @@ class OrderController
                                 $productModel = new Product();
                                 foreach ($itemsInOrder as $item) {
                                     $productModel->reduceStock($item['product_id'], $item['quantity']);
+                                    $productModel->increseSold($item['product_id'], $item['quantity']);
                                 }
+
+                                $userId = $order['user_id']; // Lấy user_id từ đơn hàng
+                                $cartModel = new Cart();
+                                $userCart = $cartModel->getCartByUserId($userId);
+                                if ($userCart) {
+                                    $cartId = $userCart['id'];
+                                    $cartItemModel = new CartItem();
+
+                                    foreach ($itemsInOrder as $orderedItem) {
+                                        $cartItemModel->removeItem($cartId, $orderedItem['product_id']);
+                                    }
+                                    error_log("VNPay IPN: Cleared ordered items from cart ID $cartId for order ID $orderId.");
+                                }
+
                                 error_log("VNPay IPN: Order $orderId processed successfully. VNPay TxnNo: $vnp_TransactionNo");
                             } else {
                                 // Thanh toán thất bại
@@ -647,6 +673,20 @@ class OrderController
                     foreach ($itemsInOrder as $item) {
                         $productModel->reduceStock($item['product_id'], $item['quantity']);
                         $productModel->increseSold($item['product_id'], $item['quantity']); // Check spelling "increseSold" in your Product.php
+                    }
+
+                    // === PHẦN THÊM MỚI: Xóa các item đã đặt khỏi giỏ hàng trong DB ===
+                    $userId = $dbOrder['user_id']; // Lấy user_id từ đơn hàng đã lấy từ DB
+                    $cartModel = new Cart();       // Đã có require_once 'Cart.php' ở đầu file
+                    $userCart = $cartModel->getCartByUserId($userId);
+                    if ($userCart) {
+                        $cartId = $userCart['id'];
+                        $cartItemModel = new CartItem(); // Đã có require_once 'CartItem.php' ở đầu file
+                        // $itemsInOrder đã được lấy ở trên để cập nhật kho
+                        foreach ($itemsInOrder as $orderedItem) {
+                            $cartItemModel->removeItem($cartId, $orderedItem['product_id']);
+                        }
+                        error_log("PayOS Success: Cleared ordered items from cart ID $cartId for order ID $orderIdFromPayOS.");
                     }
 
                     unset($_SESSION['checkout_items']);
