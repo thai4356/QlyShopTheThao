@@ -7,62 +7,93 @@ class AdminProductController {
     private $uploadDir;
 
     public function __construct() {
-        // Xác định đường dẫn tuyệt đối đến thư mục upload
-        $targetPath = __DIR__ . '/../../view/ViewUser/ProductImage/';
+        $targetPath = __DIR__ . '/../../view/ViewUser/ProductImage/'; // Đường dẫn tương đối từ thư mục controller/admin
         $this->uploadDir = realpath($targetPath);
-
-        // Kiểm tra sau khi dùng realpath
-        if ($this->uploadDir === false || !is_dir($this->uploadDir)) {
-            // Nếu realpath thất bại hoặc không phải là thư mục, thử tạo (nếu chưa có)
-            // Hoặc kiểm tra đường dẫn không dùng realpath trước nếu thư mục có thể chưa tồn tại
-            // Để đơn giản, giả sử thư mục đã tồn tại và realpath hoạt động
-            error_log("Upload directory could not be resolved or does not exist: " . $targetPath . " (Resolved: " . ($this->uploadDir ?: 'false') . ")");
-            // Xử lý lỗi nghiêm trọng ở đây, ví dụ: throw new Exception("Thư mục upload không hợp lệ.");
-            // Tạm thời, để an toàn, bạn có thể đặt một đường dẫn mặc định hoặc dừng lại
-            // For now, let's ensure it ends with a slash if valid
-            if ($this->uploadDir) {
-                $this->uploadDir .= '/';
-            } else {
-                // Fallback or error handling if realpath fails
-                // This indicates a potential issue with the path itself or directory existence
-                // For now, we'll reconstruct without realpath to see if it helps,
-                // but realpath is safer to get canonical path.
-                $this->uploadDir = $targetPath; // Thử dùng đường dẫn chưa qua realpath
-                if (substr($this->uploadDir, -1) !== '/') {
-                    $this->uploadDir .= '/';
-                }
-                error_log("Fallback upload directory used: " . $this->uploadDir);
-            }
-
+        if ($this->uploadDir) {
+            $this->uploadDir .= DIRECTORY_SEPARATOR;
         } else {
-            $this->uploadDir .= '/'; // Đảm bảo có dấu / ở cuối
+            error_log("Lỗi: Thư mục upload ProductImage không hợp lệ hoặc không tồn tại tại: " . $targetPath);
         }
-
-        // Kiểm tra quyền ghi một lần nữa sau khi đã có đường dẫn cuối cùng
-        if (!is_writable($this->uploadDir)) {
-            error_log("Upload directory is not writable: " . $this->uploadDir);
-            // Xử lý lỗi
-        }
-         error_log("Final upload directory set to: " . $this->uploadDir); // Để debug
     }
 
     public function listProducts() {
         $productModel = new AdminProduct();
-        $categoryModel = new AdminCategory(); // <-- KHỞI TẠO CATEGORY MODEL
+        $categoryModel = new AdminCategory();
 
-        $limit = 20;
-        $offset = 0;
-        $filters = [];
+        // --- XỬ LÝ PHÂN TRANG ---
+        $items_per_page = 10; // Số sản phẩm mỗi trang (bạn có thể đặt thành 20 như trước)
+        $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
+        if ($current_page < 1) {
+            $current_page = 1;
+        }
+        $offset = ($current_page - 1) * $items_per_page;
 
-        $productsData = $productModel->getFiltered($limit, $offset, $filters);
-        $allCategories = $categoryModel->getAllActiveCategories(); // <-- LẤY DANH MỤC
+        // --- XỬ LÝ SẮP XẾP ---
+        $sort_col_input = $_GET['sort_col'] ?? 'created_at';
+        $sort_order_input = strtoupper($_GET['sort_order'] ?? 'DESC');
+        if (!in_array($sort_order_input, ['ASC', 'DESC'])) {
+            $sort_order_input = 'DESC';
+        }
+        $allowed_sort_cols = [
+            'name' => 'p.name', 'price' => 'p.price', 'discount_price' => 'p.discount_price',
+            'stock' => 'p.stock', 'sold_quantity' => 'p.sold_quantity',
+            'category_name' => 'c.name', 'created_at' => 'p.created_at'
+        ];
+        $db_sort_column = $allowed_sort_cols['created_at'];
+        $client_sort_column = 'created_at';
+        if (array_key_exists($sort_col_input, $allowed_sort_cols)) {
+            $db_sort_column = $allowed_sort_cols[$sort_col_input];
+            $client_sort_column = $sort_col_input;
+        }
+
+        // --- XỬ LÝ FILTERS ---
+        $filters_for_model = [
+            'sort_column' => $db_sort_column,
+            'sort_order' => $sort_order_input
+        ];
+        $search_term = $_GET['search'] ?? null; // Lấy từ khóa tìm kiếm từ URL
+        if ($search_term) {
+            $filters_for_model['search_value'] = $search_term; // Key 'search_value' như đã dùng trong countFilteredForDataTable
+        }
+        // Ví dụ: Thêm filter theo category_id nếu có
+        // if (!empty($_GET['filter_category_id'])) {
+        //    $filters_for_model['category_id'] = (int)$_GET['filter_category_id'];
+        // }
+
+
+        // Lấy tổng số sản phẩm (sau khi lọc) để tính tổng số trang
+        // Sử dụng countFilteredForDataTable nếu có filter, nếu không thì countAllActive
+        if (!empty($filters_for_model['search_value']) /* || !empty($filters_for_model['category_id']) */) {
+            // Giả sử countFilteredForDataTable đã được tạo trong Model AdminProduct.php
+            // và nó chỉ nhận filter 'search_value' như đã định nghĩa cho DataTables.
+            // Nếu bạn có nhiều filter phức tạp hơn, countFilteredForDataTable cần xử lý chúng.
+            $total_products = $productModel->countFilteredForDataTable(['search_value' => $filters_for_model['search_value'] ?? null]);
+        } else {
+            $total_products = $productModel->countAllActive(); // Phương thức này cần tồn tại trong Model
+        }
+
+        $total_pages = ceil($total_products / $items_per_page);
+        if ($current_page > $total_pages && $total_pages > 0) { // Nếu trang hiện tại vượt quá tổng số trang
+            $current_page = $total_pages;
+            $offset = ($current_page - 1) * $items_per_page;
+        }
+
+
+        $productsData = $productModel->getFiltered($items_per_page, $offset, $filters_for_model);
+        $allCategories = $categoryModel->getAllActiveCategories();
 
         $viewData = [
             'products' => $productsData,
-            'all_categories' => $allCategories, // <-- TRUYỀN DANH MỤC CHO VIEW
+            'all_categories' => $allCategories,
             'pageTitle' => 'Quản lý Sản phẩm',
             'product_image_base_url' => '../../view/ViewUser/ProductImage/',
-            'page_name' => 'products'
+            'page_name' => 'products',
+            'current_sort_column' => $client_sort_column,
+            'current_sort_order' => $sort_order_input,
+            // Biến cho phân trang
+            'current_page' => $current_page,
+            'total_pages' => $total_pages,
+            'items_per_page' => $items_per_page
         ];
 
         return $viewData;
@@ -518,6 +549,110 @@ class AdminProductController {
             return false;
         }
     }
+
+    /**
+     * Xử lý yêu cầu AJAX từ DataTables để lấy danh sách sản phẩm.
+     */
+    public function ajaxGetProductsForDataTable() {
+        header('Content-Type: application/json');
+        $productModel = new AdminProduct();
+
+        $requestData = $_REQUEST; // DataTables gửi tham số qua GET hoặc POST
+
+        // Các tham số từ DataTables
+        $draw = isset($requestData['draw']) ? intval($requestData['draw']) : 0;
+        $start = isset($requestData['start']) ? intval($requestData['start']) : 0; // offset
+        $length = isset($requestData['length']) ? intval($requestData['length']) : 10; // limit
+
+        // Sắp xếp
+        $orderColumnIndex = $requestData['order'][0]['column'] ?? 0; // Cột được sort
+        $orderColumnDir = strtoupper($requestData['order'][0]['dir'] ?? 'DESC'); // Hướng sort (ASC/DESC)
+
+        // Lấy tên cột từ DataTables column definition (quan trọng)
+        // Client-side sẽ định nghĩa tên cho mỗi cột data
+        $columns = $requestData['columns'] ?? [];
+        $sortableColumnName = isset($columns[$orderColumnIndex]['data']) ? $columns[$orderColumnIndex]['data'] : null;
+
+        // Ánh xạ tên cột từ DataTables (JS) sang tên cột CSDL
+        $allowed_sort_cols_map = [
+            'name' => 'p.name',
+            'price_display' => 'p.price', // Giả sử cột giá trong JS tên là 'price_display'
+            'stock' => 'p.stock',
+            'sold_quantity' => 'p.sold_quantity',
+            'category_name' => 'c.name',
+            'created_at' => 'p.created_at' // Cột ẩn hoặc cột mặc định
+        ];
+
+        $db_sort_column = $allowed_sort_cols_map['created_at']; // Mặc định
+        if ($sortableColumnName && array_key_exists($sortableColumnName, $allowed_sort_cols_map)) {
+            $db_sort_column = $allowed_sort_cols_map[$sortableColumnName];
+        }
+        if (!in_array($orderColumnDir, ['ASC', 'DESC'])) {
+            $orderColumnDir = 'DESC';
+        }
+
+        // Tìm kiếm
+        $searchValue = $requestData['search']['value'] ?? null;
+
+        // Build filters array
+        $filters = [
+            'sort_column' => $db_sort_column,
+            'sort_order' => $orderColumnDir,
+        ];
+        if (!empty($searchValue)) {
+            $filters['search_value'] = $searchValue; // Model sẽ dùng key này
+        }
+        // Thêm các filter cụ thể khác từ client nếu có
+
+        // Lấy dữ liệu
+        $products = $productModel->getFiltered($length, $start, $filters);
+        $totalRecords = $productModel->countAllActive(); // Tổng số không lọc (chỉ active)
+        $totalFilteredRecords = $productModel->countFilteredForDataTable($filters); // Tổng số sau khi lọc
+
+        $dataOutput = [];
+        // Biến này cần được controller listProducts truyền cho view, sau đó view truyền cho JS
+        // Hoặc bạn có thể hardcode ở đây nếu nó cố định tương đối với root của web
+        $product_image_base_url = '../../view/ViewUser/ProductImage/';
+
+        foreach ($products as $product) {
+            $actions = '<div class="form-button-action">';
+            $actions .= '<button type="button" data-bs-toggle="tooltip" title="Sửa" class="btn btn-link btn-primary btn-lg edit-product-button" data-product-id="' . $product['id'] . '"><i class="fa fa-edit"></i></button>';
+            $actions .= '<button type="button" data-bs-toggle="tooltip" title="Xóa" class="btn btn-link btn-danger delete-product-button" data-product-id="' . $product['id'] . '" data-product-name="' . htmlspecialchars($product['name']) . '"><i class="fa fa-times"></i></button>';
+            $actions .= '</div>';
+
+            $priceDisplay = '';
+            if (isset($product['discount_price']) && $product['discount_price'] > 0 && (float)$product['discount_price'] < (float)$product['price']) {
+                $priceDisplay = '<span style="text-decoration: line-through; color: #999; font-size:0.9em;">' . number_format($product['price'], 0, ',', '.') . '₫</span><br><strong style="color: red;">' . number_format($product['discount_price'], 0, ',', '.') . '₫</strong>';
+            } else {
+                $priceDisplay = number_format($product['price'], 0, ',', '.') . '₫';
+            }
+
+            $imageUrl = !empty($product['image_url']) ? ($product_image_base_url . htmlspecialchars($product['image_url'])) : ($product_image_base_url . 'default-placeholder.png');
+            $imageTag = '<img src="' . $imageUrl . '" alt="' . htmlspecialchars($product['name']) . '" style="width: 50px; height: 50px; object-fit: cover;">';
+
+
+            $dataOutput[] = [
+                "image_display" => $imageTag, // Cột ảnh
+                "name" => htmlspecialchars($product['name']),
+                "price_display" => $priceDisplay, // Cột giá đã xử lý
+                "stock" => htmlspecialchars($product['stock'] ?? 0),
+                "sold_quantity" => htmlspecialchars($product['sold_quantity'] ?? 0),
+                "category_name" => isset($product['category_name']) ? htmlspecialchars($product['category_name']) : 'N/A',
+                "actions" => $actions // HTML cho cột hành động
+            ];
+        }
+
+        $json_data = [
+            "draw"            => $draw,
+            "recordsTotal"    => $totalRecords,
+            "recordsFiltered" => $totalFilteredRecords,
+            "data"            => $dataOutput
+        ];
+
+        echo json_encode($json_data);
+        exit;
+    }
+
 }
 ?>
 

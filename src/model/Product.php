@@ -91,7 +91,7 @@ require_once 'Connect.php';
             FROM product p
             INNER JOIN product_image pi 
                 ON p.id = pi.product_id 
-            WHERE pi.is_thumbnail = 1 AND p.is_active = 1
+            WHERE pi.is_thumbnail = 1 AND p.is_active = 1 AND p.stock > 0
             ";
 
             $params = [];

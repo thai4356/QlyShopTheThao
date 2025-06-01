@@ -1,18 +1,10 @@
 <?php
 // view/ViewAdmin/index.php
 
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Kiểm tra nếu không có role_id hoặc role_id khác 1 thì chuyển hướng
-//if (!isset($_SESSION['role_id']) || $_SESSION['role_id'] != 1) {
-//    header("Location: ../ViewUser/access_denied.php");
-//    exit;
-//}
-// Kiểm tra đăng nhập admin (giữ nguyên logic của bạn)
-$is_admin_logged_in = true; // Giả lập đã đăng nhập. Thay bằng logic kiểm tra session thực tế.
  $is_admin_logged_in = (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] == 1); // Ví dụ
 
 if (!$is_admin_logged_in) {
@@ -65,6 +57,13 @@ else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductDetails
     require_once __DIR__ . '/../../../src/controller/admin/AdminProductController.php';
     $controller = new AdminProductController();
     $controller->ajaxGetProductDetailsForEdit();
+    exit;
+}
+
+else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductsForDataTable') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminProductController.php';
+    $controller = new AdminProductController();
+    $controller->ajaxGetProductsForDataTable();
     exit;
 }
 
