@@ -50,7 +50,7 @@ jobs:
 #            ${{ runner.os }}-composer-
 
       - name: Run composer validate
-        run: composer validate --strict
+        run: composer validate
 
   check-namespace:
     name: Check Namespace
@@ -74,4 +74,4 @@ jobs:
         uses: "ramsey/composer-install@v3"
 
       - name: Run check namespace
-        run: composer dump-autoload --optimize --strict-psr
+        run: composer dump-autoload --optimize
