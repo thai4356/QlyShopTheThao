@@ -67,6 +67,14 @@ else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductsForDat
     exit;
 }
 
+else if ($ctrl_param === 'adminuser' && $act_param === 'list') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    // Gọi trực tiếp UserController.php như bạn đang dùng
+    include __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    exit;
+}
+
+
 else {
     // Xử lý các trang không qua controller MVC (nếu có) hoặc trang mặc định
     $allowed_static_pages = ['dashboard', 'categories', 'orders', 'users', 'reviews', 'profile', 'test'];
@@ -80,6 +88,7 @@ else {
         $page_param = $view_data['page_name'];
         $pageTitle = $view_data['pageTitle'];
     }
+
     else {
         // Nếu trang không hợp lệ, mặc định về dashboard
         $page_param = 'dashboard';
