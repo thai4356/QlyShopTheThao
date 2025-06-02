@@ -20,10 +20,9 @@ MyAppAdmin.ProductDeleteHandler = (function($) {
 
         // 1. Xử lý khi nhấp nút "Xóa" (icon) trong bảng -> mở modal xác nhận xóa
         $('#add-row tbody').on('click', '.delete-product-button', function(event) {
-            event.stopPropagation(); // Ngăn sự kiện click của dòng tr chạy (nếu nút nằm trong tr)
-            var $row = $(this).closest('tr.product-row-clickable'); // Tìm dòng tr cha gần nhất
-            var productId = $row.data('id');
-            var productName = $row.data('name');
+            event.stopPropagation();
+            var productId = $(this).data('product-id'); // Lấy trực tiếp từ nút
+            var productName = $(this).data('product-name'); // Lấy trực tiếp từ nút
 
             if (!productId) {
                 console.error("Không tìm thấy ID sản phẩm từ data-id của dòng.");

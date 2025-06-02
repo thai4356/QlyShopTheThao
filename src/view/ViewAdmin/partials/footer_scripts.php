@@ -80,7 +80,7 @@ if (isset($page_scripts) && is_array($page_scripts)) {
 <script src="<?php echo $assets_path; ?>js/product-modal-add.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-modal-edit.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
-<script src="<?php echo $assets_path; ?>js/product-table.js"></script>
+
 
 
 <script>

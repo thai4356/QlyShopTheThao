@@ -173,7 +173,7 @@ MyAppAdmin.ProductEdit = (function($) {
 
                     // Hiển thị các ảnh khác
                     displayExistingOtherImages(currentEditProductServerData.images_data || []);
-
+                    console.log("Attempting to show productEditModalInstance:", productEditModalInstance); // DEBUG
                     if(productEditModalInstance) productEditModalInstance.show();
                     editFormIsDirty = false;
                     $('#modalOpenSaveChangesConfirmButton').prop('disabled', true);
@@ -181,21 +181,55 @@ MyAppAdmin.ProductEdit = (function($) {
                     $.notify({ message: response.message || "Không thể tải chi tiết sản phẩm." },{ type: 'danger' });
                 }
             },
-            error: function() { /* ... */ },
+            error: function() {
+                console.error("AJAX Error for GetProductDetails:", status, error, xhr.responseText); // DEBUG
+                $.notify({ message: "Lỗi khi tải chi tiết sản phẩm. Kiểm tra console." },{ type: 'danger' });
+            },
             complete: function() { /* TODO: Hide loading indicator */ }
         });
     }
 
     function attachEditModalEventListeners() {
         // Mở modal sửa từ bảng
-        $('#add-row tbody').on('click', 'tr.product-row-clickable', function() {
-            var productId = $(this).data('id');
-            if (productId) populateAndOpenEditModal(productId);
+        // Mở modal sửa từ bảng KHI CLICK VÀO DÒNG
+        $('#add-row tbody').on('click', 'tr.product-row-clickable', function(event) {
+            // Ngăn không cho mở modal nếu click vào nút action bên trong dòng
+            if ($(event.target).closest('.form-button-action').length > 0 || $(event.target).is('a, button, input, select, textarea')) {
+                return; // Không làm gì cả nếu click vào các element tương tác
+            }
+
+            var productId = $(this).data('id'); // Lấy data-id từ thẻ <tr>
+            console.log("Dòng <tr> được click. Product ID từ data-id:", productId); // DEBUG
+
+            if (productId) {
+                populateAndOpenEditModal(productId);
+            } else {
+                console.warn("Không tìm thấy data-id trên dòng <tr> được click.");
+                // Có thể thông báo lỗi cho người dùng ở đây nếu cần
+            }
         });
+
+
         $('#add-row tbody').on('click', '.edit-product-button', function(event) {
-            event.stopPropagation();
-            var productId = $(this).closest('tr.product-row-clickable').data('id');
-            if (productId) populateAndOpenEditModal(productId);
+            event.stopPropagation()
+            console.log("Edit button clicked. Product ID:", $(this).data('product-id'));
+            var productId = $(this).data('product-id');
+            if (productId) {
+                populateAndOpenEditModal(productId); // Hàm này sẽ gọi AJAX để lấy chi tiết
+            } else {
+                console.error("Không tìm thấy product-id trên nút sửa.");
+            }
+        });
+
+        $('#add-row tbody').on('click', 'tr', function() { // Click trên bất kỳ TR nào do DataTables tạo
+            if ($(e.target).closest('.form-button-action').length === 0) {
+                var rowData = $('#add-row').DataTable().row(this).data();
+                if (rowData && rowData.id) {
+                    populateAndOpenEditModal(rowData.id);
+                } else {
+                    console.warn("Không có rowData hoặc rowData.id khi click vào dòng của DataTables.");
+                }
+            }
         });
 
         // Đóng modal sửa

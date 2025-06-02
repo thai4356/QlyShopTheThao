@@ -4,9 +4,43 @@ $products = $products ?? [];
 $product_image_base_url = $product_image_base_url ?? '../../view/ViewUser/ProductImage/'; // Phải là URL
 $all_categories = $all_categories ?? [];
 
+$current_sort_column = $current_sort_column ?? 'created_at';
+$current_sort_order = $current_sort_order ?? 'DESC';
+
 $current_page = $current_page ?? 1;
 $total_pages = $total_pages ?? 1;
 
+// Hàm trợ giúp để tạo link sắp xếp và icon
+function getSortLinkAndIcon($columnKey, $displayName, $currentSortColumn, $currentSortOrder) {
+    // ... (Nội dung hàm này giữ nguyên như đã cung cấp ở lượt trả lời về sort server-side)
+    $icon_down_up = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-arrow-down-up ms-1 text-muted" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/></svg>';
+    $icon_down = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-arrow-down ms-1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/></svg>';
+    $icon_up = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-arrow-up ms-1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/></svg>';
+
+    $sortIcon = $icon_down_up;
+    $nextSortOrder = 'ASC';
+
+    if ($currentSortColumn === $columnKey) {
+        if (strtoupper($currentSortOrder) === 'ASC') {
+            $sortIcon = $icon_up;
+            $nextSortOrder = 'DESC';
+        } elseif (strtoupper($currentSortOrder) === 'DESC') {
+            $sortIcon = $icon_down;
+            $nextSortOrder = 'ASC';
+        }
+    }
+    $queryParams = $_GET;
+    // unset($queryParams['p']); // Reset về trang 1 khi sort cột mới, tùy chọn
+    $queryParams['sort_col'] = $columnKey;
+    $queryParams['sort_order'] = $nextSortOrder;
+    // Giữ lại ctrl, act, page cho trang sản phẩm
+    $queryParams['ctrl'] = $_GET['ctrl'] ?? 'adminproduct';
+    $queryParams['act'] = $_GET['act'] ?? 'listProducts';
+    $queryParams['page'] = $_GET['page'] ?? 'products';
+
+    $queryString = http_build_query($queryParams);
+    return "<a href=\"index.php?{$queryString}\" class=\"sortable-column text-decoration-none text-dark fw-bold\">{$displayName} {$sortIcon}</a>";
+}
 ?>
 <div class="page-header">
     <h4 class="page-title">Quản Lý Sản Phẩm</h4>
@@ -156,17 +190,70 @@ $total_pages = $total_pages ?? 1;
                             <thead>
                             <tr>
                                 <th style="width: 70px;">Ảnh</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Đã bán</th>
-                                <th>Danh mục</th>
+                                <th><?php echo getSortLinkAndIcon('name', 'Tên sản phẩm', $current_sort_column, $current_sort_order); ?></th>
+                                <th><?php echo getSortLinkAndIcon('price', 'Giá', $current_sort_column, $current_sort_order); ?></th>
+                                <th><?php echo getSortLinkAndIcon('stock', 'Tồn kho', $current_sort_column, $current_sort_order); ?></th>
+                                <th><?php echo getSortLinkAndIcon('sold_quantity', 'Đã bán', $current_sort_column, $current_sort_order); ?></th>
+                                <th><?php echo getSortLinkAndIcon('category_name', 'Danh mục', $current_sort_column, $current_sort_order); ?></th>
                                 <th style="width: 100px;">Hành động</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php if (!empty($products)): ?>
-
+                                <?php foreach ($products as $product): ?>
+                                    <tr class="product-row-clickable"
+                                        data-id="<?php echo htmlspecialchars($product['id']); ?>"
+                                        data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                        data-category_id="<?php echo htmlspecialchars($product['category_id']);?>"
+                                        data-price_raw="<?php echo htmlspecialchars($product['price']); ?>"
+                                        data-discount_price_raw="<?php echo htmlspecialchars($product['discount_price'] ?? 0); ?>"
+                                        data-stock="<?php echo htmlspecialchars($product['stock']); ?>"
+                                        data-brand="<?php echo htmlspecialchars($product['brand'] ?? ''); ?>"
+                                        data-location="<?php echo htmlspecialchars($product['location'] ?? ''); ?>"
+                                        data-description="<?php echo htmlspecialchars($product['description'] ?? ''); ?>"
+                                        style="cursor: pointer;"
+                                        title="Click để Xem chi tiết"
+                                    >
+                                        <td>
+                                            <?php if (!empty($product['image_url'])): ?>
+                                                <img src="<?php echo htmlspecialchars($product_image_base_url . $product['image_url']); ?>"
+                                                     alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                            <?php else: ?>
+                                                <img src="<?php echo htmlspecialchars($product_image_base_url . 'default-placeholder.png'); ?>"
+                                                     alt="No image"
+                                                     style="width: 60px; height: 60px; object-fit: cover; border: 1px solid #eee;">
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($product['name']); ?></td>
+                                        <td>
+                                            <?php if (isset($product['discount_price']) && $product['discount_price'] > 0 && (float)$product['discount_price'] < (float)$product['price']): ?>
+                                                <span style="text-decoration: line-through; color: #999; font-size:0.9em;"><?php echo number_format($product['price'], 0, ',', '.'); ?>₫</span><br>
+                                                <strong style="color: red;"><?php echo number_format($product['discount_price'], 0, ',', '.'); ?>₫</strong>
+                                            <?php else: ?>
+                                                <?php echo number_format($product['price'], 0, ',', '.'); ?>₫
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($product['stock'] ?? 0); ?></td>
+                                        <td><?php echo htmlspecialchars($product['sold_quantity'] ?? 0); ?></td>
+                                        <td><?php echo isset($product['category_name']) ? htmlspecialchars($product['category_name']) : 'N/A'; ?></td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <button type="button" data-bs-toggle="tooltip" title="Sửa"
+                                                        class="btn btn-link btn-primary btn-lg edit-product-button"
+                                                        data-product-id="<?php echo htmlspecialchars($product['id']); // QUAN TRỌNG ?>">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button type="button" data-bs-toggle="tooltip" title="Xóa"
+                                                        class="btn btn-link btn-danger delete-product-button"
+                                                        data-product-id="<?php echo htmlspecialchars($product['id']); // QUAN TRỌNG ?>"
+                                                        data-product-name="<?php echo htmlspecialchars($product['name']); // QUAN TRỌNG ?>">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
                                     <td colspan="7" class="text-center">Không có sản phẩm nào để hiển thị.</td>
@@ -175,8 +262,40 @@ $total_pages = $total_pages ?? 1;
                             </tbody>
                         </table>
                     </div>
-
                 </div>
+                <?php if (isset($total_pages) && $total_pages > 1): ?>
+                    <div class="card-footer d-flex justify-content-center">
+                        <nav aria-label="Product navigation">
+                            <ul class="pagination mb-0">
+                                <?php // Nút Previous
+                                if ($current_page > 1):
+                                    $prevPageParams = $_GET; $prevPageParams['p'] = $current_page - 1; ?>
+                                    <li class="page-item"><a class="page-link" href="index.php?<?php echo http_build_query($prevPageParams); ?>">&laquo;</a></li>
+                                <?php else: ?>
+                                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                <?php endif; ?>
+
+                                <?php // Nút số trang
+                                $range = 2;
+                                $start_range = max(1, $current_page - $range);
+                                $end_range = min($total_pages, $current_page + $range);
+                                if ($start_range > 1) { $firstPageParams = $_GET; $firstPageParams['p'] = 1; echo '<li class="page-item"><a class="page-link" href="index.php?'.http_build_query($firstPageParams).'">1</a></li>'; if ($start_range > 2) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; } }
+                                for ($i = $start_range; $i <= $end_range; $i++): $pageParams = $_GET; $pageParams['p'] = $i; ?>
+                                    <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>"><a class="page-link" href="index.php?<?php echo http_build_query($pageParams); ?>"><?php echo $i; ?></a></li>
+                                <?php endfor;
+                                if ($end_range < $total_pages) { if ($end_range < $total_pages - 1) { echo '<li class="page-item disabled"><span class="page-link">...</span></li>'; } $lastPageParams = $_GET; $lastPageParams['p'] = $total_pages; echo '<li class="page-item"><a class="page-link" href="index.php?'.http_build_query($lastPageParams).'">'.$total_pages.'</a></li>'; } ?>
+
+                                <?php // Nút Next
+                                if ($current_page < $total_pages):
+                                    $nextPageParams = $_GET; $nextPageParams['p'] = $current_page + 1; ?>
+                                    <li class="page-item"><a class="page-link" href="index.php?<?php echo http_build_query($nextPageParams); ?>">&raquo;</a></li>
+                                <?php else: ?>
+                                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                <?php endif; ?>
+                            </ul>
+                        </nav>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

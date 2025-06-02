@@ -632,6 +632,7 @@ class AdminProductController {
 
 
             $dataOutput[] = [
+                "id" => $product['id'], // **QUAN TRỌNG: TRUYỀN ID SẢN PHẨM**
                 "image_display" => $imageTag, // Cột ảnh
                 "name" => htmlspecialchars($product['name']),
                 "price_display" => $priceDisplay, // Cột giá đã xử lý
