@@ -242,13 +242,13 @@ function getSortLinkAndIcon($columnKey, $displayName, $currentSortColumn, $curre
                                                 <button type="button" data-bs-toggle="tooltip" title="Sửa"
                                                         class="btn btn-link btn-primary btn-lg edit-product-button"
                                                         data-product-id="<?php echo htmlspecialchars($product['id']); // QUAN TRỌNG ?>">
-                                                    <i class="fa fa-edit"><i class="bi bi-pen"></i></i>
+                                                    <i class="bi bi-pen"></i>
                                                 </button>
                                                 <button type="button" data-bs-toggle="tooltip" title="Xóa"
                                                         class="btn btn-link btn-danger delete-product-button"
                                                         data-product-id="<?php echo htmlspecialchars($product['id']); // QUAN TRỌNG ?>"
                                                         data-product-name="<?php echo htmlspecialchars($product['name']); // QUAN TRỌNG ?>">
-                                                    <i class="fa fa-times"><i class="bi bi-trash"></i></i>
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </td>
