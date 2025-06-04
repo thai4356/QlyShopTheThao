@@ -45,10 +45,10 @@ function getSortLinkAndIcon($columnKey, $displayName, $currentSortColumn, $curre
 <div class="page-header">
     <h4 class="page-title">Quản Lý Sản Phẩm</h4>
     <ul class="breadcrumbs">
-        <li class="nav-home"><a href="index.php?page=dashboard"><i class="icon-home"></i></a></li>
-        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-home"><a href="index.php?page=dashboard"><i class="fa-solid fa-house"></i></a></li>
+        <li class="separator"><i class="bi bi-slash"></i></li>
         <li class="nav-item"><a href="#">Quản lý</a></li>
-        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="separator"><i class="bi bi-slash"></i></li>
         <li class="nav-item">
             <a href="index.php?ctrl=adminproduct&act=listProducts&page=products">Sản phẩm</a>
         </li>
