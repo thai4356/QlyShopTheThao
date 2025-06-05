@@ -67,6 +67,44 @@ else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductsForDat
     exit;
 }
 
+else if (($ctrl_param === 'admincategory' && $act_param === 'listCategories') || $page_param === 'categories' && $ctrl_param === null) {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
+    $controller = new AdminCategoryController();
+    $view_data = $controller->listCategories();
+    $page_param = $view_data['page_name'];
+    $pageTitle = $view_data['pageTitle'];
+}
+
+else if ($ctrl_param === 'admincategory' && $act_param === 'ajaxUpdateCategory') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
+    $controller = new AdminCategoryController();
+    $controller->ajaxUpdateCategory(); // Action này sẽ tự echo JSON và exit
+    // Không cần load layout cho AJAX
+    exit;
+}
+
+else if ($ctrl_param === 'admincategory' && $act_param === 'ajaxGetCategoriesForDataTable') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
+    $controller = new AdminCategoryController();
+    $controller->ajaxGetCategoriesForDataTable(); // Action này sẽ tự echo JSON và exit
+    exit;
+}
+
+// THÊM ROUTE CHO AJAX SOFT DELETE CATEGORY
+else if ($ctrl_param === 'admincategory' && $act_param === 'ajaxSoftDeleteCategory') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
+    $controller = new AdminCategoryController();
+    $controller->ajaxSoftDeleteCategory(); // Action này sẽ tự echo JSON và exit
+    exit;
+}
+
+else if ($ctrl_param === 'admincategory' && $act_param === 'ajaxAddCategory') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
+    $controller = new AdminCategoryController();
+    $controller->ajaxAddCategory(); // Action này sẽ tự echo JSON và exit
+    exit;
+}
+
 else if ($ctrl_param === 'adminuser' && $act_param === 'list') {
     require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
     // Gọi trực tiếp UserController.php như bạn đang dùng

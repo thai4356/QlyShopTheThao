@@ -36,7 +36,7 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
 
 <script src="<?php echo $assets_path; ?>js/plugin/chart-circle/circles.min.js"></script>
 
-<script src="<?php echo $assets_path; ?>js/plugin/datatables/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js" referrerpolicy="no-referrer"></script>
 
 <script src="<?php echo $assets_path; ?>js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
@@ -81,6 +81,7 @@ if (isset($page_scripts) && is_array($page_scripts)) {
 <script src="<?php echo $assets_path; ?>js/product-modal-edit.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
+
 
 <script src="<?php echo $assets_path; ?>js/category-modal-handler.js    "></script>
 <script>

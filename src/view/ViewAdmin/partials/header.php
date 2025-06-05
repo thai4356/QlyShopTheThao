@@ -31,6 +31,9 @@ $assets_path = 'assets/';
     <link rel="stylesheet" href="<?php echo $assets_path; ?>css/plugins.min.css" />
     <link rel="stylesheet" href="<?php echo $assets_path; ?>css/kaiadmin.min.css" />
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
+
+
 
 </head>
 <body>
