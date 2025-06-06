@@ -5,7 +5,7 @@
     <title>Hóa đơn #<?php echo $orderDetails['id']; ?></title>
     <style>
         /* Dùng font DejaVu Sans vì nó hỗ trợ tiếng Việt rất tốt trong mpdf */
-        body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; }
+         body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; }
         .invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
         .header { text-align: center; margin-bottom: 20px; }
         .header h1 { margin: 0; color: #333; }
