@@ -125,9 +125,19 @@ function KiemTraTaiKhoan($email, $pass, $conn)
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            if (password_verify($pass, $row['password'])) { // Giả sử mật khẩu đã được hash bằng bcrypt [cite: 3]
+            if (password_verify($pass, $row['password'])) { //
+
+                // ===== BẮT ĐẦU THÊM MỚI TẠI ĐÂY =====
+                // Kiểm tra xem tài khoản có bị vô hiệu hóa không
+                if ($row['is_active'] == 0) {
+                    // Nếu bị vô hiệu hóa, chuyển hướng đến trang thông báo và dừng thực thi
+                    header("Location: ../view/banned_account.php");
+                    exit();
+                }
+                // ===== KẾT THÚC PHẦN THÊM MỚI =====
+
                 if ($row['is_verified'] == 1) {
-                    return $row;
+                    return $row; // Trả về thông tin người dùng nếu mọi thứ hợp lệ
                 } else {
                     echo "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.";
                     return false;

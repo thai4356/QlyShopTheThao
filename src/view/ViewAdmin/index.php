@@ -153,11 +153,44 @@ else if ($ctrl_param === 'adminorder' && $act_param === 'printInvoice') {
     exit;
 }
 
-else if ($ctrl_param === 'adminuser' && $act_param === 'list') {
+// ROUTE MỚI: Cung cấp dữ liệu JSON cho bảng người dùng
+else if ($ctrl_param === 'adminuser' && $act_param === 'ajaxGetUsersForDataTable') {
     require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
-    // Gọi trực tiếp UserController.php như bạn đang dùng
-    include __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    $controller = new AdminUserController();
+    $controller->ajaxGetUsersForDataTable();
     exit;
+}
+
+// ROUTE MỚI: Xử lý việc vô hiệu hóa/kích hoạt người dùng
+else if ($ctrl_param === 'adminuser' && $act_param === 'toggleUserStatus') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    $controller = new AdminUserController();
+    $controller->ajaxToggleUserStatus();
+    exit;
+}
+
+// ROUTE MỚI: Xử lý việc thêm người dùng mới
+else if ($ctrl_param === 'adminuser' && $act_param === 'ajaxAddUser') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    $controller = new AdminUserController();
+    $controller->ajaxAddUser();
+    exit;
+}
+
+// ROUTE MỚI: Hiển thị trang chi tiết người dùng
+else if ($page_param === 'user_details' && isset($_GET['id'])) {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminUserController.php';
+    $controller = new AdminUserController();
+    $view_data = $controller->showUserDetails();
+    $page_param = $view_data['page_name']; // Cập nhật page_param để layout nạp đúng file
+    $pageTitle = $view_data['pageTitle'];
+}
+
+
+
+// Route hiển thị trang danh sách người dùng (vẫn giữ nguyên như cũ, chỉ là di chuyển xuống dưới)
+else if ($page_param === 'users' && $ctrl_param === null) {
+    // Không cần controller, để layout tự nạp
 }
 
 

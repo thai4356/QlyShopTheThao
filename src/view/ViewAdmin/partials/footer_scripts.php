@@ -69,12 +69,15 @@ if (isset($page_scripts) && is_array($page_scripts)) {
     // **QUAN TRỌNG: Định nghĩa các biến cấu hình toàn cục cho JavaScript ở đây**
     var MyAppAdmin = window.MyAppAdmin || {}; // Đảm bảo namespace tồn tại
     MyAppAdmin.config = MyAppAdmin.config || {};
-    // Lấy giá trị $product_image_base_url từ PHP mà AdminProductController đã truyền cho view products.php
-    // Biến này sẽ được file products.php (là file view chính) nhận được thông qua extract($view_data)
-    // Do đó, footer_scripts.php (được include bởi layout.php, mà layout.php được include bởi index.php sau khi extract)
-    // sẽ có thể truy cập được biến $product_image_base_url này.
     MyAppAdmin.config.productImageBaseUrl = "<?php echo isset($product_image_base_url) ? htmlspecialchars($product_image_base_url) : '../../view/ViewUser/ProductImage/'; // Giá trị fallback nếu không có ?>";
     console.log("Admin Config - productImageBaseUrl set to:", MyAppAdmin.config.productImageBaseUrl);
+
+    // **THÊM DÒNG MỚI NÀY**
+    // Lấy ID của admin đang đăng nhập từ session để JS sử dụng
+    MyAppAdmin.config.currentUserId = <?php echo isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0; ?>;
+
+    console.log("Admin Config - productImageBaseUrl set to:", MyAppAdmin.config.productImageBaseUrl);
+    console.log("Admin Config - currentUserId set to:", MyAppAdmin.config.currentUserId);
 </script>
 
 <script src="<?php echo $assets_path; ?>js/admin-common.js"></script>
