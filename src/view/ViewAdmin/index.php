@@ -67,6 +67,14 @@ else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductsForDat
     exit;
 }
 
+// ROUTE MỚI: Lấy chi tiết sản phẩm cho modal xem
+else if ($ctrl_param === 'adminproduct' && $act_param === 'ajaxGetProductDetailsForView') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminProductController.php';
+    $controller = new AdminProductController();
+    $controller->ajaxGetProductDetailsForView();
+    exit;
+}
+
 else if (($ctrl_param === 'admincategory' && $act_param === 'listCategories') || $page_param === 'categories' && $ctrl_param === null) {
     require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
     $controller = new AdminCategoryController();
@@ -102,6 +110,46 @@ else if ($ctrl_param === 'admincategory' && $act_param === 'ajaxAddCategory') {
     require_once __DIR__ . '/../../../src/controller/admin/AdminCategoryController.php';
     $controller = new AdminCategoryController();
     $controller->ajaxAddCategory(); // Action này sẽ tự echo JSON và exit
+    exit;
+}
+
+// ROUTE MỚI: Cung cấp dữ liệu JSON cho bảng đơn hàng
+else if ($ctrl_param === 'adminorder' && $act_param === 'ajaxGetOrdersForDataTable') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $controller->ajaxGetOrdersForDataTable();
+    exit;
+}
+
+// ROUTE MỚI: Hiển thị trang quản lý đơn hàng
+else if ($page_param === 'orders' && $ctrl_param === null) {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $view_data = $controller->listOrders();
+    $page_param = $view_data['page_name'];
+    $pageTitle = $view_data['pageTitle'];
+}
+
+// ROUTE MỚI: Hiển thị trang chi tiết đơn hàng
+else if ($page_param === 'order_details' && isset($_GET['id'])) {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $view_data = $controller->showOrderDetails();
+    $page_param = $view_data['page_name']; // Cập nhật page_param để layout nạp đúng file
+    $pageTitle = $view_data['pageTitle'];
+}
+
+else if ($ctrl_param === 'adminorder' && $act_param === 'ajaxUpdateOrderStatus') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $controller->ajaxUpdateOrderStatus();
+    exit;
+}
+
+else if ($ctrl_param === 'adminorder' && $act_param === 'printInvoice') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $controller->printInvoice(); // Gọi phương thức và nó sẽ tự exit
     exit;
 }
 

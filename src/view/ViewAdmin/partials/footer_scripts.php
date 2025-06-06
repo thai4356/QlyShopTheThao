@@ -20,7 +20,7 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
         </nav>
         <div class="copyright ms-auto">
             <?php echo date('Y'); ?>, made with <i class="fa fa-heart heart text-danger"></i> by
-            <a href="#">Your Team/Name</a>
+            <a href="#">Nhóm 1</a>
         </div>
     </div>
 </footer>
@@ -47,7 +47,9 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" referrerpolicy="no-referrer"></script>
 
 <?php
-// Nơi để echo các script riêng của từng trang nếu cần
+
+//Nạp scripts cho việc khởi tạo datatable cho các trang
+
 if (isset($page_scripts) && is_array($page_scripts)) {
     foreach ($page_scripts as $script_url) {
         echo '<script src="' . htmlspecialchars($script_url) . '"></script>';
@@ -77,16 +79,16 @@ if (isset($page_scripts) && is_array($page_scripts)) {
 
 <script src="<?php echo $assets_path; ?>js/admin-common.js"></script>
 <script src="<?php echo $assets_path; ?>js/image-cropper-modal.js"></script>
+<!--product-->
 <script src="<?php echo $assets_path; ?>js/product-modal-add.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-modal-edit.js"></script>
 <script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
-<script src="<?php echo $assets_path; ?>js/product-delete-handler.js"></script>
 
+<!--category-->
+<script src="<?php echo $assets_path; ?>js/category-modal-handler.js"></script>
 
-<script src="<?php echo $assets_path; ?>js/category-modal-handler.js    "></script>
-<script>
-    
-</script>
+<!--order-->
+
 
 
 </body>

@@ -450,10 +450,10 @@ class OrderController
                 if ($order) {
                     // Nên kiểm tra số tiền một cách cẩn thận, có thể có sai số nhỏ do float
                     if (abs((float)$order['total_price'] - (float)$vnp_Amount_received) < 1) { // Chấp nhận sai số nhỏ hơn 1 đồng
-                        if ($order['status'] == 'pending_vnpay' || $order['status'] == 'pending') { // Kiểm tra trạng thái hiện tại
+                        if ($order['status'] == 'đang xử lý' || $order['status'] == 'pending') { // Kiểm tra trạng thái hiện tại
                             if ($vnp_ResponseCode == '00' && $vnp_TransactionStatus == '00') {
                                 // Thanh toán thành công
-                                $orderModel->updateOrderStatusAndTxn($orderId, 'completed', $vnp_TransactionNo, $orderId_raw); // Cần phương thức này
+                                $orderModel->updateOrderStatusAndTxn($orderId, 'đã thanh toán', $vnp_TransactionNo, $orderId_raw); // Cần phương thức này
 
                                 // Trừ kho sản phẩm
                                 $orderItemModel = new OrderItem();
@@ -480,7 +480,7 @@ class OrderController
                                 error_log("VNPay IPN: Order $orderId processed successfully. VNPay TxnNo: $vnp_TransactionNo");
                             } else {
                                 // Thanh toán thất bại
-                                $orderModel->updateOrderStatusAndTxn($orderId, 'failed_vnpay', $vnp_TransactionNo, $orderId_raw);
+                                $orderModel->updateOrderStatusAndTxn($orderId, 'thất bại', $vnp_TransactionNo, $orderId_raw);
                                 error_log("VNPay IPN: Order $orderId payment failed. VNPay TxnNo: $vnp_TransactionNo, ResponseCode: $vnp_ResponseCode");
                             }
                             $returnData['RspCode'] = '00';
@@ -566,7 +566,7 @@ class OrderController
         }
         // Update status to 'pending_payos' if createOrder sets a default like 'pending'
         // Or modify createOrder to accept status
-        $orderModel->updateOrderStatusAndTxn($orderId, 'pending_payos');
+        $orderModel->updateOrderStatusAndTxn($orderId, 'đang xử lý');
 
 
         // Save order items
@@ -649,9 +649,9 @@ class OrderController
             }
 
 
-            if ($paymentLinkInfo['status'] == 'PAID') {
+            if ($paymentLinkInfo['status'] == 'đã thanh toán'|| $statusFromQuery == 'PAID') {
                 // Check if order is still pending to avoid reprocessing
-                if ($dbOrder['status'] == 'pending_payos' || $dbOrder['status'] == 'pending') {
+                if ($dbOrder['status'] == 'đang xử lý' || $dbOrder['status'] == 'pending') {
                     // Update order status to 'completed'
                     $transactionTime = !empty($paymentLinkInfo['transactions']) && isset($paymentLinkInfo['transactions'][0]['transactionDateTime'])
                         ? date('Y-m-d H:i:s', strtotime($paymentLinkInfo['transactions'][0]['transactionDateTime']))
@@ -660,7 +660,7 @@ class OrderController
                     $orderModel->updateOrderPayOSInfo(
                         $orderIdFromPayOS,
                         $paymentLinkInfo['id'], // payos_payment_link_id
-                        $paymentLinkInfo['status'], // status = 'completed'
+                        'đã thanh toán', // status = 'completed'
                         $paymentLinkInfo['orderCode'], // payos_reference (which is our orderId)
                         $transactionTime // payos_transaction_datetime
                     );
@@ -731,14 +731,14 @@ class OrderController
 
             // Update order status to 'cancelled_payos' or based on $paymentLinkInfo['status']
             // The getPaymentLinkInformation might show "CANCELLED"
-            if ($paymentLinkInfo['status'] == 'CANCELLED') {
-                $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'cancelled_payos');
+            if ($paymentLinkInfo['status'] == 'hủy') {
+                $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'hủy');
             } else {
                 // If status is not explicitly CANCELLED, might just be a general failure or user navigated away
                 // Keep current status or update to a general failed state if not already 'pending_payos'
                 $dbOrder = $orderModel->getOrderById($orderIdFromPayOS);
-                if ($dbOrder && ($dbOrder['status'] == 'pending_payos' || $dbOrder['status'] == 'pending')) {
-                    $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'cancelled_by_user'); // Or a more generic status
+                if ($dbOrder && ($dbOrder['status'] == 'đang xử lý' || $dbOrder['status'] == 'pending')) {
+                    $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'hủy'); // Or a more generic status
                 }
             }
 

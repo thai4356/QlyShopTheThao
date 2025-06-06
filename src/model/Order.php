@@ -30,7 +30,7 @@ class Order {
         $stmt = $conn->prepare("
         INSERT INTO orders 
         (user_id, total_price, payment_method, name, address, phone, status, created_at, updated_at, orderNo)
-        VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW(), ?)
+        VALUES (?, ?, ?, ?, ?, ?, 'đang xử lý', NOW(), NOW(), ?)
     ");
 
         // Thực thi câu lệnh

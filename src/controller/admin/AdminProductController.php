@@ -133,6 +133,35 @@ class AdminProductController {
     }
 
     /**
+     * Lấy chi tiết sản phẩm (info + images) để hiển thị trên modal read-only.
+     */
+    public function ajaxGetProductDetailsForView() {
+        header('Content-Type: application/json');
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id'])) {
+            echo json_encode(['success' => false, 'message' => 'Yêu cầu không hợp lệ.']);
+            exit;
+        }
+
+        $productId = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+        if (!$productId) {
+            echo json_encode(['success' => false, 'message' => 'ID sản phẩm không hợp lệ.']);
+            exit;
+        }
+
+        $productModel = new AdminProduct();
+        // Tận dụng phương thức getById đã có sẵn và rất tốt của bạn
+        $productDetails = $productModel->getById($productId);
+
+        if ($productDetails) {
+            // Phương thức getById đã trả về tất cả những gì chúng ta cần
+            echo json_encode(['success' => true, 'data' => $productDetails]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Không tìm thấy sản phẩm.']);
+        }
+        exit;
+    }
+
+    /**
      * Xử lý yêu cầu AJAX để cập nhật sản phẩm.
      */
     public function ajaxUpdateProduct() {

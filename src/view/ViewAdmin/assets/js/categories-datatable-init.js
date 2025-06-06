@@ -35,4 +35,5 @@ $(document).ready(function() {
         "responsive": true,
         "stateSave": true
     });
+
 });
