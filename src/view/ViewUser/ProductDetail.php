@@ -101,6 +101,16 @@
                 <small>Đánh giá lúc <?= $r['created_at'] ?></small><br>
                 <small>Bởi <?= strstr($r['email'], '@', true) ?></small>
 
+                <?php
+                // **THÊM MỚI: Kiểm tra và hiển thị nếu có trả lời từ admin**
+                if (!empty($r['admin_reply'])):
+                ?>
+                <div class="admin-reply" style="background-color: #f8f9fa; border-left: 4px solid #17a2b8; padding: 10px; margin-top: 10px; font-size: medium;">
+                    <strong>Phản hồi từ Quản trị viên:</strong>
+                    <p style="margin-top: 5px;"><?= nl2br(htmlspecialchars($r['admin_reply'])) ?></p>
+                    <small>Trả lời lúc <?= date('d-m-Y H:i', strtotime($r['replied_at'])) ?></small>
+                </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>

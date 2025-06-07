@@ -54,7 +54,6 @@ $(document).ready(function() {
                             <a href="index.php?page=order_details&id=${data}" data-toggle="tooltip" title="Xem chi tiết" class="btn btn-link btn-primary btn-lg">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <button type="button" data-toggle="tooltip" title="Cập nhật" class="btn btn-link btn-success"><i class="fa fa-edit"></i></button>
                         </div>
                     `;
                 }

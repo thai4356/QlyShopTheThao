@@ -186,7 +186,54 @@ else if ($page_param === 'user_details' && isset($_GET['id'])) {
     $pageTitle = $view_data['pageTitle'];
 }
 
+// ROUTE MỚI: Cung cấp dữ liệu JSON cho bảng đánh giá
+else if ($ctrl_param === 'adminreview' && $act_param === 'ajaxGetReviewsForDataTable') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $controller->ajaxGetReviewsForDataTable();
+    exit;
+}
 
+// ROUTE MỚI: Hiển thị trang quản lý đánh giá
+else if ($page_param === 'reviews') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $view_data = $controller->listReviews();
+    $page_param = $view_data['page_name'];
+    $pageTitle = $view_data['pageTitle'];
+}
+
+// ROUTE MỚI: Hiển thị trang chi tiết đánh giá
+else if ($page_param === 'review_details' && isset($_GET['id'])) {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $view_data = $controller->showReviewDetails();
+    $page_param = $view_data['page_name'];
+    $pageTitle = $view_data['pageTitle'];
+}
+
+// ROUTE MỚI: Xử lý việc admin gửi phản hồi
+else if ($ctrl_param === 'adminreview' && $act_param === 'ajaxSubmitReply') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $controller->ajaxSubmitReply();
+    exit;
+}
+
+else if ($ctrl_param === 'adminreview' && $act_param === 'ajaxToggleReviewStatus') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $controller->ajaxToggleReviewStatus();
+    exit;
+}
+
+// ROUTE MỚI: Xử lý xóa đánh giá
+else if ($ctrl_param === 'adminreview' && $act_param === 'ajaxDeleteReview') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminReviewController.php';
+    $controller = new AdminReviewController();
+    $controller->ajaxDeleteReview();
+    exit;
+}
 
 // Route hiển thị trang danh sách người dùng (vẫn giữ nguyên như cũ, chỉ là di chuyển xuống dưới)
 else if ($page_param === 'users' && $ctrl_param === null) {

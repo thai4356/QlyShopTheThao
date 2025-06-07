@@ -11,13 +11,17 @@ class Review {
     }
 
     public function getByProductId($productId) {
-        $stmt = $this->conn->prepare("
-        SELECT r.*, u.email 
-        FROM $this->table r 
-        INNER JOIN username u ON r.user_id = u.id 
-        WHERE r.product_id = ? 
-        ORDER BY r.created_at DESC
-    ");
+        $query = "SELECT 
+                r.id, r.user_id, r.product_id, r.rating, r.comment, r.created_at,
+                r.admin_reply, r.replied_at, -- Lấy thêm dữ liệu trả lời của admin
+                u.email 
+              FROM $this->table r 
+              INNER JOIN username u ON r.user_id = u.id 
+              WHERE r.product_id = ? 
+              AND r.status = 'approved'
+              ORDER BY r.created_at DESC";
+
+        $stmt = $this->conn->prepare($query);
         $stmt->execute([$productId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
