@@ -64,6 +64,54 @@ $(document).ready(function() {
         initializeChart(revenueChartData);
     }
 
+    if (typeof categoryChartData !== 'undefined' && document.getElementById('categoryChart')) {
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryChartData.labels,
+                datasets: [{
+                    data: categoryChartData.data,
+                    // Chart.js sẽ tự tạo màu, hoặc bạn có thể định nghĩa một mảng màu ở đây
+                    backgroundColor: [
+                        '#1d7af3',
+                        '#f3545d',
+                        '#fdaf4b',
+                        '#59d05d',
+                        '#48abf7',
+                        '#716cb0',
+                        '#a0b4c9'
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Để biểu đồ lấp đầy thẻ chứa
+                plugins: {
+                    legend: {
+                        position: 'bottom', // Hiển thị chú thích ở dưới
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.raw !== null) {
+                                    // Hiển thị số lượng sản phẩm
+                                    label += context.raw + ' sản phẩm';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     // BƯỚC 3: Thêm sự kiện 'change' cho ComboBox
     $('#revenue-chart-filter').on('change', function() {
         const selectedRange = $(this).val();

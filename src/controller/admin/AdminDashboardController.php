@@ -18,6 +18,10 @@ class AdminDashboardController {
         $startDate = date('Y-m-d 00:00:00', strtotime('-6 days'));
         $endDate = date('Y-m-d 23:59:59');
         $revenue_chart_data = $dashboardModel->getRevenueDataByRange($startDate, $endDate);
+        $category_chart_data = $dashboardModel->getProductCountByCategory();
+        $recent_orders = $dashboardModel->getRecentOrders();
+        $recent_users = $dashboardModel->getRecentUsers();
+        $low_stock_products = $dashboardModel->getLowStockProducts();
 
         // Chuẩn bị MỌI DỮ LIỆU để truyền cho view
         $view_data = [
@@ -25,6 +29,10 @@ class AdminDashboardController {
             'pageTitle' => 'Dashboard',
             'stats' => $stats,
             'revenue_chart_data' => $revenue_chart_data, // Phải có dòng này
+            'category_chart_data' => $category_chart_data,
+            'recent_orders' => $recent_orders,
+            'recent_users' => $recent_users,
+            'low_stock_products' => $low_stock_products,
             'page_scripts' => [$assets_path_for_js . 'js/admin-dashboard-charts.js'] // Phải có dòng này để nạp file JS
         ];
 

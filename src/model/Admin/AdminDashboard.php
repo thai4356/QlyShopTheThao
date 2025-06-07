@@ -133,5 +133,71 @@ class AdminDashboard {
         return ['labels' => $labels, 'data' => $data];
     }
 
+    // HÀM MỚI: Lấy số lượng sản phẩm theo từng danh mục
+    public function getProductCountByCategory() {
+        $query = "SELECT c.name as category_name, COUNT(p.id) as product_count 
+              FROM category c 
+              LEFT JOIN product p ON c.id = p.category_id 
+              WHERE c.is_active = 1
+              GROUP BY c.id, c.name 
+              ORDER BY product_count DESC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Chuẩn bị dữ liệu cho Chart.js
+        $labels = [];
+        $data = [];
+        foreach ($results as $row) {
+            $labels[] = $row['category_name'];
+            $data[] = (int)$row['product_count'];
+        }
+
+        return ['labels' => $labels, 'data' => $data];
+    }
+
+    // HÀM MỚI: Lấy 5 đơn hàng gần đây nhất
+    public function getRecentOrders($limit = 5) {
+        $query = "SELECT id, name, total_price, status, created_at 
+              FROM orders 
+              ORDER BY created_at DESC 
+              LIMIT :limit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // HÀM MỚI: Lấy 5 người dùng đăng ký gần đây nhất
+    public function getRecentUsers($limit = 5) {
+        $query = "SELECT id, email, created_at 
+              FROM username 
+              ORDER BY created_at DESC 
+              LIMIT :limit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // HÀM MỚI: Lấy các sản phẩm sắp hết hàng (tồn kho < 10)
+    public function getLowStockProducts($limit = 5, $threshold = 10) {
+        // Sửa lại câu lệnh SQL để JOIN với bảng product_image
+        // và chỉ lấy ảnh là thumbnail (is_thumbnail = 1)
+        $query = "SELECT p.id, p.name, p.stock, pi.image_url
+              FROM product p
+              LEFT JOIN product_image pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
+              WHERE p.stock < :threshold AND p.is_active = 1
+              ORDER BY p.stock ASC 
+              LIMIT :limit";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':threshold', $threshold, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>
