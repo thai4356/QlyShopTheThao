@@ -46,9 +46,13 @@ $currentStatus = $orderDetails['status'];
                         if ($status === 'đã giao') $badgeClass = 'badge-success';
                         else if ($status === 'đang xử lý') $badgeClass = 'badge-info';
                         else if ($status === 'đã thanh toán') $badgeClass = 'badge-warning';
+
+                        // THÊM MỚI Ở ĐÂY
+                        else if ($status === 'chờ hoàn tiền') $badgeClass = 'badge-danger';
+
                         else if ($status === 'hủy' || $status === 'thất bại') $badgeClass = 'badge-danger';
                         ?>
-                    <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars(ucfirst($status)); ?></span>
+                        <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars(ucfirst($status)); ?></span>
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -58,6 +62,10 @@ $currentStatus = $orderDetails['status'];
                 </ul>
             </div>
             <div class="card-footer text-center">
+
+                <?php if ($currentStatus === 'chờ hoàn tiền'): ?>
+                <?php endif; ?>
+
                 <?php if ($currentStatus === 'đang xử lý' || $currentStatus === 'đã thanh toán'): ?>
                     <button id="processOrderBtn" class="btn btn-success" data-order-id="<?php echo $orderDetails['id']; ?>">
                         <i class="fa fa-check"></i> Xử lý (Giao hàng)
@@ -67,6 +75,12 @@ $currentStatus = $orderDetails['status'];
                 <?php if ($currentStatus === 'đang xử lý'): ?>
                     <button id="cancelOrderBtn" class="btn btn-danger" data-order-id="<?php echo $orderDetails['id']; ?>">
                         <i class="fa fa-times"></i> Hủy đơn hàng
+                    </button>
+                <?php endif; ?>
+
+                <?php if ($currentStatus === 'đã thanh toán'): ?>
+                    <button id="cancelPaidOrderBtn" class="btn btn-danger" data-order-id="<?php echo $orderDetails['id']; ?>">
+                        <i class="fa fa-undo"></i> Hủy đơn & Hoàn tiền
                     </button>
                 <?php endif; ?>
             </div>

@@ -11,25 +11,55 @@ class Review {
     }
 
     public function getByProductId($productId) {
-        $query = "SELECT 
-                r.id, r.user_id, r.product_id, r.rating, r.comment, r.created_at,
-                r.admin_reply, r.replied_at, -- Lấy thêm dữ liệu trả lời của admin
-                u.email 
-              FROM $this->table r 
-              INNER JOIN username u ON r.user_id = u.id 
-              WHERE r.product_id = ? 
-              AND r.status = 'approved'
-              ORDER BY r.created_at DESC";
-
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare("
+        SELECT r.*, u.email 
+        FROM $this->table r 
+        INNER JOIN username u ON r.user_id = u.id 
+        WHERE r.product_id = ? 
+        ORDER BY r.created_at DESC
+    ");
         $stmt->execute([$productId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    private $sensitiveWords = [
+        // Tiếng Anh
+        'fuck', 'shit', 'bitch', 'asshole', 'bastard',
+        // Tiếng Việt
+        'địt', 'đụ', 'lồn', 'cặc', 'chó', 'đĩ', 'mẹ mày', 'con mẹ', 'vãi lồn'
+    ];
+
+
+    private function containsSensitiveWords($comment) {
+        foreach ($this->sensitiveWords as $word) {
+            $pattern = '/\b' . preg_quote($word, '/') . '\b/iu';
+            if (preg_match($pattern, $comment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function addReview($userId, $productId, $rating, $comment) {
+        if ($this->containsSensitiveWords($comment)) {
+            // Có từ cấm, không lưu và trả về lỗi
+            return [
+                'success' => false,
+                'message' => 'Bình luận chứa từ ngữ không phù hợp!'
+            ];
+        }
+
+        // Bình luận hợp lệ, tiến hành lưu
         $stmt = $this->conn->prepare("INSERT INTO $this->table (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$userId, $productId, $rating, $comment]);
+        $success = $stmt->execute([$userId, $productId, $rating, $comment]);
+
+        return [
+            'success' => $success,
+            'message' => $success ? 'Bình luận đã được gửi!' : 'Đã có lỗi xảy ra!'
+        ];
     }
+
+
 
 }

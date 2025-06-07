@@ -19,7 +19,7 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
 
     <!--Google Fonts CSS-->
 
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
     <!--Navbar Start  -->
@@ -29,9 +29,10 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
                 <div class="col-lg-2">
                     <!-- Sit Logo Start -->
                     <div class="site-branding">
-                        <a href="Menu.php" title="Fithub">
+                        <a href="?module=home" title="Fithub">
                             <img src="../Public/Image/logo.png" alt="Logo">
                             <img src="../Public/Image/logo_stickey.png" class="sticky-logo" alt="Logo">
+
                         </a>
                     </div>
                     <!-- Sit Logo End -->

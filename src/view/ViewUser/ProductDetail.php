@@ -67,9 +67,21 @@
                     <p><strong>Đánh giá:</strong> Chưa có đánh giá</p>
                 <?php endif; ?>
 
-                <p><strong>Còn lại:</strong> <?= $product['stock'] ?></p>
+                <?php if ($product['stock'] == 0): ?>
+                    <p class="stock-out"><strong>Còn lại:</strong> 0 (Hết hàng)</p>
+                <?php else: ?>
+                    <p><strong>Còn lại:</strong> <?= $product['stock'] ?></p>
+                <?php endif; ?>
+
                 <p><strong>Đã bán:</strong> <?= $product['sold_quantity'] ?></p>
-                <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success" style="background-color: orangered;border-color: orangered">Thêm vào giỏ</a>
+                <?php if ($product['stock'] == 0): ?>
+                    <a class="btn btn-secondary disabled" style="pointer-events: none; opacity: 0.6;">Hết hàng</a>
+                <?php else: ?>
+                    <a href="?module=cart&act=add&masp=<?= $product['id'] ?>" class="btn btn-success" style="background-color: orangered;border-color: orangered">
+                        Thêm vào giỏ
+                    </a>
+                <?php endif; ?>
+
                 <form method="POST" action="../../controller/WishlistController.php" style="display: inline;">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     <input type="hidden" name="action" value="add">
@@ -104,12 +116,12 @@
                 <?php
                 // **THÊM MỚI: Kiểm tra và hiển thị nếu có trả lời từ admin**
                 if (!empty($r['admin_reply'])):
-                ?>
-                <div class="admin-reply" style="background-color: #f8f9fa; border-left: 4px solid #17a2b8; padding: 10px; margin-top: 10px; font-size: medium;">
-                    <strong>Phản hồi từ Quản trị viên:</strong>
-                    <p style="margin-top: 5px;"><?= nl2br(htmlspecialchars($r['admin_reply'])) ?></p>
-                    <small>Trả lời lúc <?= date('d-m-Y H:i', strtotime($r['replied_at'])) ?></small>
-                </div>
+                    ?>
+                    <div class="admin-reply" style="background-color: #f8f9fa; border-left: 4px solid #17a2b8; padding: 10px; margin-top: 10px; font-size: medium;">
+                        <strong>Phản hồi từ Quản trị viên:</strong>
+                        <p style="margin-top: 5px;"><?= nl2br(htmlspecialchars($r['admin_reply'])) ?></p>
+                        <small>Trả lời lúc <?= date('d-m-Y H:i', strtotime($r['replied_at'])) ?></small>
+                    </div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>

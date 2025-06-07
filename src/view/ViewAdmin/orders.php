@@ -31,6 +31,7 @@
                             <option value="đã giao">Đã giao</option>
                             <option value="hủy">Hủy</option>
                             <option value="thất bại">Thất bại</option>
+                            <option value="chờ hoàn tiền" style="color: red; font-weight: bold;">Chờ hoàn tiền</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -40,7 +41,6 @@
                             <option value="cod">COD</option>
                             <option value="vnpay">VNPAY</option>
                             <option value="payos">PayOS</option>
-                            <option value="momo">MoMo</option>
                         </select>
                     </div>
                     <div class="col-md-3">

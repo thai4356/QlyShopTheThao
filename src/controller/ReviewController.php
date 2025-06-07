@@ -21,12 +21,19 @@ class ReviewController {
             $reviewModel = new Review();
             try{
                 $result = $reviewModel->addReview($userId, $productId, $rating, $comment);
+
+                if (!$result['success']) {
+                    $_SESSION['message'] = "Ngôn từ mất kiểm soát thế hả ??";
+                } else {
+                    $_SESSION['message'] = "Cảm ơn bạn đã đánh giá!";
+                }
+
             }catch(PDOException $e){
                 $_SESSION['message'] = "Bạn đã đánh giá sản phẩm này rồi.";
                 header("Location: ../view/ViewUser/Index.php?module=chitietsanpham&masp=$productId");
                 exit;
             }
-                $_SESSION['message'] = "Cảm ơn bạn đã đánh giá!";
+//
         }
         header("Location: ../view/ViewUser/Index.php?module=chitietsanpham&masp=$productId");
         exit;

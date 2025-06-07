@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../model/Connect.php';
 require_once __DIR__ . '/../model/Order.php';
 require_once __DIR__ . '/../model/OrderItem.php';
 require_once __DIR__ . '/../model/Product.php';
@@ -84,13 +85,11 @@ class OrderController
 
     public function processPayment()
     {
-        session_start();
-
-        // Lấy dữ liệu từ form thanh toán
-        $paymentMethod = isset($_POST['payment_method']) ? $_POST['payment_method'] : '';
-        $name = isset($_POST['hoten']) ? $_POST['hoten'] : '';
-        $address = isset($_POST['diachi']) ? $_POST['diachi'] : '';
-        $phone = isset($_POST['dienthoai']) ? $_POST['dienthoai'] : '';
+        // Lấy dữ liệu từ form
+        $paymentMethod = $_POST['payment_method'] ?? '';
+        $name = $_POST['hoten'] ?? '';
+        $address = $_POST['diachi'] ?? '';
+        $phone = $_POST['dienthoai'] ?? '';
 
         // Kiểm tra dữ liệu bắt buộc
         if ($paymentMethod == '' || $name == '' || $address == '' || $phone == '') {
@@ -98,29 +97,38 @@ class OrderController
             return;
         }
 
-        // Lấy user_id từ session (mặc định là 1 nếu chưa có)
-        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1;
-
-        $cartItems = $_SESSION['checkout_items'];
+        // Lấy user ID từ session
+        $userId = $_SESSION['user_id'] ?? 1;
+        $cartItems = $_SESSION['checkout_items'] ?? [];
         $totalPrice = 0;
         $productModel = new Product();
 
-        // Tính tổng và kiểm tra tồn kho
+        // ✅ Kiểm tra tồn kho trước khi tiếp tục
         foreach ($cartItems as &$item) {
             $product = $productModel->getById($item['product_id']);
             $item['price'] = $product['price'];
 
-            if ($item['quantity'] > $product['stock']) {
-                $item['quantity'] = $product['stock'];
+            if ($product['stock'] == 0) {
+                echo "Sản phẩm '{$product['name']}' đã hết hàng.";
+                return;
             }
 
+            if ($item['quantity'] > $product['stock']) {
+                echo "<div style='margin: 50px auto; width: 80%; padding: 15px; background-color: #ffe6e6; color: red; border: 1px solid red; border-radius: 5px; text-align: center; font-weight: bold;'>
+        Sản phẩm '{$product['name']}' chỉ còn {$product['stock']} sản phẩm trong kho do một người dùng khác vừa mới mua sản phẩm.
+        <br><br>
+        <a href='https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/view/ViewUser/Index.php?module=home' style='color: blue;'>Quay lại trang chủ</a>
+             </div>";
+                return;
+            }
             $totalPrice += $item['price'] * $item['quantity'];
         }
 
+        // ✅ Tạo đơn hàng
         $orderModel = new Order();
         $orderId = $orderModel->createOrder($userId, $totalPrice, $paymentMethod, $name, $address, $phone);
 
-        // Lưu chi tiết từng sản phẩm
+        // ✅ Ghi chi tiết đơn hàng và cập nhật stock
         $orderItemModel = new OrderItem();
         foreach ($cartItems as &$item) {
             $orderItemModel->addItem($orderId, $item['product_id'], $item['quantity'], $item['price']);
@@ -128,6 +136,7 @@ class OrderController
             $productModel->increseSold($item['product_id'], $item['quantity']);
         }
 
+        // ✅ Xóa khỏi giỏ hàng
         $cartModel = new Cart();
         $cart = $cartModel->getCartByUserId($userId);
         $cartId = $cart['id'];
@@ -137,10 +146,10 @@ class OrderController
             $cartItemModel->removeItem($cartId, $item['product_id']);
         }
 
-        // Xóa session sau khi thanh toán
+        // ✅ Xóa session
         unset($_SESSION['checkout_items']);
 
-        // Chuyển hướng sang trang thành công
+        // ✅ Chuyển hướng
         header("Location: ../view/ViewUser/success.php?order_id=" . $orderId);
         exit;
     }
@@ -433,87 +442,101 @@ class OrderController
         }
         $secureHash_calculated = hash_hmac('sha512', $hashData, VNP_HASH_SECRET);
 
+        $conn = (new Connect())->getConnection(); // Lấy connection cho transaction
+        $returnData = [];
+
         try {
             if ($secureHash_calculated == $vnp_SecureHash_received) {
-                $orderId_raw = isset($inputData['vnp_TxnRef']) ? $inputData['vnp_TxnRef'] : null;
+                $orderId_raw = $inputData['vnp_TxnRef'] ?? null;
                 $orderId_parts = explode('_', $orderId_raw);
-                $orderId = $orderId_parts[0];
-
-                $vnp_Amount_received = isset($inputData['vnp_Amount']) ? (int)($inputData['vnp_Amount'] / 100) : null;
-                $vnp_ResponseCode = isset($inputData['vnp_ResponseCode']) ? $inputData['vnp_ResponseCode'] : null;
-                $vnp_TransactionStatus = isset($inputData['vnp_TransactionStatus']) ? $inputData['vnp_TransactionStatus'] : null;
-                $vnp_TransactionNo = isset($inputData['vnp_TransactionNo']) ? $inputData['vnp_TransactionNo'] : null;
+                $orderId = (int)$orderId_parts[0];
 
                 $orderModel = new Order();
-                $order = $orderModel->getOrderById($orderId); // Bạn cần có phương thức này trong Order Model
+                $order = $orderModel->getOrderById($orderId);
 
                 if ($order) {
-                    // Nên kiểm tra số tiền một cách cẩn thận, có thể có sai số nhỏ do float
-                    if (abs((float)$order['total_price'] - (float)$vnp_Amount_received) < 1) { // Chấp nhận sai số nhỏ hơn 1 đồng
-                        if ($order['status'] == 'đang xử lý' || $order['status'] == 'pending') { // Kiểm tra trạng thái hiện tại
-                            if ($vnp_ResponseCode == '00' && $vnp_TransactionStatus == '00') {
-                                // Thanh toán thành công
-                                $orderModel->updateOrderStatusAndTxn($orderId, 'đã thanh toán', $vnp_TransactionNo, $orderId_raw); // Cần phương thức này
+                    // Chỉ xử lý nếu đơn hàng đang ở trạng thái chờ
+                    if ($order['status'] == 'đang xử lý') {
+                        if (isset($inputData['vnp_ResponseCode']) && $inputData['vnp_ResponseCode'] == '00') {
+                            // Bắt đầu transaction
+                            $conn->beginTransaction();
 
-                                // Trừ kho sản phẩm
-                                $orderItemModel = new OrderItem();
-                                $itemsInOrder = $orderItemModel->getItemsByOrderId($orderId);
-                                $productModel = new Product();
+                            $orderItemModel = new OrderItem();
+                            $productModel = new Product();
+                            $itemsInOrder = $orderItemModel->getItemsByOrderId($orderId);
+                            $canProcess = true;
+
+                            // Vòng lặp kiểm tra và trừ kho
+                            foreach ($itemsInOrder as $item) {
+                                $rowsAffected = $productModel->reduceStock($item['product_id'], $item['quantity']);
+                                if ($rowsAffected == 0) {
+                                    // Nếu trừ kho thất bại (hết hàng), đánh dấu và dừng lại
+                                    $canProcess = false;
+                                    break;
+                                }
+                            }
+
+                            if ($canProcess) {
+                                // Nếu trừ kho tất cả sản phẩm thành công
                                 foreach ($itemsInOrder as $item) {
-                                    $productModel->reduceStock($item['product_id'], $item['quantity']);
                                     $productModel->increseSold($item['product_id'], $item['quantity']);
                                 }
 
-                                $userId = $order['user_id']; // Lấy user_id từ đơn hàng
+                                // Cập nhật trạng thái đơn hàng
+                                $orderModel->updateOrderStatusAndTxn($orderId, 'đã thanh toán', $inputData['vnp_TransactionNo'], $orderId_raw);
+
+                                // Xóa giỏ hàng
+                                $userId = $order['user_id'];
                                 $cartModel = new Cart();
                                 $userCart = $cartModel->getCartByUserId($userId);
                                 if ($userCart) {
-                                    $cartId = $userCart['id'];
                                     $cartItemModel = new CartItem();
-
                                     foreach ($itemsInOrder as $orderedItem) {
-                                        $cartItemModel->removeItem($cartId, $orderedItem['product_id']);
+                                        $cartItemModel->removeItem($userCart['id'], $orderedItem['product_id']);
                                     }
-                                    error_log("VNPay IPN: Cleared ordered items from cart ID $cartId for order ID $orderId.");
                                 }
 
-                                error_log("VNPay IPN: Order $orderId processed successfully. VNPay TxnNo: $vnp_TransactionNo");
+                                $conn->commit(); // Hoàn tất giao dịch
+                                $returnData['RspCode'] = '00';
+                                $returnData['Message'] = 'Confirm Success';
+
                             } else {
-                                // Thanh toán thất bại
-                                $orderModel->updateOrderStatusAndTxn($orderId, 'thất bại', $vnp_TransactionNo, $orderId_raw);
-                                error_log("VNPay IPN: Order $orderId payment failed. VNPay TxnNo: $vnp_TransactionNo, ResponseCode: $vnp_ResponseCode");
+                                // Nếu có sản phẩm không đủ hàng
+                                $conn->rollBack(); // Hoàn tác tất cả
+                                $orderModel->updateOrderStatusAndTxn($orderId, 'chờ hoàn tiền', $inputData['vnp_TransactionNo'], $orderId_raw);
+                                error_log("OVERSALE on VNPay IPN for Order ID: " . $orderId);
+                                $returnData['RspCode'] = '00'; // Vẫn trả về success cho VNPay, nhưng hệ thống của bạn biết đây là lỗi
+                                $returnData['Message'] = 'Confirm Success';
                             }
+                        } else {
+                            // Giao dịch thất bại từ VNPay
+                            $orderModel->updateOrderStatusAndTxn($orderId, 'thất bại', $inputData['vnp_TransactionNo'], $orderId_raw);
                             $returnData['RspCode'] = '00';
                             $returnData['Message'] = 'Confirm Success';
-                        } else {
-                            $returnData['RspCode'] = '02'; // Đơn đã được xác nhận
-                            $returnData['Message'] = 'Order already confirmed';
-                            error_log("VNPay IPN: Order $orderId already confirmed. Status: " . $order['status']);
                         }
                     } else {
-                        $returnData['RspCode'] = '04'; // Sai số tiền
-                        $returnData['Message'] = 'Invalid amount';
-                        error_log("VNPay IPN: Order $orderId invalid amount. DB: " . $order['total_price'] . ", VNPay: " . $vnp_Amount_received);
+                        $returnData['RspCode'] = '02'; // Đơn hàng đã được xác nhận trước đó
+                        $returnData['Message'] = 'Order already confirmed';
                     }
                 } else {
                     $returnData['RspCode'] = '01'; // Không tìm thấy đơn hàng
                     $returnData['Message'] = 'Order not found';
-                    error_log("VNPay IPN: Order $orderId not found for TxnRef: $orderId_raw");
                 }
             } else {
-                $returnData['RspCode'] = '97';
+                $returnData['RspCode'] = '97'; // Sai chữ ký
                 $returnData['Message'] = 'Invalid signature';
-                error_log("VNPay IPN: Invalid signature for data: " . http_build_query($inputData));
             }
         } catch (Exception $e) {
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
             $returnData['RspCode'] = '99';
             $returnData['Message'] = 'Unknown error';
             error_log("VNPay IPN Exception: " . $e->getMessage());
         }
 
         echo json_encode($returnData);
-        die();
-        // === KẾT THÚC LOGIC ADAPT TỪ vnpay_ipn.php ===
+        exit();
     }
 
     public function initiatePayOSPayment()
@@ -624,93 +647,106 @@ class OrderController
     public function handlePayOSReturn()
     {
         $orderIdFromPayOS = isset($_GET['orderCode']) ? (int)$_GET['orderCode'] : null;
-        $statusFromQuery = isset($_GET['status']) ? $_GET['status'] : null; // e.g., PAID, CANCELLED
+        $statusFromQuery = isset($_GET['status']) ? $_GET['status'] : null;
 
         if (!$orderIdFromPayOS) {
             echo "Lỗi: Mã đơn hàng không hợp lệ từ PayOS.";
-            // Redirect to error page
             exit;
         }
+
+        // Lấy connection để sử dụng transaction
+        $conn = (new Connect())->getConnection();
 
         try {
             $paymentLinkInfo = $this->payOS->getPaymentLinkInformation($orderIdFromPayOS);
             $orderModel = new Order();
-            $dbOrder = $orderModel->getOrderById($orderIdFromPayOS); // Fetch by orders.id
+            $dbOrder = $orderModel->getOrderById($orderIdFromPayOS);
 
             if (!$dbOrder) {
                 echo "Lỗi: Không tìm thấy đơn hàng trong hệ thống.";
                 exit;
             }
 
-            // Check if amounts match (optional but recommended)
-            if ((int)$dbOrder['total_price'] != (int)$paymentLinkInfo['amountTotal']) {
-                error_log("PayOS Return: Amount mismatch for order " . $orderIdFromPayOS . ". DB: " . $dbOrder['total_price'] . ", PayOS: " . $paymentLinkInfo['amountTotal']);
-                // Potentially flag for review or handle as error
-            }
+            // Chỉ xử lý nếu trạng thái đơn hàng là 'đang xử lý'
+            if ($dbOrder['status'] == 'đang xử lý') {
+                if ($paymentLinkInfo['status'] == 'PAID' || $statusFromQuery == 'PAID') {
 
+                    // Bắt đầu transaction
+                    $conn->beginTransaction();
 
-            if ($paymentLinkInfo['status'] == 'đã thanh toán'|| $statusFromQuery == 'PAID') {
-                // Check if order is still pending to avoid reprocessing
-                if ($dbOrder['status'] == 'đang xử lý' || $dbOrder['status'] == 'pending') {
-                    // Update order status to 'completed'
-                    $transactionTime = !empty($paymentLinkInfo['transactions']) && isset($paymentLinkInfo['transactions'][0]['transactionDateTime'])
-                        ? date('Y-m-d H:i:s', strtotime($paymentLinkInfo['transactions'][0]['transactionDateTime']))
-                        : date('Y-m-d H:i:s');
-                    // The method below needs to be created/adjusted in Order.php model
-                    $orderModel->updateOrderPayOSInfo(
-                        $orderIdFromPayOS,
-                        $paymentLinkInfo['id'], // payos_payment_link_id
-                        'đã thanh toán', // status = 'completed'
-                        $paymentLinkInfo['orderCode'], // payos_reference (which is our orderId)
-                        $transactionTime // payos_transaction_datetime
-                    );
-
-
-                    // Update product stock
                     $orderItemModel = new OrderItem();
                     $productModel = new Product();
                     $itemsInOrder = $orderItemModel->getItemsByOrderId($orderIdFromPayOS);
+                    $canProcess = true;
+
+                    // Vòng lặp kiểm tra và trừ kho cho từng sản phẩm
                     foreach ($itemsInOrder as $item) {
-                        $productModel->reduceStock($item['product_id'], $item['quantity']);
-                        $productModel->increseSold($item['product_id'], $item['quantity']); // Check spelling "increseSold" in your Product.php
-                    }
-
-                    // === PHẦN THÊM MỚI: Xóa các item đã đặt khỏi giỏ hàng trong DB ===
-                    $userId = $dbOrder['user_id']; // Lấy user_id từ đơn hàng đã lấy từ DB
-                    $cartModel = new Cart();       // Đã có require_once 'Cart.php' ở đầu file
-                    $userCart = $cartModel->getCartByUserId($userId);
-                    if ($userCart) {
-                        $cartId = $userCart['id'];
-                        $cartItemModel = new CartItem(); // Đã có require_once 'CartItem.php' ở đầu file
-                        // $itemsInOrder đã được lấy ở trên để cập nhật kho
-                        foreach ($itemsInOrder as $orderedItem) {
-                            $cartItemModel->removeItem($cartId, $orderedItem['product_id']);
+                        $rowsAffected = $productModel->reduceStock($item['product_id'], $item['quantity']);
+                        if ($rowsAffected == 0) {
+                            // Nếu trừ kho thất bại (hết hàng), đánh dấu và dừng lại
+                            $canProcess = false;
+                            error_log("OVERSALE on PayOS Return for Order ID: " . $orderIdFromPayOS . ", Product ID: " . $item['product_id']);
+                            break;
                         }
-                        error_log("PayOS Success: Cleared ordered items from cart ID $cartId for order ID $orderIdFromPayOS.");
                     }
 
-                    unset($_SESSION['checkout_items']);
-                    header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&payment_method=payos&status=success');
-                    exit;
-                } else if ($dbOrder['status'] == 'completed') {
-                    // Already processed, just redirect to success
-                    header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&payment_method=payos&status=already_completed');
-                    exit;
-                } else {
-                    // Order in a different state, might be an issue
-                    error_log("PayOS Return: Order " . $orderIdFromPayOS . " has status " . $dbOrder['status'] . " but PayOS says PAID.");
-                    header('Location: ../view/ViewUser/Payment.php?error=payos_status_mismatch&order_id=' . $orderIdFromPayOS);
+                    if ($canProcess) {
+                        // Nếu trừ kho thành công cho tất cả sản phẩm
+                        foreach ($itemsInOrder as $item) {
+                            $productModel->increseSold($item['product_id'], $item['quantity']);
+                        }
+
+                        // Cập nhật trạng thái và thông tin giao dịch
+                        $transactionTime = !empty($paymentLinkInfo['transactions']) ? date('Y-m-d H:i:s', strtotime($paymentLinkInfo['transactions'][0]['transactionDateTime'])) : date('Y-m-d H:i:s');
+                        $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'đã thanh toán', $paymentLinkInfo['orderCode'], $transactionTime);
+
+                        // Xóa các sản phẩm đã đặt khỏi giỏ hàng
+                        $userId = $dbOrder['user_id'];
+                        $cartModel = new Cart();
+                        $userCart = $cartModel->getCartByUserId($userId);
+                        if ($userCart) {
+                            $cartItemModel = new CartItem();
+                            foreach ($itemsInOrder as $orderedItem) {
+                                $cartItemModel->removeItem($userCart['id'], $orderedItem['product_id']);
+                            }
+                        }
+
+                        $conn->commit(); // Hoàn tất giao dịch
+
+                        // Chuyển hướng đến trang thành công
+                        unset($_SESSION['checkout_items']);
+                        header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&payment_method=payos&status=success');
+                        exit;
+
+                    } else {
+                        // Nếu có sản phẩm đã hết hàng
+                        $conn->rollBack(); // Hoàn tác tất cả các thay đổi
+
+                        // Cập nhật trạng thái đơn hàng thành "chờ hoàn tiền"
+                        $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'chờ hoàn tiền');
+
+                        // Chuyển hướng đến trang lỗi (hoặc thành công nhưng với thông báo đặc biệt)
+                        header('Location: ../view/ViewUser/Payment.php?error=oversold_and_refund_pending&order_id=' . $orderIdFromPayOS);
+                        exit;
+                    }
+
+                } else { // Trạng thái từ PayOS là CANCELLED, FAILED, EXPIRED...
+                    $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], 'hủy'); // Hoặc 'thất bại'
+                    header('Location: ../view/ViewUser/Payment.php?error=payos_failed&order_id=' . $orderIdFromPayOS . '&payos_status=' . $paymentLinkInfo['status']);
                     exit;
                 }
-            } else { // CANCELLED, FAILED, EXPIRED etc.
-                $orderModel->updateOrderPayOSInfo($orderIdFromPayOS, $paymentLinkInfo['id'], $paymentLinkInfo['status']);
-                header('Location: ../view/ViewUser/Payment.php?error=payos_failed&order_id=' . $orderIdFromPayOS . '&payos_status=' . $paymentLinkInfo['status']);
+            } else {
+                // Đơn hàng đã được xử lý trước đó, chỉ cần chuyển hướng
+                header('Location: ../view/ViewUser/Success.php?order_id=' . $orderIdFromPayOS . '&status=already_processed');
                 exit;
             }
+
         } catch (\Throwable $e) {
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
             error_log("PayOS Return/Cancel Error for orderCode " . $orderIdFromPayOS . ": " . $e->getMessage());
             echo "Có lỗi xảy ra khi xử lý phản hồi từ PayOS. " . $e->getMessage();
-            // Redirect to a generic error page or home
             exit;
         }
     }

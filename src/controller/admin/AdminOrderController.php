@@ -2,7 +2,8 @@
 // src/controller/admin/AdminOrderController.php
 
 require_once __DIR__ . '/../../../src/model/admin/AdminOrder.php';
-
+require_once __DIR__ . '/../../model/admin/AdminOrderItem.php';
+require_once __DIR__ . '/../../model/admin/AdminProduct.php';
 use Mpdf\Mpdf;
 
 require_once __DIR__ . '/../../../vendor/autoload.php'; // Composer autoloader
@@ -171,6 +172,64 @@ class AdminOrderController
 
         } catch (\Mpdf\MpdfException $e) {
             echo "Lỗi khi tạo PDF: " . $e->getMessage();
+        }
+        exit;
+    }
+
+    /**
+     * Xử lý AJAX để hủy đơn hàng đã thanh toán và hoàn trả sản phẩm về kho.
+     */
+    public function ajaxCancelAndRestockOrder()
+    {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['order_id'])) {
+            echo json_encode(['success' => false, 'message' => 'Yêu cầu không hợp lệ.']);
+            exit;
+        }
+
+        $orderId = filter_input(INPUT_POST, 'order_id', FILTER_VALIDATE_INT);
+        if (!$orderId) {
+            echo json_encode(['success' => false, 'message' => 'ID đơn hàng không hợp lệ.']);
+            exit;
+        }
+
+        // Lấy connection để dùng transaction
+        $conn = (new AdminConnect())->getConnection();
+
+        // Khởi tạo các model cần thiết
+        $orderModel = new AdminOrder();
+        $orderItemModel = new AdminOrderItem(); // Giả sử bạn có AdminOrderItem.php với getItemsByOrderId
+        $productModel = new AdminProduct();
+
+        try {
+            $conn->beginTransaction();
+
+            // 1. Lấy tất cả sản phẩm trong đơn hàng
+            $items = $orderItemModel->getItemsByOrderId($orderId);
+            if (empty($items)) {
+                throw new Exception('Không tìm thấy sản phẩm nào trong đơn hàng.');
+            }
+
+            // 2. Lặp qua từng sản phẩm để hoàn kho và giảm số lượng đã bán
+            foreach ($items as $item) {
+                $productModel->restockProduct($item['product_id'], $item['quantity']);
+                $productModel->decreaseSoldCount($item['product_id'], $item['quantity']);
+            }
+
+            // 3. Cập nhật trạng thái đơn hàng thành "hủy"
+            $orderModel->updateStatus($orderId, 'hủy');
+
+            // 4. Nếu tất cả thành công, commit transaction
+            $conn->commit();
+
+            echo json_encode(['success' => true, 'message' => 'Đã hủy đơn hàng và hoàn trả sản phẩm về kho thành công!']);
+
+        } catch (Exception $e) {
+            // Nếu có lỗi, rollback tất cả thay đổi
+            $conn->rollBack();
+            error_log("Failed to cancel and restock order ID $orderId: " . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
         }
         exit;
     }

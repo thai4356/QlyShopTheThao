@@ -32,6 +32,7 @@ class CartItem {
             ci.*, 
             p.name, 
             p.price,
+            p.stock,
             pi.image_url
         FROM cart_item ci
         INNER JOIN product p ON ci.product_id = p.id

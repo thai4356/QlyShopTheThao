@@ -1,6 +1,4 @@
-<?php
-$orderId = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
-?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -57,9 +55,9 @@ $orderId = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
 <body>
 
 <div class="success-container">
-    <h2>🎉 Đặt hàng thành công! Hãy theo dõi tình trạng đơn hàng của bạn trong phần lịch sử nhé</h2>
-    <p class="order-id">Mã đơn hàng của bạn là: <strong>#<?php echo $orderId; ?></strong></p>
-    <a href="Index.php" class="btn-home">⬅️ Về trang chủ</a>
+    <h2> Đặt hàng thành công! Hãy theo dõi tình trạng đơn hàng của bạn trong phần lịch sử nhé</h2>
+
+    <a href="Index.php" class="btn-home">⬅Về trang chủ</a>
 </div>
 
 </body>

@@ -116,7 +116,7 @@ class AdminOrder
     public function updateStatus($orderId, $newStatus)
     {
         // Các trạng thái hợp lệ để tránh lỗi SQL Injection hoặc dữ liệu không mong muốn
-        $allowedStatuses = ["đã giao", "hủy"];
+        $allowedStatuses = ["đã giao", "hủy", "đã hoàn tiền"];
         if (!in_array($newStatus, $allowedStatuses)) {
             return false;
         }

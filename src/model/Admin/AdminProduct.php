@@ -554,26 +554,27 @@ class AdminProduct {
         }
     }
 
-    public function getAllLocations() {
-        $stmt = $this->conn->query("SELECT DISTINCT location FROM product WHERE location IS NOT NULL AND location <> '' LIMIT 5
-                                                                ");
-        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    /**
+     * Tăng lại số lượng tồn kho cho một sản phẩm (khi hủy đơn).
+     * @param int $productId ID sản phẩm.
+     * @param int $quantity Số lượng cần hoàn trả.
+     * @return bool
+     */
+    public function restockProduct($productId, $quantity) {
+        $stmt = $this->conn->prepare("UPDATE product SET stock = stock + ? WHERE id = ?");
+        return $stmt->execute([$quantity, $productId]);
     }
 
-    public function getAllBrands() {
-        $stmt = $this->conn->query("SELECT DISTINCT brand FROM product WHERE brand IS NOT NULL AND brand <> '' LIMIT 5
-                                                                 ");
-        return $stmt->fetchAll(PDO::FETCH_COLUMN);
-    }
-
-    public function reduceStock($productId, $quantity) {
-        $stmt = $this->conn->prepare("UPDATE product SET stock = stock - ? WHERE id = ? AND stock >= ?");
-        $stmt->execute(array($quantity, $productId, $quantity));
-    }
-
-    public function increseSold($productId, $quantity) {
-        $stmt = $this->conn->prepare("UPDATE product SET sold_quantity = sold_quantity + ? WHERE id = ? AND stock >= ?");
-        $stmt->execute(array($quantity, $productId, $quantity));
+    /**
+     * Giảm số lượng đã bán của một sản phẩm (khi hủy đơn).
+     * @param int $productId ID sản phẩm.
+     * @param int $quantity Số lượng cần giảm.
+     * @return bool
+     */
+    public function decreaseSoldCount($productId, $quantity) {
+        // Đảm bảo số lượng đã bán không bị âm
+        $stmt = $this->conn->prepare("UPDATE product SET sold_quantity = sold_quantity - ? WHERE id = ? AND sold_quantity >= ?");
+        return $stmt->execute([$quantity, $productId, $quantity]);
     }
 
 

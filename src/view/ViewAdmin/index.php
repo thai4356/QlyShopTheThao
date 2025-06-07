@@ -21,6 +21,22 @@ $page_param = $_GET['page'] ?? 'dashboard'; // Trang mặc định nếu không 
 $pageTitle = ucfirst(str_replace('_', ' ', $page_param)); // Tiêu đề trang mặc định
 $view_data = []; // Dữ liệu mặc định truyền cho view
 
+if ($ctrl_param === 'admindashboard' && $act_param === 'ajaxGetChartData') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminDashboardController.php';
+    $controller = new AdminDashboardController();
+    $controller->ajaxGetChartData(); // Hàm này đã có exit() bên trong nên sẽ dừng ở đây
+}
+
+else if ($page_param === 'dashboard') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminDashboardController.php';
+    $controller = new AdminDashboardController();
+    $view_data = $controller->showDashboard();
+    $page_param = $view_data['page_name'];
+    $pageTitle = $view_data['pageTitle'];
+}
+
+
+
 // Định tuyến cơ bản
 if ($ctrl_param === 'adminproduct' && $act_param === 'listProducts') {
     require_once __DIR__ . '/../../../src/controller/admin/AdminProductController.php';
@@ -118,6 +134,13 @@ else if ($ctrl_param === 'adminorder' && $act_param === 'ajaxGetOrdersForDataTab
     require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
     $controller = new AdminOrderController();
     $controller->ajaxGetOrdersForDataTable();
+    exit;
+}
+
+else if ($ctrl_param === 'adminorder' && $act_param === 'ajaxCancelAndRestockOrder') {
+    require_once __DIR__ . '/../../../src/controller/admin/AdminOrderController.php';
+    $controller = new AdminOrderController();
+    $controller->ajaxCancelAndRestockOrder();
     exit;
 }
 
@@ -235,6 +258,8 @@ else if ($ctrl_param === 'adminreview' && $act_param === 'ajaxDeleteReview') {
     exit;
 }
 
+
+
 // Route hiển thị trang danh sách người dùng (vẫn giữ nguyên như cũ, chỉ là di chuyển xuống dưới)
 else if ($page_param === 'users' && $ctrl_param === null) {
     // Không cần controller, để layout tự nạp
@@ -247,7 +272,8 @@ else {
     if (in_array($page_param, $allowed_static_pages)) {
         // Không có controller cụ thể, $page_param sẽ được dùng để load file content trực tiếp
         // $pageTitle đã được đặt ở trên
-    } else if ($page_param === 'products' && $ctrl_param === null) { // Xử lý ngầm cho ?page=products
+    }
+    else if ($page_param === 'products' && $ctrl_param === null) { // Xử lý ngầm cho ?page=products
         require_once __DIR__ . '/../../../src/controller/admin/AdminProductController.php';
         $controller = new AdminProductController();
         $view_data = $controller->listProducts();
@@ -255,10 +281,12 @@ else {
         $pageTitle = $view_data['pageTitle'];
     }
 
-    else {
-        // Nếu trang không hợp lệ, mặc định về dashboard
-        $page_param = 'dashboard';
-        $pageTitle = ucfirst($page_param);
+    else if ($page_param === 'dashboard') {
+        require_once __DIR__ . '/../../../src/controller/admin/AdminDashboardController.php';
+        $controller = new AdminDashboardController();
+        $view_data = $controller->showDashboard();
+        $page_param = $view_data['page_name'];
+        $pageTitle = $view_data['pageTitle'];
     }
 }
 

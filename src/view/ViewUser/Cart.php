@@ -56,57 +56,29 @@ require_once "../../controller/checklogin.php";
             text-decoration: underline;
         }
 
-        /* === CSS ĐƯỢC CẬP NHẬT CHO NÚT THANH TOÁN DỰA TRÊN STYLE2.CSS === */
-        .button {
+        .out-of-stock-row {
+            opacity: 0.4;
+            pointer-events: none; /* Tắt mọi thao tác với dòng hết hàng */
+        }
+
+        .product-image-wrapper {
+            position: relative;
             display: inline-block;
-            font-family: Be Vietnam Pro, Arial, sans-serif; /* Ưu tiên Rubik nếu có, fallback về Arial */
-            font-size: 15px;
-            line-height: 1.5; /* Điều chỉnh line-height cho phù hợp với padding */
-            font-weight: 500;
-            text-transform: uppercase;
-            color: #ffffff !important; /* Quan trọng để ghi đè màu mặc định của button */
-            background-color: #fd3d0c; /* Màu cam đỏ từ style2.css */
-            padding: 15px 35px; /* Padding có thể điều chỉnh, gốc của .sec-btn là 18px 45px */
-            border-radius: 10px; /* Bo góc từ style2.css */
-            border: none; /* Bỏ border mặc định */
-            cursor: pointer;
-            position: relative; /* Cho hiệu ứng ::before */
-            z-index: 1; /* Cho hiệu ứng ::before */
-            overflow: hidden; /* Ngăn hiệu ứng tràn ra ngoài */
-            transition: color 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease; /* Thêm transition cho color và background-color */
         }
 
-        .button::before {
-            content: "";
+        .overlay-text {
             position: absolute;
-            bottom: 0;
+            top: 20px;
             left: 0;
-            width: 100%;
-            height: 0;
-            background-color: #141b22; /* Màu nền khi hover, từ style2.css (.sec-btn::before) */
-            z-index: -1;
-            border-radius: 10px; /* Giữ bo tròn cho hiệu ứng */
-            transition: height 0.5s ease; /* Chỉ transition height cho ::before */
+            right: 0;
+            text-align: center;
+            color: red;
+            font-weight: bold;
+            font-size: 14px;
+            background-color: rgba(255,255,255,0.7);
+            padding: 2px;
         }
 
-        .button:hover::before {
-            height: 100%;
-            top: 0; /* Đảm bảo ::before phủ từ trên xuống */
-            bottom: auto;
-        }
-
-        .button:hover {
-            color: #ffffff !important; /* Giữ màu chữ trắng khi hover */
-            /* Hiệu ứng box-shadow khi hover có thể thêm nếu muốn, ví dụ:
-            box-shadow: 0px 10px 24px 0px rgba(253, 61, 12, 0.2); */
-        }
-
-        /* Hiệu ứng focus để người dùng biết nút đang được chọn (quan trọng cho accessibility) */
-        .button:focus {
-            outline: 2px solid #141b22; /* Màu outline khi focus */
-            outline-offset: 2px;
-        }
-        /* === KẾT THÚC CSS CHO NÚT THANH TOÁN === */
     </style>
 </head>
 <body>
@@ -114,55 +86,66 @@ require_once "../../controller/checklogin.php";
     <h2 style="margin-top: 0">Giỏ hàng</h2>
 
 
-        <?php if (empty($items)): ?>
-            <p style="margin-top:300px; margin-bottom: 100px; text-align:center; font-size:18px; color:gray;">
-                Giỏ hàng trống
-            </p>
-        <?php else: ?>
-            <form method="post" action="?module=order">
-                <table border="1" cellpadding="10">
-                    <tr>
-                        <th></th><th>Ảnh</th><th>Tên</th><th>Giá</th><th>Số lượng</th><th>Tổng</th><th>Xóa</th>
+    <?php if (empty($items)): ?>
+        <p style="margin-top:300px; margin-bottom: 100px; text-align:center; font-size:18px; color:gray;">
+            Giỏ hàng trống
+        </p>
+    <?php else: ?>
+        <form method="post" action="?module=order">
+            <table border="1" cellpadding="10">
+                <tr>
+                    <th></th><th>Ảnh</th><th>Tên</th><th>Giá</th><th>Số lượng</th><th>Tổng</th><th>Xóa</th>
+                </tr>
+                <?php
+                $tong = 0;
+                foreach ($items as $item):
+                    $total = $item['price'] * $item['quantity'];
+                    $tong += $total;
+                    $isOutOfStock = $item['stock'] == 0;
+                    ?>
+                    <tr class="<?= $isOutOfStock ? 'out-of-stock-row' : '' ?>">
+                        <td class="checkbox-cell">
+                            <?php if (!$isOutOfStock): ?>
+                                <input type="checkbox" name="select_item[]" value="<?= $item['product_id'] ?>" onclick="updateTotal()">
+                            <?php endif; ?>
+                        </td>
+                        <td class="image-cell">
+                            <div class="product-image-wrapper">
+                                <img src="ProductImage/<?= $item['image_url'] ?>" width="60">
+                                <?php if ($isOutOfStock): ?>
+                                    <div class="overlay-text" style="font-size: 50px">Hết hàng</div>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                        <td><?= $item['name'] ?></td>
+                        <td><?= number_format($item['price']) ?>₫</td>
+                        <td>
+                            <input class="qty-input"
+                                   type="number"
+                                   name="qty[<?= $item['product_id'] ?>]"
+                                   id="qty-<?= $item['product_id'] ?>"
+                                   value="<?= $item['quantity'] ?>"
+                                   min="1"
+                                <?= $isOutOfStock ? 'readonly disabled' : '' ?>
+                                   onchange="updateItemTotal(<?= $item['product_id'] ?>, <?= $item['price'] ?>)">
+                        </td>
+                        <input type="hidden" name="qty_hidden[<?= $item['product_id'] ?>]" id="qty-hidden-<?= $item['product_id'] ?>" value="<?= $item['quantity'] ?>">
+                        <td><?= number_format($total) ?>₫</td>
+                        <td><a href="?module=cart&act=remove&masp=<?= $item['product_id'] ?>">Xóa</a></td>
                     </tr>
-                    <?php
-                    $tong = 0;
-                    foreach ($items as $item):
-                        $total = $item['price'] * $item['quantity'];
-                        $tong += $total;
-                        ?>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox" name="select_item[]" value="<?= $item['product_id'] ?>" onclick="updateTotal()">
-                            <td><img src="ProductImage/<?= $item['image_url'] ?>" width="60"></td>
-                            <td><?= $item['name'] ?></td>
-                            <td id="total-<?= $item['product_id'] ?>" data-total="<?= $total ?>">
-                                <?= number_format($total) ?>₫
-                            </td>
-                            <td>
-                                <input class="qty-input"
-                                       type="number"
-                                       name="qty[<?= $item['product_id'] ?>]"
-                                       id="qty-<?= $item['product_id'] ?>"
-                                       value="<?= $item['quantity'] ?>"
-                                       min="1"
-                                       onchange="updateItemTotal(<?= $item['product_id'] ?>, <?= $item['price'] ?>)">
-                            </td>
-                            <input type="hidden" name="qty_hidden[<?= $item['product_id'] ?>]" id="qty-hidden-<?= $item['product_id'] ?>" value="<?= $item['quantity'] ?>">
+                <?php endforeach; ?>
 
-                            <td data-total="<?= $total ?>"><?= number_format($total) ?>₫</td>
-                            <td><a href="?module=cart&act=remove&masp=<?= $item['product_id'] ?>">Xóa</a></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr class="total-row">
-                        <td colspan="6" align="right"><strong>Tổng đã chọn:</strong></td>
-                        <td id="selected-total">0₫</td>
-                    </tr>
-                </table>
-                <br>
-                <div style="text-align: right">
-                    <button type="submit" class="button">Thanh toán sản phẩm đã chọn</button>
-                </div>
-            </form>
-        <?php endif; ?>
+                <tr class="total-row">
+                    <td colspan="6" align="right"><strong>Tổng đã chọn:</strong></td>
+                    <td id="selected-total">0₫</td>
+                </tr>
+            </table>
+            <br>
+            <div style="text-align: right">
+                <button type="submit" class="button">Thanh toán sản phẩm đã chọn</button>
+            </div>
+        </form>
+    <?php endif; ?>
 
 
 

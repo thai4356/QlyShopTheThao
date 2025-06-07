@@ -30,7 +30,7 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
 
 <script src="<?php echo $assets_path; ?>js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-<script src="<?php echo $assets_path; ?>js/plugin/chart.js/chart.min.js"></script>
+<script src="<?php echo $assets_path; ?>js/plugin/chart.js/chart.min.js" ></script>
 
 <script src="<?php echo $assets_path; ?>js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
 

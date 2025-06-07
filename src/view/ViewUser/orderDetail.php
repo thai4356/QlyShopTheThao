@@ -1,22 +1,17 @@
 <?php
-// Function to map status to text and CSS class (có thể dùng lại từ OrderHistory.php)
-if (!function_exists('getOrderStatusDisplay')) { // Tránh lỗi định nghĩa lại hàm nếu đã include ở đâu đó
-    function getOrderStatusDisplay($status) {
-        switch (strtolower($status)) {
-            case 'pending':
-                return ['text' => 'Đang xử lý', 'class' => 'status-pending'];
-            case 'confirmed':
-                return ['text' => 'Đã xác nhận', 'class' => 'status-confirmed'];
-            case 'shipped':
-                return ['text' => 'Đang giao', 'class' => 'status-shipped'];
-            case 'completed':
-                return ['text' => 'Hoàn tất', 'class' => 'status-completed'];
-            case 'canceled':
-                return ['text' => 'Đã hủy', 'class' => 'status-canceled'];
-            default:
-                return ['text' => ucfirst($status), 'class' => 'status-default'];
-        }
-    }
+function getOrderStatusDisplay($status) {
+    // Chuyển trạng thái về chữ thường để so sánh cho chắc chắn
+    $status = mb_strtolower($status, 'UTF-8');
+
+    return match ($status) {
+        'đang xử lý' => ['text' => 'Đang xử lý', 'class' => 'status-processing'],
+        'đã thanh toán' => ['text' => 'Đã thanh toán', 'class' => 'status-paid'],
+        'đã giao' => ['text' => 'Đã giao', 'class' => 'status-delivered'],
+        'hủy' => ['text' => 'Đã hủy', 'class' => 'status-canceled'],
+        'thất bại' => ['text' => 'Thất bại', 'class' => 'status-failed'],
+        'chờ hoàn tiền' => ['text' => 'Chờ hoàn tiền', 'class' => 'status-refund-pending'],
+        default => ['text' => 'Không xác định', 'class' => 'status-default'],
+    };
 }
 $statusDisplay = getOrderStatusDisplay($order['status']);
 ?>
@@ -24,7 +19,7 @@ $statusDisplay = getOrderStatusDisplay($order['status']);
 <link rel="stylesheet" href="../Public/CSS/order-detail.css">
 
 <div class="order-detail-container container" style="margin-top: 100px;">
-    <h2 class="page-title">Chi tiết đơn hàng #<?= htmlspecialchars($order['id']) ?></h2>
+    <h2 class="page-title">Chi tiết đơn hàng #<?= htmlspecialchars($order['orderNo']) ?></h2>
 
     <div class="order-info-card">
         <div class="info-section">

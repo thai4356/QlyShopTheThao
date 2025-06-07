@@ -35,7 +35,7 @@ require_once 'Connect.php';
         }
 
         public function countFiltered($filters = []) {
-            $sql = "SELECT COUNT(*) AS total FROM product WHERE 1=1";
+            $sql = "SELECT COUNT(*) AS total FROM product WHERE 1=1 AND is_active = 1 AND stock > 0";
             $params = [];
 
             // Lọc theo nơi bán
@@ -174,6 +174,7 @@ require_once 'Connect.php';
         public function reduceStock($productId, $quantity) {
             $stmt = $this->conn->prepare("UPDATE product SET stock = stock - ? WHERE id = ? AND stock >= ?");
             $stmt->execute(array($quantity, $productId, $quantity));
+            return $stmt->rowCount();
         }
 
         public function increseSold($productId, $quantity) {

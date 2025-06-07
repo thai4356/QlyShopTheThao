@@ -31,6 +31,12 @@ $(document).ready(function() {
                         case 'đã thanh toán': badgeClass = 'badge-warning'; break;
                         case 'hủy': badgeClass = 'badge-secondary'; break;
                         case 'thất bại': badgeClass = 'badge-danger'; break;
+
+                        // THÊM MỚI TẠI ĐÂY
+                        case 'chờ hoàn tiền':
+                            badgeClass = 'badge-danger'; // Dùng màu đỏ cho nổi bật
+                            statusText = '⚠️ Chờ hoàn tiền'; // Thêm icon cảnh báo
+                            break;
                         default: badgeClass = 'badge-dark';
                     }
                     return `<span class="badge ${badgeClass}">${statusText}</span>`;
