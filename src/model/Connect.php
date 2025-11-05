@@ -1,11 +1,12 @@
 <?php
 class Connect {
 
-    private $host = "gondola.proxy.rlwy.net:37729";
-    private $db_name = "user_database";
-    private $username = "root";
-    private $password = "NvsggkIBRDcJpFNKVKOPYAofrTUsFhor";
+    private $host = "j3egkd.h.filess.io:3306"; //
+    private $db_name = "user_database_biggestzoo"; //
+    private $username = "user_database_biggestzoo"; //
+    private $password = "8200c17fb8ab66b3f73f8a0b4dc95ee2da14de7e"; //
     public $conn;
+
 
     public function getConnection() {
         $this->conn = null;
