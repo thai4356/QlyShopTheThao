@@ -61,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->isHTML(true);  //Set email format to HTML
             $mail->Subject = 'Password Reset Request';
 
-            $mail->Body = 'Click <a href="https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/view/resetpassword.php?token=' . $token . '">here</a> to reset your password.';
+            $mail->Body = 'Click <a href="https://whippet-exotic-specially.ngrok-free.app/QlyShopTheThao/src/view/resetpassword.php?token=' . $token . '">here</a> to reset your password.';
 
-            $mail->AltBody = 'Click this link to reset your password: https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/view/resetpassword.php?token=' . $token;
+            $mail->AltBody = 'Click this link to reset your password: https://whippet-exotic-specially.ngrok-free.app/QlyShopTheThao/src/view/resetpassword.php?token=' . $token;
 
 
             $mail->send();
