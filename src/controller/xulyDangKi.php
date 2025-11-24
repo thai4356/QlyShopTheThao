@@ -42,13 +42,13 @@ function sendVerificationEmail($email, $token) {
         $mail->isSMTP();  //Send using SMTP
         $mail->Host = 'smtp.gmail.com';  //Change this if it's different
         $mail->SMTPAuth = true;  //Enable SMTP authentication
-        $mail->Username = 'thaitqth2210015@fpt.edu.vn';  //SMTP username
-        $mail->Password = 'wqjo ryit lhgs regq';  //SMTP password
+        $mail->Username = 'thesupremesorcerer727@gmail.com';  //SMTP username
+        $mail->Password = 'lrzv bplc edgs orss';  //SMTP password
         $mail->SMTPSecure = 'ssl';  // for SMTPS (SSL encryption)
         $mail->Port = 465;  //Port for SMTP (465 for TLS or 587 for STARTTLS)
 
         //Recipients
-        $mail->setFrom('thaitqth2210015@fpt.edu.vn', 'Mailer');
+        $mail->setFrom('thesupremesorcerer727@gmail.com', 'Mailer');
         $mail->addAddress($email);  //Send to user email
         $mail->addReplyTo($email, 'Information');
 
