@@ -19,7 +19,7 @@ $dotenv->load();
 class OrderController
 {
     private $payOS;
-    private $ngrok_url = "https://up-summary-honeybee.ngrok-free.app";
+    private $ngrok_url = "https://whippet-exotic-specially.ngrok-free.app";
 
     public function __construct()
     {
@@ -117,7 +117,7 @@ class OrderController
                 echo "<div style='margin: 50px auto; width: 80%; padding: 15px; background-color: #ffe6e6; color: red; border: 1px solid red; border-radius: 5px; text-align: center; font-weight: bold;'>
         Sản phẩm '{$product['name']}' chỉ còn {$product['stock']} sản phẩm trong kho do một người dùng khác vừa mới mua sản phẩm.
         <br><br>
-        <a href='https://up-summary-honeybee.ngrok-free.app/QlyShopTheThao/src/view/ViewUser/Index.php?module=home' style='color: blue;'>Quay lại trang chủ</a>
+        <a href='https://whippet-exotic-specially.ngrok-free.app/QlyShopTheThao/src/view/ViewUser/Index.php?module=home' style='color: blue;'>Quay lại trang chủ</a>
              </div>";
                 return;
             }

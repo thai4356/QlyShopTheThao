@@ -22,7 +22,7 @@ define('VNP_API_URL_TRANSACTION_QUERY', 'https://sandbox.vnpayment.vn/merchant_w
 
 // URL Callback (Return URL và IPN URL) - RẤT QUAN TRỌNG: Phải sử dụng URL ngrok của bạn
 // THAY THẾ '' BẰNG URL NGrok HIỆN TẠI CỦA BẠN NẾU NÓ THAY ĐỔI!
-$ngrokBaseUrl = "https://up-summary-honeybee.ngrok-free.app"; // Đây là URL ngrok bạn đã cung cấp.
+$ngrokBaseUrl = "https://whippet-exotic-specially.ngrok-free.app"; // Đây là URL ngrok bạn đã cung cấp.
 $projectRootPathForUrl = "/QlyShopTheThao"; // Đường dẫn gốc của dự án trên webserver của bạn.
 
 define('VNP_RETURN_URL', $ngrokBaseUrl . $projectRootPathForUrl . '/src/controller/vnpay_return_handler.php');
