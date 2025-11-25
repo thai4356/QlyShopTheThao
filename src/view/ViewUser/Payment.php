@@ -1,11 +1,9 @@
 <?php
 session_start();
-
 require_once "../../controller/checklogin.php";
 
 $items = isset($_SESSION['checkout_items']) ? $_SESSION['checkout_items'] : [];
 $total = 0;
-$count = count($items);
 ?>
 
 <!doctype html>
@@ -13,33 +11,40 @@ $count = count($items);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh toán</title>
-    <link rel="stylesheet" href="../Public/CSS/checkout.css">
-    <link rel="stylesheet" href="../Public/CSS/vCP.css">
+    <title>Thanh toán đơn hàng</title>
+    <!-- Link đến file CSS mới ở trên hoặc chèn vào thẻ style -->
+    <link rel="stylesheet" href="../Public/CSS/payment-style.css">
     <style>
-        .Content_Table { width: 100%; border-collapse: collapse; }
-        .Content_Table th, .Content_Table td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        /* Bạn có thể dán đoạn CSS tôi cung cấp ở trên vào đây nếu chưa tạo file riêng */
     </style>
 </head>
 <body>
-<br>
-<div class="col-75">
-    <div style="width: 45%; float:left; margin-left: 2%">
-        <?php if (empty($items)): ?>
-            <h1>Không có sản phẩm nào được chọn để thanh toán.</h1>
-            <h3><a href="indexUser.php">Quay lại trang mua sắm</a></h3>
-        <?php else: ?>
-            <div id="content_cart">
-                <div id="right_detail">
-                    <h3>Sản phẩm bạn đã chọn</h3>
-                    <table class="Content_Table">
+
+<div class="container">
+    <?php if (empty($items)): ?>
+        <div style="text-align: center; padding: 50px;">
+            <h1 style="color: #888;">Giỏ hàng của bạn đang trống</h1>
+            <a href="indexUser.php" class="btn-submit" style="display:inline-block; width:auto; text-decoration:none;">Quay lại mua sắm</a>
+        </div>
+    <?php else: ?>
+
+        <form action="../../controller/xulyThanhToan.php" method="post" onsubmit="return kt();">
+            <div class="checkout-layout">
+
+                <!-- CỘT TRÁI: SẢN PHẨM -->
+                <div class="checkout-products">
+                    <h3>Sản phẩm đã chọn (<?= count($items) ?>)</h3>
+                    <table class="product-table">
+                        <thead>
                         <tr>
-                            <th>Sản phẩm</th>
+                            <th style="width: 40%">Sản phẩm</th>
                             <th>Giá</th>
-                            <th>Ảnh</th>
-                            <th>Số lượng</th>
+                            <th>Hình ảnh</th>
+                            <th>SL</th>
                             <th>Thành tiền</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <?php foreach ($items as $item): ?>
                             <?php
                             $lineTotal = $item['price'] * $item['quantity'];
@@ -47,76 +52,104 @@ $count = count($items);
                             ?>
                             <tr>
                                 <td><?= htmlspecialchars($item['name']) ?></td>
-                                <td><?= number_format($item['price']) ?>₫</td>
-                                <td><img src="ProductImage/<?= $item['image_url'] ?>" width="100" height="100"></td>
-                                <td><?= $item['quantity'] ?></td>
-                                <td><?= number_format($lineTotal) ?>₫</td>
+                                <td class="product-price"><?= number_format($item['price']) ?>₫</td>
+                                <td>
+                                    <img src="ProductImage/<?= $item['image_url'] ?>" width="60" height="60" alt="Img">
+                                </td>
+                                <td>x<?= $item['quantity'] ?></td>
+                                <td class="product-price"><?= number_format($lineTotal) ?>₫</td>
                             </tr>
                         <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
-            </div>
-        <?php endif; ?>
-    </div>
 
-    <span class="iphone" style="width: 50%; float:right">
-        <form action="../../controller/xulyThanhToan.php" method="post" onsubmit="return kt();">
-            <p><span>Họ và tên</span><input type="text" name="hoten" id="hoten" required></p>
-            <p><span>Địa chỉ</span><input type="text" name="diachi" id="diachi" required></p>
-            <p><span>Số điện thoại</span><input type="text" name="dienthoai" id="dienthoai" required></p>
+                <!-- CỘT PHẢI: THÔNG TIN & THANH TOÁN -->
+                <div class="checkout-payment">
+                    <h3>Thông tin giao hàng</h3>
 
-            <fieldset>
-                <legend>Phương thức thanh toán</legend>
-                <div class="form__radios">
-                    <div class="form__radio">
-                        <label for="cod">Thanh toán khi nhận hàng (COD)</label>
-                        <input checked id="cod" name="payment_method" type="radio" value="cod" />
+                    <div class="form-group">
+                        <label for="hoten">Họ và tên</label>
+                        <input type="text" name="hoten" id="hoten" placeholder="Nhập họ tên người nhận" required>
                     </div>
-                    <div class="form__radio">
-                        <label for="payos">Thanh toán qua PayOS</label>
-                        <input id="payos" name="payment_method" type="radio" value="payos" />
+
+                    <div class="form-group">
+                        <label for="dienthoai">Số điện thoại</label>
+                        <input type="text" name="dienthoai" id="dienthoai" placeholder="Ví dụ: 0912345678" required>
                     </div>
-                    <div class="form__radio">
-                        <label for="vnpay">Ví VnPay</label>
-                        <input id="vnpay" name="payment_method" type="radio" value="vnpay" />
+
+                    <div class="form-group">
+                        <label for="diachi">Địa chỉ nhận hàng</label>
+                        <input type="text" name="diachi" id="diachi" placeholder="Số nhà, đường, phường/xã..." required>
                     </div>
+
+                    <h3 style="margin-top: 25px;">Phương thức thanh toán</h3>
+                    <div class="payment-methods">
+                        <label for="cod" class="payment-option">
+                            <input type="radio" id="cod" name="payment_method" value="cod" checked>
+                            <span>Thanh toán khi nhận hàng (COD)</span>
+                            <img src="https://png.pngtree.com/png-clipart/20250602/original/pngtree-cod-icon-vector-png-image_21114741.png" alt="COD" class="payment-icon">
+                        </label>
+                        <label for="payos" class="payment-option">
+                            <input type="radio" id="payos" name="payment_method" value="payos">
+                            <span>Thanh toán chuyển khoản (PayOS)</span>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn7cwXPUowOI81NE9GEkuks2EUjHwYPsHm2A&s" alt="PayOS" class="payment-icon">
+                        </label>
+                        <label for="vnpay" class="payment-option">
+                            <input type="radio" id="vnpay" name="payment_method" value="vnpay">
+                            <span>Ví điện tử VNPay</span>
+                            <img src="https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png" alt="VNPay" class="payment-icon">
+                        </label>
+                    </div>
+
+                    <?php
+                    $shipping = 30000;
+                    $discount = $total * 0.10; // Giảm 10%
+                    $grandTotal = $total + $shipping - $discount;
+                    ?>
+
+                    <div class="order-summary">
+                        <div class="summary-row">
+                            <span>Tạm tính:</span>
+                            <span><?= number_format($total) ?>₫</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Phí vận chuyển:</span>
+                            <span><?= number_format($shipping) ?>₫</span>
+                        </div>
+                        <div class="summary-row" style="color: #27ae60;">
+                            <span>Giảm giá (10%):</span>
+                            <span>-<?= number_format($discount) ?>₫</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Tổng thanh toán:</span>
+                            <span><?= number_format($grandTotal) ?>₫</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" name="dathang" id="dathang" class="btn-submit">
+                        Đặt hàng ngay
+                    </button>
                 </div>
-            </fieldset>
-            <br>
-            <?php
-            $shipping = 30000;
-            $discount = $total * 0.10;
-            $grandTotal = $total + $shipping - $discount;
-            ?>
-            <div>
-                <h2>Chi tiết hóa đơn</h2>
-                <table>
-                    <tbody>
-                        <tr><td>Phí vận chuyển</td><td align="right"><?= number_format($shipping) ?>₫</td></tr>
-                        <tr><td>Giảm giá 10%</td><td align="right">-<?= number_format($discount) ?>₫</td></tr>
-                        <tr><td>Tạm tính</td><td align="right"><?= number_format($total) ?>₫</td></tr>
-                    </tbody>
-                    <tfoot>
-                        <tr><td>Tổng cộng</td><td align="right"><strong><?= number_format($grandTotal) ?>₫</strong></td></tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div>
-                <button name="dathang" id="dathang" class="button button--full" type="submit">
-                    <svg class="icon"><use xlink:href="#icon-shopping-bag" /></svg> Đặt hàng ngay
-                </button>
             </div>
         </form>
-    </span>
+
+    <?php endif; ?>
 </div>
 
 <script>
     function kt() {
-        var hoten = document.getElementById("hoten");
-        var diachi = document.getElementById("diachi");
-        var dienthoai = document.getElementById("dienthoai");
-        if (hoten.value === "" || diachi.value === "" || dienthoai.value === "") {
-            alert("Vui lòng điền đầy đủ thông tin!");
+        var hoten = document.getElementById("hoten").value.trim();
+        var diachi = document.getElementById("diachi").value.trim();
+        var dienthoai = document.getElementById("dienthoai").value.trim();
+
+        if (hoten === "" || diachi === "" || dienthoai === "") {
+            alert("Vui lòng điền đầy đủ thông tin giao hàng!");
+            return false;
+        }
+        // Có thể thêm validate số điện thoại đơn giản
+        if(isNaN(dienthoai) || dienthoai.length < 9) {
+            alert("Số điện thoại không hợp lệ!");
             return false;
         }
         return true;
@@ -124,181 +157,3 @@ $count = count($items);
 </script>
 </body>
 </html>
-
-
-
-<style>
-    @use postcss-preset-env {
-        stage: 0;
-    }
-
-    :root {
-        --color-background: #fae3ea;
-        --color-primary: #fc8080;
-        --font-family-base: Poppin, sans-serif;
-        --font-size-h1: 1.25rem;
-        --font-size-h2: 1rem;
-    }
-
-
-    * {
-        box-sizing: inherit;
-    }
-
-    html {
-        box-sizing: border-box;
-    }
-
-
-
-    address {
-        font-style: normal;
-    }
-
-    button {
-        border: 0;
-        color: inherit;
-        cursor: pointer;
-        font: inherit;
-    }
-
-    fieldset {
-        border: 0;
-        margin: 0;
-        padding: 0;
-    }
-
-    h1 {
-        font-size: var(--font-size-h1);
-        line-height: 1.2;
-        margin-block: 0 1.5em;
-    }
-
-    h2 {
-        font-size: var(--font-size-h2);
-        line-height: 1.2;
-        margin-block: 0 0.5em;
-    }
-
-    legend {
-        font-weight: 600;
-        margin-block-end: 0.5em;
-        padding: 0;
-    }
-
-    input {
-        border: 0;
-        color: inherit;
-        font: inherit;
-    }
-
-    input[type="radio"] {
-        accent-color: var(--color-primary);
-    }
-
-    table {
-        border-collapse: collapse;
-        inline-size: 100%;
-    }
-
-    tbody {
-        color: #b4b4b4;
-    }
-
-    td {
-        padding-block: 0.125em;
-    }
-
-    tfoot {
-        border-top: 1px solid #b4b4b4;
-        font-weight: 600;
-    }
-
-    .align {
-        display: grid;
-        place-items: center;
-    }
-
-    .button {
-        align-items: center;
-        background-color: var(--color-primary);
-        border-radius: 999em;
-        color: #fff;
-        display: flex;
-        gap: 0.5em;
-        justify-content: center;
-        padding-block: 0.75em;
-        padding-inline: 1em;
-        transition: 0.3s;
-    }
-
-    .button:focus,
-    .button:hover {
-        background-color: #e96363;
-    }
-
-    .button--full {
-        inline-size: 100%;
-    }
-
-    .card {
-        border-radius: 1em;
-        background-color: var(--color-primary);
-        color: #fff;
-        padding: 1em;
-    }
-
-    .form {
-        display: grid;
-        gap: 2em;
-    }
-
-    .form__radios {
-        display: grid;
-        gap: 1em;
-    }
-
-    .form__radio {
-        align-items: center;
-        background-color: #fefdfe;
-        border-radius: 1em;
-        box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
-        display: flex;
-        padding: 1em;
-    }
-
-    .form__radio label {
-        align-items: center;
-        display: flex;
-        flex: 1;
-        gap: 1em;
-    }
-
-    .header {
-        display: flex;
-        justify-content: center;
-        padding-block: 0.5em;
-        padding-inline: 1em;
-    }
-
-    .icon {
-        block-size: 1em;
-        display: inline-block;
-        fill: currentColor;
-        inline-size: 1em;
-        vertical-align: middle;
-    }
-
-    .iphone {
-        background-color: #fbf6f7;
-        background-image: linear-gradient(to bottom, #fbf6f7, #fff);
-        border-radius: 2em;
-        block-size: 812px;
-        box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
-        inline-size: 375px;
-        overflow: auto;
-        padding: 2em;
-    }
-
-
-</style>

@@ -79,6 +79,28 @@ require_once "../../controller/checklogin.php";
             padding: 2px;
         }
 
+        .button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff6b6b, #f06595);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(240, 101, 149, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(240, 101, 149, 0.4);
+        }
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 12px rgba(240, 101, 149, 0.35);
+            opacity: 0.9;
+        }
+
     </style>
 </head>
 <body>
@@ -130,7 +152,9 @@ require_once "../../controller/checklogin.php";
                                    onchange="updateItemTotal(<?= $item['product_id'] ?>, <?= $item['price'] ?>)">
                         </td>
                         <input type="hidden" name="qty_hidden[<?= $item['product_id'] ?>]" id="qty-hidden-<?= $item['product_id'] ?>" value="<?= $item['quantity'] ?>">
-                        <td><?= number_format($total) ?>₫</td>
+                        <td id="total-<?= $item['product_id'] ?>" data-total="<?= $total ?>">
+                            <?= number_format($total) ?>₫
+                        </td>
                         <td><a href="?module=cart&act=remove&masp=<?= $item['product_id'] ?>">Xóa</a></td>
                     </tr>
                 <?php endforeach; ?>
