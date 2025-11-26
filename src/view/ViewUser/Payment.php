@@ -12,15 +12,13 @@ $total = 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán đơn hàng</title>
-    <!-- Link đến file CSS mới ở trên hoặc chèn vào thẻ style -->
+    <!-- Link đến file CSS -->
     <link rel="stylesheet" href="../Public/CSS/payment-style.css">
-    <style>
-        /* Bạn có thể dán đoạn CSS tôi cung cấp ở trên vào đây nếu chưa tạo file riêng */
-    </style>
+
 </head>
 <body>
 
-<div class="container">
+<div class="container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
     <?php if (empty($items)): ?>
         <div style="text-align: center; padding: 50px;">
             <h1 style="color: #888;">Giỏ hàng của bạn đang trống</h1>
@@ -54,7 +52,7 @@ $total = 0;
                                 <td><?= htmlspecialchars($item['name']) ?></td>
                                 <td class="product-price"><?= number_format($item['price']) ?>₫</td>
                                 <td>
-                                    <img src="ProductImage/<?= $item['image_url'] ?>" width="60" height="60" alt="Img">
+                                    <img src="ProductImage/<?= $item['image_url'] ?>" width="60" height="60" alt="Img" style="object-fit:cover; border-radius:5px;">
                                 </td>
                                 <td>x<?= $item['quantity'] ?></td>
                                 <td class="product-price"><?= number_format($lineTotal) ?>₫</td>
@@ -84,21 +82,21 @@ $total = 0;
                     </div>
 
                     <h3 style="margin-top: 25px;">Phương thức thanh toán</h3>
-                    <div class="payment-methods">
+                    <div class="payment-methods" style="border: 1px solid #eee; border-radius: 8px;">
                         <label for="cod" class="payment-option">
                             <input type="radio" id="cod" name="payment_method" value="cod" checked>
-                            <span>Thanh toán khi nhận hàng (COD)</span>
-                            <img src="https://png.pngtree.com/png-clipart/20250602/original/pngtree-cod-icon-vector-png-image_21114741.png" alt="COD" class="payment-icon">
+                            <span style="margin-left: 10px;">Thanh toán khi nhận hàng (COD)</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/2331/2331941.png" alt="COD" class="payment-icon">
                         </label>
                         <label for="payos" class="payment-option">
                             <input type="radio" id="payos" name="payment_method" value="payos">
-                            <span>Thanh toán chuyển khoản (PayOS)</span>
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn7cwXPUowOI81NE9GEkuks2EUjHwYPsHm2A&s" alt="PayOS" class="payment-icon">
+                            <span style="margin-left: 10px;">Thanh toán chuyển khoản (PayOS)</span>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn7cwXPUowOI81NE9GEkuks2EUjHwYPsHm2A&s" alt="PayOS" class="payment-icon" style="height: 25px;">
                         </label>
-                        <label for="vnpay" class="payment-option">
-                            <input type="radio" id="vnpay" name="payment_method" value="vnpay">
-                            <span>Ví điện tử VNPay</span>
-                            <img src="https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png" alt="VNPay" class="payment-icon">
+                        <label for="stripe" class="payment-option">
+                            <input type="radio" id="stripe" name="payment_method" value="stripe">
+                            <span style="margin-left: 10px;">Thanh toán qua thẻ quốc tế (Stripe)</span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="payment-icon" style="height: 25px;">
                         </label>
                     </div>
 
@@ -147,7 +145,6 @@ $total = 0;
             alert("Vui lòng điền đầy đủ thông tin giao hàng!");
             return false;
         }
-        // Có thể thêm validate số điện thoại đơn giản
         if(isNaN(dienthoai) || dienthoai.length < 9) {
             alert("Số điện thoại không hợp lệ!");
             return false;
