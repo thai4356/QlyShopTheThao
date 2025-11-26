@@ -434,7 +434,7 @@ class OrderController
 
         // Tạo URL trả về
         $returnUrl = $this->ngrok_url . "/QlyShopTheThao/src/controller/stripe_return_handler.php?session_id={CHECKOUT_SESSION_ID}&order_id=" . $orderId;
-        $cancelUrl = $this->ngrok_url . "/QlyShopTheThao/src/view/ViewUser/Payment.php?error=stripe_cancelled";
+        $cancelUrl = $this->ngrok_url . "/QlyShopTheThao/src/controller/stripe_cancel_handler.php?order_id=" . $orderId;
 
         try {
             // Tạo Stripe Checkout Session
@@ -574,6 +574,35 @@ class OrderController
             }
             error_log("Stripe Return Error: " . $e->getMessage());
             echo "Có lỗi xảy ra: " . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function handleStripeCancel()
+    {
+        $orderId = $_GET['order_id'] ?? null;
+
+        if (!$orderId) {
+            header('Location: ../view/ViewUser/Payment.php');
+            exit;
+        }
+
+        $orderModel = new Order();
+        $dbOrder = $orderModel->getOrderById($orderId);
+
+        // Chỉ hủy nếu đơn hàng đang ở trạng thái 'đang xử lý'
+        // Để tránh trường hợp đơn đã thanh toán rồi mà bị hack link hủy
+        if ($dbOrder && $dbOrder['status'] == 'đang xử lý') {
+            // Cập nhật trạng thái thành 'hủy'
+            // Lưu ý: Chuỗi 'hủy' này khớp với case 'hủy' trong OrderHistory.php của bạn
+            $orderModel->updateOrderStatusAndTxn($orderId, 'hủy');
+
+            // Chuyển hướng về trang thanh toán và báo lỗi
+            header('Location: ../view/ViewUser/Payment.php?error=stripe_cancelled&order_id=' . $orderId);
+            exit;
+        } else {
+            // Nếu đơn hàng không tìm thấy hoặc trạng thái không phải đang xử lý
+            header('Location: ../view/ViewUser/Payment.php');
             exit;
         }
     }
