@@ -474,6 +474,7 @@ class OrderController
 
     public function handleStripeReturn()
     {
+        // 1. Lấy dữ liệu từ URL trả về
         $sessionId = $_GET['session_id'] ?? null;
         $orderId = $_GET['order_id'] ?? null;
 
@@ -482,71 +483,87 @@ class OrderController
             exit;
         }
 
-        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+        // Cấu hình Stripe
+        \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
         $conn = (new Connect())->getConnection();
 
         try {
-            $session = Session::retrieve($sessionId);
+            // 2. Lấy thông tin Session từ Stripe để kiểm tra trạng thái
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
             $orderModel = new Order();
             $dbOrder = $orderModel->getOrderById($orderId);
 
+            // Kiểm tra xem đơn hàng có hợp lệ không
             if (!$dbOrder || $dbOrder['status'] != 'đang xử lý') {
-                // Đơn hàng không tồn tại hoặc đã xử lý rồi
                 header('Location: ../view/ViewUser/Success.php?order_id=' . $orderId . '&status=already_processed');
                 exit;
             }
 
+            // 3. Nếu thanh toán thành công ('paid')
             if ($session->payment_status == 'paid') {
-                // THANH TOÁN THÀNH CÔNG -> TRỪ KHO
-                $conn->beginTransaction();
+
+                $conn->beginTransaction(); // Bắt đầu giao dịch DB
 
                 $orderItemModel = new OrderItem();
                 $productModel = new Product();
+
+                // Lấy danh sách sản phẩm trong đơn hàng (chính là các sản phẩm đã tick)
                 $itemsInOrder = $orderItemModel->getItemsByOrderId($orderId);
                 $canProcess = true;
 
+                // --- BƯỚC A: TRỪ KHO ---
                 foreach ($itemsInOrder as $item) {
                     $rowsAffected = $productModel->reduceStock($item['product_id'], $item['quantity']);
                     if ($rowsAffected == 0) {
-                        $canProcess = false;
-                        error_log("OVERSALE on Stripe Return Order ID: " . $orderId);
+                        $canProcess = false; // Hết hàng
                         break;
                     }
                 }
 
                 if ($canProcess) {
+                    // Tăng lượt bán
                     foreach ($itemsInOrder as $item) {
                         $productModel->increseSold($item['product_id'], $item['quantity']);
                     }
 
-                    // Cập nhật trạng thái thành công
+                    // Cập nhật trạng thái đơn hàng
                     $orderModel->updateOrderStripeInfo($orderId, $sessionId, 'đã thanh toán');
 
-                    // Xóa giỏ hàng
+                    // --- BƯỚC B: XÓA SẢN PHẨM KHỎI GIỎ HÀNG (YÊU CẦU CỦA BẠN) ---
+                    // 1. Lấy giỏ hàng của user hiện tại
                     $cartModel = new Cart();
-                    $userCart = $cartModel->getCartByUserId($dbOrder['user_id']);
+                    $userCart = $cartModel->getCartByUserId($dbOrder['user_id']); // $dbOrder['user_id'] lấy từ DB cho chính xác
+
                     if ($userCart) {
                         $cartItemModel = new CartItem();
-                        foreach ($itemsInOrder as $item) {
-                            $cartItemModel->removeItem($userCart['id'], $item['product_id']);
+                        // 2. Duyệt qua từng sản phẩm trong ĐƠN HÀNG và xóa khỏi GIỎ HÀNG
+                        foreach ($itemsInOrder as $orderedItem) {
+                            // Gọi hàm removeItem mà bạn đã có trong model CartItem
+                            // Chỉ xóa đúng sản phẩm đã mua, giữ lại các sản phẩm chưa tick
+                            $cartItemModel->removeItem($userCart['id'], $orderedItem['product_id']);
                         }
                     }
+                    // -----------------------------------------------------------
 
-                    $conn->commit();
+                    $conn->commit(); // Lưu thay đổi vào DB
+
+                    // Xóa session checkout_items cho sạch sẽ
+                    if (session_status() == PHP_SESSION_NONE) session_start();
                     unset($_SESSION['checkout_items']);
+
                     header('Location: ../view/ViewUser/Success.php?order_id=' . $orderId . '&payment_method=stripe&status=success');
                     exit;
 
                 } else {
-                    // Hết hàng -> Hoàn tác và đánh dấu lỗi
+                    // Trường hợp đã thanh toán tiền nhưng kho hết hàng đột xuất
                     $conn->rollBack();
-                    $orderModel->updateOrderStripeInfo($orderId, $sessionId, 'chờ hoàn tiền'); // Vì tiền đã trừ trên Stripe nhưng kho hết hàng
+                    $orderModel->updateOrderStripeInfo($orderId, $sessionId, 'chờ hoàn tiền');
                     header('Location: ../view/ViewUser/Payment.php?error=oversold_stripe&order_id=' . $orderId);
                     exit;
                 }
 
             } else {
-                // Thanh toán chưa hoàn tất
                 header('Location: ../view/ViewUser/Payment.php?error=stripe_payment_failed');
                 exit;
             }
@@ -555,7 +572,7 @@ class OrderController
             if ($conn->inTransaction()) {
                 $conn->rollBack();
             }
-            error_log("Stripe Return Handler Error: " . $e->getMessage());
+            error_log("Stripe Return Error: " . $e->getMessage());
             echo "Có lỗi xảy ra: " . $e->getMessage();
             exit;
         }
