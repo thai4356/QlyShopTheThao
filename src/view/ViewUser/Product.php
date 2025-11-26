@@ -1,4 +1,6 @@
 <?php
+require_once '../../model/product.php';
+$productModel = new Product();
 $locations = $productModel->getAllLocations();
 $brands = $productModel->getAllBrands();
 require_once '../../model/category.php';
