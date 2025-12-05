@@ -78,6 +78,11 @@ $activeModule = isset($_GET['module']) ? $_GET['module'] : 'home';
 
                         <div class="header-btn">
                             <?php if (isset($_SESSION['username'])): ?>
+                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
+                                    <a href="../ViewAdmin/index.php" class="sec-btn admin-btn" style="margin-right: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        <i class="fas fa-cog"></i> Admin
+                                    </a>
+                                <?php endif; ?>
                                 <a href="../../controller/logout.php" class="sec-btn">Log out</a>
                             <?php else: ?>
                                 <a href="../login.php" class="sec-btn">Log in</a>

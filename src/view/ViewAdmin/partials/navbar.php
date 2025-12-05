@@ -2,10 +2,12 @@
 // view/ViewAdmin/partials/navbar.php
 $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
 
-// Thông tin admin giả lập cho giao diện
-$admin_name_display = $_SESSION['username_admin'] ?? 'Admin Kai'; // Lấy từ session nếu có, hoặc dùng tên mặc định
-$admin_email_display = $_SESSION['email_admin'] ?? 'admin@example.com';
-$admin_avatar_display = isset($_SESSION['avatar_admin']) ? $assets_path.'img/avatars/'.$_SESSION['avatar_admin'] : $assets_path.'img/profile.jpg';
+// Lấy thông tin admin từ session
+$admin_name_display = $_SESSION['username'] ?? 'Admin';
+$admin_email_display = $_SESSION['email'] ?? 'admin@example.com';
+$admin_avatar_display = isset($_SESSION['avatar']) && !empty($_SESSION['avatar'])
+    ? $assets_path.'img/avatars/'.$_SESSION['avatar']
+    : $assets_path.'img/profile.jpg';
 ?>
 <div class="main-panel">
     <div class="main-header">
@@ -33,11 +35,8 @@ $admin_avatar_display = isset($_SESSION['avatar_admin']) ? $assets_path.'img/ava
                 </nav>
 
                 <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-
                     <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
-
                     </li>
-
 
                     <li class="nav-item topbar-user dropdown hidden-caret">
                         <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
@@ -65,10 +64,16 @@ $admin_avatar_display = isset($_SESSION['avatar_admin']) ? $assets_path.'img/ava
                                 </li>
                                 <li>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="index.php?page=profile">Hồ sơ của tôi</a>
-                                    <a class="dropdown-item" href="#">Cài đặt tài khoản</a>
+                                    <a class="dropdown-item" href="index.php?page=profile">
+                                        <i class="fas fa-user me-2"></i> Hồ sơ của tôi
+                                    </a>
+                                    <a class="dropdown-item" href="../ViewUser/Index.php">
+                                        <i class="fas fa-home me-2"></i> Trang người dùng
+                                    </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="../../index.php?ctrl=auth&act=logout">Đăng xuất</a>
+                                    <a class="dropdown-item text-danger" href="../../controller/logout.php">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                    </a>
                                 </li>
                             </div>
                         </ul>
