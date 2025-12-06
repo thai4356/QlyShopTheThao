@@ -75,7 +75,7 @@ $assets_path = 'assets/'; // Đường dẫn đến thư mục assets
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../../index.php?ctrl=auth&act=logout">
+                    <a href="../../controller/admin/AdminLogout.php" onclick="return confirm('Bạn có chắc chắn muốn đăng xuất?');">
                         <i class="fas fa-sign-out-alt"></i>
                         <p>Đăng Xuất</p>
                     </a>

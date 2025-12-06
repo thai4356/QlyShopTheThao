@@ -105,33 +105,59 @@ class AdminProduct {
         SELECT DISTINCT 
             p.*, 
             pi.image_url,
-            c.name AS category_name  -- Thêm dòng này để lấy tên danh mục
+            c.name AS category_name
         FROM 
             $this->table p
         LEFT JOIN 
-            product_image pi ON p.id = pi.product_id 
-        LEFT JOIN -- Sử dụng LEFT JOIN để vẫn hiển thị sản phẩm nếu category_id không hợp lệ (tùy chọn)
-            category c ON p.category_id = c.id -- Thêm JOIN với bảng category
+            product_image pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
+        LEFT JOIN
+            category c ON p.category_id = c.id
         WHERE 
-            pi.is_thumbnail = 1 AND p.is_active = 1
-        "; //
+            p.is_active = 1
+        ";
 
-        $whereClauses = []; // Mảng chứa các điều kiện WHERE
-        $paramsForWhere = [];       // Mảng chứa các tham số cho prepared statement
+        $whereClauses = [];
+        $paramsForWhere = [];
 
-        // --- Xử lý các FILTERS (tìm kiếm, giá, danh mục, v.v.) ---
-        // Ví dụ: Lọc theo tên sản phẩm
-        if (!empty($filters['search'])) {
+        // Tìm kiếm theo từ khóa (search_value)
+        if (!empty($filters['search_value'])) {
+            $searchableCols = ['p.name', 'p.description', 'p.brand', 'c.name'];
+            $searchClauses = [];
+            foreach($searchableCols as $col) {
+                $searchClauses[] = $col . " LIKE ?";
+                $paramsForWhere[] = '%' . $filters['search_value'] . '%';
+            }
+            if (!empty($searchClauses)) {
+                $whereClauses[] = "(" . implode(" OR ", $searchClauses) . ")";
+            }
+        }
+
+        // Lọc theo tên sản phẩm (search - legacy)
+        if (!empty($filters['search']) && empty($filters['search_value'])) {
             $whereClauses[] = "p.name LIKE ?";
             $paramsForWhere[] = '%' . $filters['search'] . '%';
         }
-        // Ví dụ: Lọc theo danh mục (nếu bạn có filter này)
+
+        // Lọc theo danh mục
         if (!empty($filters['category_id'])) {
             $whereClauses[] = "p.category_id = ?";
             $paramsForWhere[] = (int)$filters['category_id'];
         }
-        // Thêm các điều kiện lọc khác vào $whereClauses và $params nếu cần...
 
+        // Lọc theo tồn kho
+        if (!empty($filters['stock_filter'])) {
+            switch ($filters['stock_filter']) {
+                case 'in_stock':
+                    $whereClauses[] = "p.stock > 0";
+                    break;
+                case 'out_of_stock':
+                    $whereClauses[] = "p.stock = 0";
+                    break;
+                case 'low_stock':
+                    $whereClauses[] = "p.stock > 0 AND p.stock < 10";
+                    break;
+            }
+        }
 
         // Nối các điều kiện WHERE vào câu SQL
         if (!empty($whereClauses)) {
@@ -141,9 +167,8 @@ class AdminProduct {
         // --- Xử lý SẮP XẾP (ORDER BY) ---
         $orderByClause = " ORDER BY p.created_at DESC"; // Mặc định: sản phẩm mới nhất
         if (!empty($filters['sort_column']) && !empty($filters['sort_order'])) {
-            // Controller đã validate $filters['sort_column'] và $filters['sort_order']
-            $column = $filters['sort_column']; // Ví dụ: 'p.name', 'c.name', 'p.price'
-            $order = $filters['sort_order'];   // 'ASC' hoặc 'DESC'
+            $column = $filters['sort_column'];
+            $order = $filters['sort_order'];
 
             // Xử lý đặc biệt cho sắp xếp giá (ưu tiên giá khuyến mãi nếu có)
             if ($column === 'p.price') {
@@ -162,7 +187,11 @@ class AdminProduct {
             // Bind các tham số cho phần WHERE
             $paramIndex = 1;
             foreach ($paramsForWhere as $value) {
-                $stmt->bindValue($paramIndex++, $value, PDO::PARAM_STR); // Giả sử hầu hết là string, hoặc kiểm tra kiểu
+                if (is_int($value)) {
+                    $stmt->bindValue($paramIndex++, $value, PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue($paramIndex++, $value, PDO::PARAM_STR);
+                }
             }
 
             // Bind các tham số cho LIMIT và OFFSET với PDO::PARAM_INT

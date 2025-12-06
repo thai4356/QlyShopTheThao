@@ -21,7 +21,7 @@ class AdminProductController {
         $categoryModel = new AdminCategory();
 
         // --- XỬ LÝ PHÂN TRANG ---
-        $items_per_page = 10; // Số sản phẩm mỗi trang (bạn có thể đặt thành 20 như trước)
+        $items_per_page = 10; // Số sản phẩm mỗi trang
         $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
         if ($current_page < 1) {
             $current_page = 1;
@@ -51,33 +51,44 @@ class AdminProductController {
             'sort_column' => $db_sort_column,
             'sort_order' => $sort_order_input
         ];
-        $search_term = $_GET['search'] ?? null; // Lấy từ khóa tìm kiếm từ URL
-        if ($search_term) {
-            $filters_for_model['search_value'] = $search_term; // Key 'search_value' như đã dùng trong countFilteredForDataTable
-        }
-        // Ví dụ: Thêm filter theo category_id nếu có
-        // if (!empty($_GET['filter_category_id'])) {
-        //    $filters_for_model['category_id'] = (int)$_GET['filter_category_id'];
-        // }
 
+        // Lấy từ khóa tìm kiếm
+        $keyword = trim($_GET['keyword'] ?? '');
+        if (!empty($keyword)) {
+            $filters_for_model['search_value'] = $keyword;
+        }
+
+        // Lọc theo danh mục
+        $category_filter = $_GET['category_filter'] ?? '';
+        if (!empty($category_filter) && is_numeric($category_filter)) {
+            $filters_for_model['category_id'] = (int)$category_filter;
+        }
+
+        // Lọc theo tồn kho
+        $stock_filter = $_GET['stock_filter'] ?? '';
+        if (!empty($stock_filter)) {
+            $filters_for_model['stock_filter'] = $stock_filter; // 'in_stock', 'out_of_stock', 'low_stock'
+        }
 
         // Lấy tổng số sản phẩm (sau khi lọc) để tính tổng số trang
-        // Sử dụng countFilteredForDataTable nếu có filter, nếu không thì countAllActive
-        if (!empty($filters_for_model['search_value']) /* || !empty($filters_for_model['category_id']) */) {
-            // Giả sử countFilteredForDataTable đã được tạo trong Model AdminProduct.php
-            // và nó chỉ nhận filter 'search_value' như đã định nghĩa cho DataTables.
-            // Nếu bạn có nhiều filter phức tạp hơn, countFilteredForDataTable cần xử lý chúng.
-            $total_products = $productModel->countFilteredForDataTable(['search_value' => $filters_for_model['search_value'] ?? null]);
+        $has_filters = !empty($filters_for_model['search_value']) ||
+                       !empty($filters_for_model['category_id']) ||
+                       !empty($filters_for_model['stock_filter']);
+
+        if ($has_filters) {
+            $total_products = $productModel->countFilteredForDataTable($filters_for_model);
         } else {
-            $total_products = $productModel->countAllActive(); // Phương thức này cần tồn tại trong Model
+            $total_products = $productModel->countAllActive();
         }
 
         $total_pages = ceil($total_products / $items_per_page);
-        if ($current_page > $total_pages && $total_pages > 0) { // Nếu trang hiện tại vượt quá tổng số trang
+        if ($total_pages == 0) {
+            $total_pages = 1;
+        }
+        if ($current_page > $total_pages && $total_pages > 0) {
             $current_page = $total_pages;
             $offset = ($current_page - 1) * $items_per_page;
         }
-
 
         $productsData = $productModel->getFiltered($items_per_page, $offset, $filters_for_model);
         $allCategories = $categoryModel->getAllActiveCategories();
@@ -93,7 +104,12 @@ class AdminProductController {
             // Biến cho phân trang
             'current_page' => $current_page,
             'total_pages' => $total_pages,
-            'items_per_page' => $items_per_page
+            'items_per_page' => $items_per_page,
+            'total_products' => $total_products,
+            // Giữ lại giá trị filter để hiển thị trên form
+            'filter_keyword' => $keyword,
+            'filter_category' => $category_filter,
+            'filter_stock' => $stock_filter
         ];
 
         return $viewData;

@@ -9,6 +9,12 @@ $current_sort_order = $current_sort_order ?? 'DESC';
 
 $current_page = $current_page ?? 1;
 $total_pages = $total_pages ?? 1;
+$total_products = $total_products ?? 0;
+
+// Giá trị filter từ controller
+$filter_keyword = $filter_keyword ?? '';
+$filter_category = $filter_category ?? '';
+$filter_stock = $filter_stock ?? '';
 
 // Hàm trợ giúp để tạo link sắp xếp và icon
 function getSortLinkAndIcon($columnKey, $displayName, $currentSortColumn, $currentSortOrder) {
@@ -67,6 +73,66 @@ function getSortLinkAndIcon($columnKey, $displayName, $currentSortColumn, $curre
                         </button>
                     </div>
                 </div>
+
+                <!-- Thanh tìm kiếm sản phẩm -->
+                <div class="card-body border-bottom pb-3">
+                    <form method="GET" action="index.php" id="searchProductForm">
+                        <input type="hidden" name="ctrl" value="adminproduct">
+                        <input type="hidden" name="act" value="listProducts">
+                        <input type="hidden" name="page" value="products">
+                        <input type="hidden" name="sort_col" value="<?php echo htmlspecialchars($current_sort_column); ?>">
+                        <input type="hidden" name="sort_order" value="<?php echo htmlspecialchars($current_sort_order); ?>">
+
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="searchKeyword" class="form-label">Tìm kiếm</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control" id="searchKeyword" name="keyword"
+                                           placeholder="Nhập tên sản phẩm, thương hiệu..."
+                                           value="<?php echo htmlspecialchars($filter_keyword); ?>">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="searchCategory" class="form-label">Danh mục</label>
+                                <select class="form-select" id="searchCategory" name="category_filter">
+                                    <option value="">Tất cả danh mục</option>
+                                    <?php if (!empty($all_categories)): ?>
+                                        <?php foreach ($all_categories as $category): ?>
+                                            <option value="<?php echo htmlspecialchars($category['id']); ?>"
+                                                <?php echo ($filter_category == $category['id']) ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($category['name']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="searchStock" class="form-label">Tồn kho</label>
+                                <select class="form-select" id="searchStock" name="stock_filter">
+                                    <option value="">Tất cả</option>
+                                    <option value="in_stock" <?php echo ($filter_stock == 'in_stock') ? 'selected' : ''; ?>>Còn hàng</option>
+                                    <option value="out_of_stock" <?php echo ($filter_stock == 'out_of_stock') ? 'selected' : ''; ?>>Hết hàng</option>
+                                    <option value="low_stock" <?php echo ($filter_stock == 'low_stock') ? 'selected' : ''; ?>>Sắp hết (&lt;10)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Tìm kiếm
+                                    </button>
+                                    <a href="index.php?ctrl=adminproduct&act=listProducts&page=products" class="btn btn-secondary">
+                                        <i class="fas fa-redo"></i> Đặt lại
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card-body">
                     <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-labelledby="addRowModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                         <div class="modal-dialog modal-xl" role="document">
