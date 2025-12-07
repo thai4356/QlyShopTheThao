@@ -19,7 +19,65 @@ try {
 }
 
 $recaptchaSecretKey = isset($_ENV['RECAPTCHA_SECRET_KEY']) ? $_ENV['RECAPTCHA_SECRET_KEY'] : null;
+
+// =====================================================
+// TẠM THỜI TẮT RECAPTCHA - ĐỂ BẬT LẠI:
+// 1. Đặt $skipRecaptcha = false;
+// 2. Hoặc xóa/comment dòng này
+// =====================================================
+$skipRecaptcha = true; // <-- THAY ĐỔI THÀNH false ĐỂ BẬT LẠI RECAPTCHA
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // =====================================================
+    // KHỐI CODE KHI TẮT RECAPTCHA (xử lý đăng nhập trực tiếp)
+    // =====================================================
+    if ($skipRecaptcha) {
+        $database = new Connect();
+        $conn = $database->getConnection();
+
+        $email = isset($_POST["email"]) ? $_POST["email"] : '';
+        $pass = isset($_POST["password"]) ? $_POST["password"] : '';
+
+        if (empty($email) || empty($pass)) {
+            echo "Vui lòng nhập email và mật khẩu.";
+            exit;
+        }
+
+        $row = KiemTraTaiKhoan($email, $pass, $conn);
+
+        if ($row) {
+            $_SESSION["logined"] = "OK";
+            $_SESSION["username"] = $row["email"];
+            $_SESSION["role"] = $row["roleid"];
+            $_SESSION["user_id"] = $row["id"];
+
+            if (isset($_POST['remember'])) {
+                setcookie('email', $email, time() + (86400 * 7), "/");
+            } else {
+                if (isset($_COOKIE['email'])) {
+                    setcookie('email', '', time() - 3600, "/");
+                }
+            }
+
+            if ($row["roleid"] == 1) {
+                header("Location: ../view/ViewAdmin/index.php");
+                exit;
+            } else {
+                header("Location: ../view/ViewUser/Index.php");
+                exit;
+            }
+        }
+        // KiemTraTaiKhoan đã echo lỗi nếu thất bại
+        exit;
+    }
+    // =====================================================
+    // KẾT THÚC KHỐI CODE KHI TẮT RECAPTCHA
+    // =====================================================
+
+    // =====================================================
+    // KHỐI CODE KIỂM TRA RECAPTCHA (sẽ chạy khi $skipRecaptcha = false)
+    // =====================================================
     if (isset($_POST['g-recaptcha-response'])) {
         $recaptcha_response = $_POST['g-recaptcha-response'];
 

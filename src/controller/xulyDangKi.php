@@ -27,12 +27,16 @@ require_once "../model/Connect.php"; // chỉ include, không gán vào $conn
 
 $recaptchaSecretKey = $_ENV['RECAPTCHA_SECRET_KEY'] ?? null;
 
+// =====================================================
+// TẠM THỜI TẮT RECAPTCHA - ĐỂ BẬT LẠI:
+// 1. Đặt $skipRecaptcha = false;
+// 2. Hoặc xóa/comment dòng này
+// =====================================================
+$skipRecaptcha = true; // <-- THAY ĐỔI THÀNH false ĐỂ BẬT LẠI RECAPTCHA
+
 $database = new Connect();
 $conn = $database->getConnection(); // chính xác: đây là object PDO
 
-
-$email = $_REQUEST["email"];
-$pass = $_REQUEST["password"];
 
 function sendVerificationEmail($email, $token) {
     $mail = new PHPMailer(true);
@@ -102,6 +106,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Mật khẩu phải có ít nhất 5 ký tự.";
         exit;
     }
+
+    // =====================================================
+    // KHỐI CODE KHI TẮT RECAPTCHA (xử lý đăng ký trực tiếp)
+    // =====================================================
+    if ($skipRecaptcha) {
+        Add($email, $pass, $conn); // Đăng ký trực tiếp không cần reCAPTCHA
+        exit;
+    }
+    // =====================================================
+    // KẾT THÚC KHỐI CODE KHI TẮT RECAPTCHA
+    // =====================================================
+
+    // =====================================================
+    // KHỐI CODE KIỂM TRA RECAPTCHA (sẽ chạy khi $skipRecaptcha = false)
+    // =====================================================
 
     // 1. Check if reCAPTCHA Secret Key is configured
     if (empty($recaptchaSecretKey)) {
